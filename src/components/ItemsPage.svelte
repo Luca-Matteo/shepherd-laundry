@@ -1,6 +1,7 @@
 <script lang="ts">
   import Icon from "./Icon.svelte";
   import { items, members, type LaundryItem } from "../lib/stores";
+  import { statusLabels, priorityLabels, fabricLabels, colorLabels, label } from "../lib/labels";
 
   let filterStatus: string = "all";
   let filterOwner: string = "all";
@@ -20,7 +21,7 @@
     });
 
   function ownerName(ownerId: string): string {
-    return $members.find((m) => m.id === ownerId)?.name ?? "Unknown";
+    return $members.find((m) => m.id === ownerId)?.name ?? "Unbekannt";
   }
 
   function statusIcon(status: LaundryItem["status"]): string {
@@ -142,12 +143,12 @@
       </div>
 
       <div class="item-card__badges">
-        <span class="badge {statusBadge(item.status)}">{item.status}</span>
+        <span class="badge {statusBadge(item.status)}">{label(statusLabels, item.status)}</span>
         {#if item.priority !== "normal" && item.priority !== "low"}
-          <span class="badge {priorityBadge(item.priority)}">{item.priority}</span>
+          <span class="badge {priorityBadge(item.priority)}">{label(priorityLabels, item.priority)}</span>
         {/if}
-        <span class="badge badge--neutral">{item.fabricType}</span>
-        <span class="badge badge--neutral">{item.color}</span>
+        <span class="badge badge--neutral">{label(fabricLabels, item.fabricType)}</span>
+        <span class="badge badge--neutral">{label(colorLabels, item.color)}</span>
       </div>
 
       <div class="item-card__meta">

@@ -1,5 +1,6 @@
 <script lang="ts">
   import Icon from "./Icon.svelte";
+  import { roleLabels, label } from "../lib/labels";
   import { members, type FamilyMember } from "../lib/stores";
 
   let activeTab: "general" | "members" | "machines" | "notifications" =
@@ -152,7 +153,7 @@
               <span class="member-email">{member.email}</span>
             </div>
             <span class="badge {member.role === 'admin' ? 'badge--green' : 'badge--neutral'}">
-              {member.role}
+              {label(roleLabels, member.role)}
             </span>
             <button
               class="btn btn--ghost btn--sm"

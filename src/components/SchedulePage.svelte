@@ -6,6 +6,7 @@
     members,
     type WashCycle,
   } from "../lib/stores";
+  import { statusLabels, colorLabels, fabricLabels, label } from "../lib/labels";
 
   let filterStatus: string = "all";
 
@@ -148,7 +149,7 @@
                 <h3 class="cycle-detail__name">{cycle.name}</h3>
                 <span class="cycle-detail__time">{cycle.scheduledTime}</span>
               </div>
-              <span class="badge {statusColor(cycle.status)}">{cycle.status}</span>
+              <span class="badge {statusColor(cycle.status)}">{label(statusLabels, cycle.status)}</span>
             </div>
 
             <div class="cycle-detail__props">
@@ -164,7 +165,7 @@
                 <span>Beladung: {cycle.machineLoad}%</span>
               </div>
               <div class="cycle-detail__prop">
-                <span>Farbe: {cycle.colorGroup}</span>
+                <span>Farbe: {label(colorLabels, cycle.colorGroup)}</span>
               </div>
             </div>
 
