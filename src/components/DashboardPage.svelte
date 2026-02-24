@@ -17,27 +17,19 @@
 
   function statusColor(status: WashCycle["status"]): string {
     switch (status) {
-      case "running":
-        return "badge--green";
-      case "scheduled":
-        return "badge--orange";
-      case "completed":
-        return "badge--neutral";
-      case "cancelled":
-        return "badge--danger";
-      default:
-        return "badge--neutral";
+      case "running": return "badge--green";
+      case "scheduled": return "badge--orange";
+      case "completed": return "badge--neutral";
+      case "cancelled": return "badge--danger";
+      default: return "badge--neutral";
     }
   }
 
   function priorityColor(priority: LaundryItem["priority"]): string {
     switch (priority) {
-      case "urgent":
-        return "badge--danger";
-      case "high":
-        return "badge--orange";
-      default:
-        return "badge--neutral";
+      case "urgent": return "badge--danger";
+      case "high": return "badge--orange";
+      default: return "badge--neutral";
     }
   }
 
@@ -67,21 +59,33 @@
 
 <!-- Stats row -->
 <section class="grid grid--stats section" aria-label="Quick statistics">
-  <div class="card stat">
+  <div class="card stat-card">
+    <div class="stat-card__icon stat-card__icon--green">
+      <Icon name="items" size={20} />
+    </div>
     <div class="stat__value">{$hamperItems.length}</div>
     <div class="stat__label">In hamper</div>
   </div>
-  <div class="card stat">
+  <div class="card stat-card">
+    <div class="stat-card__icon stat-card__icon--orange">
+      <Icon name="washing-machine" size={20} />
+    </div>
     <div class="stat__value">{$activeCycles.length}</div>
     <div class="stat__label">Active cycles</div>
   </div>
-  <div class="card stat">
+  <div class="card stat-card">
+    <div class="stat-card__icon stat-card__icon--green">
+      <Icon name="wind" size={20} />
+    </div>
     <div class="stat__value">
       {$dryingSessions.filter((d) => d.status === "active").length}
     </div>
     <div class="stat__label">Drying now</div>
   </div>
-  <div class="card stat">
+  <div class="card stat-card">
+    <div class="stat-card__icon" class:stat-card__icon--danger={$lowConsumables.length > 0} class:stat-card__icon--neutral={$lowConsumables.length === 0}>
+      <Icon name="alert" size={20} />
+    </div>
     <div class="stat__value">{$lowConsumables.length}</div>
     <div class="stat__label">
       {$lowConsumables.length === 1 ? "Supply low" : "Supplies low"}
@@ -89,15 +93,13 @@
   </div>
 </section>
 
-<!-- Two-column: upcoming cycles + urgent items -->
+<!-- Two-column -->
 <div class="dashboard-cols">
-  <!-- Upcoming cycles -->
   <section class="section">
     <div class="section-header">
       <h2 class="section__title">Upcoming Cycles</h2>
       <a href="/schedule" class="btn btn--ghost btn--sm">
-        View all
-        <Icon name="chevron-right" size={14} />
+        View all <Icon name="chevron-right" size={14} />
       </a>
     </div>
     <div class="cycle-list">
@@ -113,43 +115,34 @@
                 {cycle.scheduledDate} at {cycle.scheduledTime}
               </span>
             </div>
-            <span class="badge {statusColor(cycle.status)}">
-              {cycle.status}
-            </span>
+            <span class="badge {statusColor(cycle.status)}">{cycle.status}</span>
           </div>
           <div class="cycle-card__meta">
             <span class="cycle-card__detail">
-              <Icon name="thermometer" size={14} />
-              {cycle.temperature}°C
+              <Icon name="thermometer" size={14} /> {cycle.temperature}°C
             </span>
             <span class="cycle-card__detail">
-              <Icon name="clock" size={14} />
-              {cycle.duration} min
+              <Icon name="clock" size={14} /> {cycle.duration} min
             </span>
-            <span class="cycle-card__detail">
-              Load: {cycle.machineLoad}%
-            </span>
+            <span class="cycle-card__detail">Load: {cycle.machineLoad}%</span>
           </div>
         </div>
       {:else}
         <div class="empty-state">
           <p class="empty-state__text">No upcoming cycles scheduled.</p>
           <a href="/schedule" class="btn btn--primary btn--sm">
-            <Icon name="plus" size={16} />
-            Create cycle
+            <Icon name="plus" size={16} /> Create cycle
           </a>
         </div>
       {/each}
     </div>
   </section>
 
-  <!-- Attention needed -->
   <section class="section">
     <div class="section-header">
       <h2 class="section__title">Needs Attention</h2>
       <a href="/items" class="btn btn--ghost btn--sm">
-        View all
-        <Icon name="chevron-right" size={14} />
+        View all <Icon name="chevron-right" size={14} />
       </a>
     </div>
     <div class="attention-list">
@@ -160,9 +153,7 @@
               <span class="attention-card__name">{item.name}</span>
               <span class="attention-card__owner">{ownerName(item.owner)}</span>
             </div>
-            <span class="badge {priorityColor(item.priority)}">
-              {item.priority}
-            </span>
+            <span class="badge {priorityColor(item.priority)}">{item.priority}</span>
           </div>
         </div>
       {:else}
@@ -172,13 +163,11 @@
       {/each}
     </div>
 
-    <!-- Low supplies quick peek -->
     {#if $lowConsumables.length > 0}
-      <div class="section-header" style="margin-top: var(--space-6);">
+      <div class="section-header" style="margin-top: var(--space-8);">
         <h2 class="section__title">Low Supplies</h2>
         <a href="/consumables" class="btn btn--ghost btn--sm">
-          View all
-          <Icon name="chevron-right" size={14} />
+          View all <Icon name="chevron-right" size={14} />
         </a>
       </div>
       {#each $lowConsumables as con (con.id)}
@@ -208,25 +197,56 @@
   .dashboard-cols {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-6);
+    gap: var(--space-8);
   }
 
   @media (max-width: 900px) {
-    .dashboard-cols {
-      grid-template-columns: 1fr;
-    }
+    .dashboard-cols { grid-template-columns: 1fr; }
+  }
+
+  .stat-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .stat-card__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--radius-lg);
+  }
+
+  .stat-card__icon--green {
+    background: var(--color-green-50);
+    color: var(--color-green-600);
+  }
+
+  .stat-card__icon--orange {
+    background: var(--color-orange-50);
+    color: var(--color-orange-600);
+  }
+
+  .stat-card__icon--danger {
+    background: var(--color-danger-light);
+    color: var(--color-danger);
+  }
+
+  .stat-card__icon--neutral {
+    background: var(--color-surface-sunken);
+    color: var(--color-text-tertiary);
   }
 
   .section-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-5);
   }
 
-  .section-header .section__title {
-    margin-bottom: 0;
-  }
+  .section-header .section__title { margin-bottom: 0; }
 
   .cycle-list {
     display: flex;
@@ -244,10 +264,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 2.25rem;
-    height: 2.25rem;
+    width: 2.5rem;
+    height: 2.5rem;
     background: var(--color-green-50);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     color: var(--color-green-600);
     flex-shrink: 0;
   }
@@ -260,7 +280,7 @@
   }
 
   .cycle-card__name {
-    font-weight: var(--weight-medium);
+    font-weight: var(--weight-semibold);
     font-size: var(--text-sm);
     color: var(--color-text);
   }
@@ -268,13 +288,14 @@
   .cycle-card__time {
     font-size: var(--text-xs);
     color: var(--color-text-tertiary);
+    margin-top: 1px;
   }
 
   .cycle-card__meta {
     display: flex;
     gap: var(--space-4);
-    margin-top: var(--space-3);
-    padding-top: var(--space-3);
+    margin-top: var(--space-4);
+    padding-top: var(--space-4);
     border-top: 1px solid var(--color-border-light);
   }
 
@@ -289,7 +310,7 @@
   .attention-list {
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
+    gap: var(--space-3);
   }
 
   .attention-card__row {
@@ -301,18 +322,17 @@
 
   .attention-card__name {
     font-size: var(--text-sm);
-    font-weight: var(--weight-medium);
+    font-weight: var(--weight-semibold);
     display: block;
   }
 
   .attention-card__owner {
     font-size: var(--text-xs);
     color: var(--color-text-tertiary);
+    margin-top: 1px;
   }
 
-  .supply-peek {
-    margin-top: var(--space-2);
-  }
+  .supply-peek { margin-top: var(--space-3); }
 
   .supply-peek__row {
     display: flex;
@@ -327,6 +347,7 @@
 
   .supply-peek__pct {
     font-size: var(--text-xs);
+    font-weight: var(--weight-semibold);
     color: var(--color-text-secondary);
   }
 </style>

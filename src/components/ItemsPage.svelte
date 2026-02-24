@@ -213,10 +213,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 2rem;
-    height: 2rem;
+    width: 2.25rem;
+    height: 2.25rem;
     background: var(--color-green-50);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     color: var(--color-green-600);
     flex-shrink: 0;
   }

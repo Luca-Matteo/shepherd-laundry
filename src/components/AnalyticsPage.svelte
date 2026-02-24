@@ -124,14 +124,20 @@
     <div class="card">
       <div class="efficiency-ring" aria-label="Load efficiency: {monthlyStats.avgLoadEfficiency}%">
         <svg viewBox="0 0 120 120" class="ring-svg">
-          <circle cx="60" cy="60" r="52" fill="none" stroke="var(--color-surface-sunken)" stroke-width="10" />
+          <defs>
+            <linearGradient id="ring-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="var(--color-green-400)" />
+              <stop offset="100%" stop-color="var(--color-green-700)" />
+            </linearGradient>
+          </defs>
+          <circle cx="60" cy="60" r="52" fill="none" stroke="var(--color-surface-sunken)" stroke-width="8" />
           <circle
             cx="60"
             cy="60"
             r="52"
             fill="none"
-            stroke="var(--color-green-500)"
-            stroke-width="10"
+            stroke="url(#ring-grad)"
+            stroke-width="8"
             stroke-linecap="round"
             stroke-dasharray="{(monthlyStats.avgLoadEfficiency / 100) * 326.7} 326.7"
             transform="rotate(-90 60 60)"
@@ -227,25 +233,28 @@
   .filter-chip {
     display: inline-flex;
     align-items: center;
-    padding: var(--space-1) var(--space-3);
+    padding: 0.375rem 0.875rem;
     border-radius: var(--radius-full);
     font-size: var(--text-sm);
     font-weight: var(--weight-medium);
-    color: var(--color-text-secondary);
+    color: var(--color-text-tertiary);
     background: var(--color-surface-raised);
-    border: 1px solid var(--color-border);
+    box-shadow: inset 0 0 0 1.5px var(--color-border-light);
+    border: none;
     cursor: pointer;
-    transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+    transition: background var(--transition-fast), box-shadow var(--transition-fast), color var(--transition-fast);
   }
 
   .filter-chip:hover {
-    border-color: var(--color-green-400);
+    box-shadow: inset 0 0 0 1.5px var(--color-green-400);
+    color: var(--color-text);
   }
 
   .filter-chip--active {
     background: var(--color-green-50);
-    border-color: var(--color-green-500);
+    box-shadow: inset 0 0 0 1.5px var(--color-green-500);
     color: var(--color-green-700);
+    font-weight: var(--weight-semibold);
   }
 
   .analytics-cols {
@@ -288,8 +297,8 @@
   .bar-chart__bar {
     width: 70%;
     max-width: 2.5rem;
-    background: var(--color-green-500);
-    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    background: linear-gradient(180deg, var(--color-green-400), var(--color-green-600));
+    border-radius: var(--radius-md) var(--radius-md) var(--radius-sm) var(--radius-sm);
     min-height: 4px;
     display: flex;
     align-items: flex-start;
