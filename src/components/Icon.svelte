@@ -121,13 +121,26 @@
     <line x1="7" y1="6" x2="7.01" y2="6" stroke-width="2" />
     <line x1="10" y1="6" x2="10.01" y2="6" stroke-width="2" />
   {:else if name === "laundry-basket"}
-    <!-- Laundry basket — woven bowl form, brand icon -->
-    <line x1="3.5" y1="9" x2="20.5" y2="9" />
-    <path d="M4.5 9 C4.5 17 7 21.5 12 21.5 C17 21.5 19.5 17 19.5 9" />
-    <line x1="5.3" y1="13" x2="18.7" y2="13" stroke-width="0.75" opacity="0.4" />
-    <line x1="6.2" y1="16.5" x2="17.8" y2="16.5" stroke-width="0.75" opacity="0.4" />
-    <line x1="7.5" y1="19.5" x2="16.5" y2="19.5" stroke-width="0.75" opacity="0.35" />
-    <path d="M10 9 C9.5 6 11 3.5 13.5 3 C15.5 2.6 16.5 4.5 16 6.5 L15 9" />
+    <!-- Laundry basket — detailed woven form, brand icon -->
+    <!-- Rim band -->
+    <rect x="3" y="7.5" width="18" height="2.5" rx="1" />
+    <!-- Basket body -->
+    <path d="M4 10 L5.5 19.5 C5.7 20.8 6.8 21.5 8.5 21.5 L15.5 21.5 C17.2 21.5 18.3 20.8 18.5 19.5 L20 10" />
+    <!-- Horizontal weave -->
+    <line x1="4.5" y1="13" x2="19.5" y2="13" stroke-width="0.6" opacity="0.35" />
+    <line x1="5" y1="16" x2="19" y2="16" stroke-width="0.6" opacity="0.35" />
+    <line x1="5.5" y1="19" x2="18.5" y2="19" stroke-width="0.6" opacity="0.3" />
+    <!-- Vertical weave -->
+    <line x1="8" y1="10" x2="8.3" y2="21" stroke-width="0.6" opacity="0.25" />
+    <line x1="12" y1="10" x2="12" y2="21.5" stroke-width="0.6" opacity="0.25" />
+    <line x1="16" y1="10" x2="15.7" y2="21" stroke-width="0.6" opacity="0.25" />
+    <!-- Rim weave marks -->
+    <line x1="7" y1="7.5" x2="7" y2="10" stroke-width="0.5" opacity="0.3" />
+    <line x1="11" y1="7.5" x2="11" y2="10" stroke-width="0.5" opacity="0.3" />
+    <line x1="15" y1="7.5" x2="15" y2="10" stroke-width="0.5" opacity="0.3" />
+    <line x1="19" y1="7.5" x2="19" y2="10" stroke-width="0.5" opacity="0.3" />
+    <!-- Fabric drape -->
+    <path d="M9.5 8 C9 5.5 10.5 2.5 13 2 C15 1.6 16 3.5 15.5 5.5 L14.5 8.5" />
   {:else if name === "shepherd"}
     <!-- Shepherd's crook / staff — brand icon -->
     <path d="M7 22V10" />
