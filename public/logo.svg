@@ -1,21 +1,41 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="none">
   <!--
     Shepherd Laundry — Brand Mark
-    A laundry basket reduced to its essence.
-    LoveFrom-inspired: geometry, negative space, purposeful reduction.
+    Woven laundry basket, warm and affectionate.
+    Inspired by the Apple 🧺 emoji, refined through LoveFrom principles.
   -->
 
-  <!-- Basket rim — confident, anchoring horizontal -->
-  <line x1="14" y1="28" x2="66" y2="28" stroke="#5B7C52" stroke-width="2.5" stroke-linecap="round"/>
+  <defs>
+    <clipPath id="basket-body">
+      <path d="M15 32 C15 55 22 68 40 68 C58 68 65 55 65 32 Z"/>
+    </clipPath>
+  </defs>
 
-  <!-- Basket body — tapered form, soft rounded base -->
-  <path d="M17 28 L21 63 C21.5 66 23.5 68 27 68 L53 68 C56.5 68 58.5 66 59 63 L63 28" stroke="#5B7C52" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Basket body — warm bowl form -->
+  <path d="M15 32 C15 55 22 68 40 68 C58 68 65 55 65 32 Z" fill="#C9A56B"/>
 
-  <!-- Weave texture — three lines, quiet rhythm -->
-  <line x1="18.5" y1="38" x2="61.5" y2="38" stroke="#5B7C52" stroke-width="1.2" stroke-linecap="round" opacity="0.3"/>
-  <line x1="19.5" y1="48" x2="60.5" y2="48" stroke="#5B7C52" stroke-width="1.2" stroke-linecap="round" opacity="0.3"/>
-  <line x1="20.5" y1="58" x2="59.5" y2="58" stroke="#5B7C52" stroke-width="1.2" stroke-linecap="round" opacity="0.3"/>
+  <!-- Woven texture — horizontal bands and vertical crosshatch -->
+  <g clip-path="url(#basket-body)">
+    <!-- Horizontal weave rows -->
+    <rect x="14" y="37" width="52" height="3.5" fill="#A8874A" opacity="0.25"/>
+    <rect x="14" y="45" width="52" height="3.5" fill="#A8874A" opacity="0.25"/>
+    <rect x="14" y="53" width="52" height="3.5" fill="#A8874A" opacity="0.25"/>
+    <rect x="14" y="61" width="52" height="3" fill="#A8874A" opacity="0.2"/>
+    <!-- Vertical weave hints -->
+    <rect x="25" y="32" width="2" height="36" fill="#A8874A" opacity="0.12"/>
+    <rect x="33" y="32" width="2" height="36" fill="#A8874A" opacity="0.12"/>
+    <rect x="41" y="32" width="2" height="36" fill="#A8874A" opacity="0.12"/>
+    <rect x="49" y="32" width="2" height="36" fill="#A8874A" opacity="0.12"/>
+  </g>
 
-  <!-- Fabric drape — graceful curve, gives the mark humanity -->
-  <path d="M32 28 C32 21 35.5 13.5 42 12 C48 10.5 51 15 49.5 21 L47 28" stroke="#5B7C52" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- Basket outline -->
+  <path d="M15 32 C15 55 22 68 40 68 C58 68 65 55 65 32" fill="none" stroke="#8C6E38" stroke-width="1.5"/>
+
+  <!-- Rim — substantial rounded lip -->
+  <rect x="12" y="25" width="56" height="8.5" rx="4.25" fill="#D4B279" stroke="#8C6E38" stroke-width="1.2"/>
+
+  <!-- Fabric cloth — warm cream, draped gently -->
+  <path d="M32 27 C31 18 34 11 42 9.5 C49 8.5 52 13 51 19 L49 29" fill="#F2EDE4" stroke="#C8C0B2" stroke-width="1"/>
+  <!-- Fabric fold detail -->
+  <path d="M38.5 14 C39 16.5 39 21 38 28" stroke="#C8C0B2" stroke-width="0.6" fill="none" opacity="0.5"/>
 </svg>
