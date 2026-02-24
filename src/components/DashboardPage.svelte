@@ -1,6 +1,9 @@
 <script lang="ts">
   import Icon from "./Icon.svelte";
   import {
+    statusLabels, priorityLabels, label,
+  } from "../lib/labels";
+  import {
     items,
     cycles,
     dryingSessions,
@@ -46,49 +49,86 @@
 
   function ownerName(ownerId: string): string {
     const m = $members.find((m) => m.id === ownerId);
-    return m?.name ?? "Unknown";
+    return m?.name ?? "Unbekannt";
+  }
+
+  function getGreeting(): string {
+    const h = new Date().getHours();
+    if (h < 12) return "Guten Morgen";
+    if (h < 18) return "Guten Nachmittag";
+    return "Guten Abend";
   }
 </script>
 
 <div class="page-header">
-  <h1 class="page-header__title">Übersicht</h1>
+  <h1 class="page-header__title">{getGreeting()}, Alex</h1>
   <p class="page-header__subtitle">
-    Guten Morgen — hier ist deine Wäscheübersicht.
+    Hier ist der aktuelle Stand deiner Wäsche.
   </p>
+</div>
+
+<!-- Quick actions -->
+<div class="quick-actions section">
+  <a href="/schedule" class="quick-action card card--interactive">
+    <div class="quick-action__icon quick-action__icon--green">
+      <Icon name="plus" size={20} />
+    </div>
+    <span class="quick-action__label">Waschgang planen</span>
+  </a>
+  <a href="/items" class="quick-action card card--interactive">
+    <div class="quick-action__icon quick-action__icon--orange">
+      <Icon name="items" size={20} />
+    </div>
+    <span class="quick-action__label">Wäsche verwalten</span>
+  </a>
+  <a href="/consumables" class="quick-action card card--interactive">
+    <div class="quick-action__icon quick-action__icon--neutral">
+      <Icon name="consumables" size={20} />
+    </div>
+    <span class="quick-action__label">Vorräte prüfen</span>
+  </a>
 </div>
 
 <!-- Stats row -->
 <section class="grid grid--stats section" aria-label="Schnellstatistik">
   <div class="card stat-card">
     <div class="stat-card__icon stat-card__icon--green">
-      <Icon name="items" size={20} />
+      <Icon name="items" size={18} />
     </div>
-    <div class="stat__value">{$hamperItems.length}</div>
-    <div class="stat__label">Im Wäschekorb</div>
+    <div>
+      <div class="stat__value">{$hamperItems.length}</div>
+      <div class="stat__label">Im Wäschekorb</div>
+    </div>
   </div>
   <div class="card stat-card">
     <div class="stat-card__icon stat-card__icon--orange">
-      <Icon name="washing-machine" size={20} />
+      <Icon name="washing-machine" size={18} />
     </div>
-    <div class="stat__value">{$activeCycles.length}</div>
-    <div class="stat__label">Aktive Waschgänge</div>
+    <div>
+      <div class="stat__value">{$activeCycles.length}</div>
+      <div class="stat__label">Aktive Waschgänge</div>
+    </div>
   </div>
   <div class="card stat-card">
     <div class="stat-card__icon stat-card__icon--green">
-      <Icon name="wind" size={20} />
+      <Icon name="wind" size={18} />
     </div>
-    <div class="stat__value">
-      {$dryingSessions.filter((d) => d.status === "active").length}
+    <div>
+      <div class="stat__value">
+        {$dryingSessions.filter((d) => d.status === "active").length}
+      </div>
+      <div class="stat__label">Trocknet gerade</div>
     </div>
-    <div class="stat__label">Trocknet gerade</div>
   </div>
   <div class="card stat-card">
     <div class="stat-card__icon" class:stat-card__icon--danger={$lowConsumables.length > 0} class:stat-card__icon--neutral={$lowConsumables.length === 0}>
-      <Icon name="alert" size={20} />
+      <Icon name="alert" size={18} />
     </div>
-    <div class="stat__value">{$lowConsumables.length}</div>
-    <div class="stat__label">
-      {$lowConsumables.length === 1 ? "Vorrat knapp" : "Vorräte knapp"}
+    <div>
+      <div class="stat__value">{$lowConsumables.length}</div>
+      <div class="stat__label">
+        {$lowConsumables.length === 1 ? "Vorrat knapp" : "Vorräte knapp"}
+      </div>
     </div>
   </div>
 </section>
@@ -99,7 +139,7 @@
     <div class="section-header">
       <h2 class="section__title">Nächste Waschgänge</h2>
       <a href="/schedule" class="btn btn--ghost btn--sm">
-        Alle anzeigen <Icon name="chevron-right" size={14} />
+        Alle <Icon name="chevron-right" size={14} />
       </a>
     </div>
     <div class="cycle-list">
@@ -107,15 +147,15 @@
         <div class="card card--interactive cycle-card">
           <div class="cycle-card__header">
             <div class="cycle-card__icon">
-              <Icon name="washing-machine" size={20} />
+              <Icon name="washing-machine" size={18} />
             </div>
             <div class="cycle-card__info">
               <span class="cycle-card__name">{cycle.name}</span>
               <span class="cycle-card__time">
-                {cycle.scheduledDate} at {cycle.scheduledTime}
+                {cycle.scheduledDate} · {cycle.scheduledTime}
               </span>
             </div>
-            <span class="badge {statusColor(cycle.status)}">{cycle.status}</span>
+            <span class="badge {statusColor(cycle.status)}">{label(statusLabels, cycle.status)}</span>
           </div>
           <div class="cycle-card__meta">
             <span class="cycle-card__detail">
@@ -124,7 +164,7 @@
             <span class="cycle-card__detail">
               <Icon name="clock" size={14} /> {cycle.duration} min
             </span>
-            <span class="cycle-card__detail">Load: {cycle.machineLoad}%</span>
+            <span class="cycle-card__detail">Beladung: {cycle.machineLoad}%</span>
           </div>
         </div>
       {:else}
@@ -138,62 +178,136 @@
     </div>
   </section>
 
-  <section class="section">
-    <div class="section-header">
-      <h2 class="section__title">Erfordert Aufmerksamkeit</h2>
-      <a href="/items" class="btn btn--ghost btn--sm">
-        Alle anzeigen <Icon name="chevron-right" size={14} />
-      </a>
-    </div>
-    <div class="attention-list">
-      {#each $urgentItems as item (item.id)}
-        <div class="card card--interactive attention-card">
-          <div class="attention-card__row">
-            <div>
-              <span class="attention-card__name">{item.name}</span>
-              <span class="attention-card__owner">{ownerName(item.owner)}</span>
-            </div>
-            <span class="badge {priorityColor(item.priority)}">{item.priority}</span>
-          </div>
-        </div>
-      {:else}
-        <div class="empty-state">
-          <p class="empty-state__text">Aktuell nichts Dringendes.</p>
-        </div>
-      {/each}
-    </div>
-
-    {#if $lowConsumables.length > 0}
-      <div class="section-header" style="margin-top: var(--space-8);">
-        <h2 class="section__title">Knappe Vorräte</h2>
-        <a href="/consumables" class="btn btn--ghost btn--sm">
-          Alle anzeigen <Icon name="chevron-right" size={14} />
+  <div>
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section__title">Erfordert Aufmerksamkeit</h2>
+        <a href="/items" class="btn btn--ghost btn--sm">
+          Alle <Icon name="chevron-right" size={14} />
         </a>
       </div>
-      {#each $lowConsumables as con (con.id)}
-        <div class="card supply-peek">
-          <div class="supply-peek__row">
-            <span class="supply-peek__name">{con.name}</span>
-            <span class="supply-peek__pct">{consumablePercent(con)}%</span>
+      <div class="attention-list">
+        {#each $urgentItems as item (item.id)}
+          <div class="card card--interactive attention-card">
+            <div class="attention-card__row">
+              <div>
+                <span class="attention-card__name">{item.name}</span>
+                <span class="attention-card__owner">{ownerName(item.owner)}</span>
+              </div>
+              <span class="badge {priorityColor(item.priority)}">{label(priorityLabels, item.priority)}</span>
+            </div>
           </div>
-          <div class="progress">
-            <div
-              class="progress__fill {consumableBarClass(con)}"
-              style="width: {consumablePercent(con)}%"
-              role="progressbar"
-              aria-valuenow={consumablePercent(con)}
-              aria-valuemin={0}
-              aria-valuemax={100}
-              aria-label="{con.name} remaining"
-            ></div>
+        {:else}
+          <div class="empty-state">
+            <p class="empty-state__text">Aktuell nichts Dringendes.</p>
           </div>
+        {/each}
+      </div>
+    </section>
+
+    {#if $lowConsumables.length > 0}
+      <section class="section">
+        <div class="section-header">
+          <h2 class="section__title">Knappe Vorräte</h2>
+          <a href="/consumables" class="btn btn--ghost btn--sm">
+            Alle <Icon name="chevron-right" size={14} />
+          </a>
         </div>
-      {/each}
+        {#each $lowConsumables as con (con.id)}
+          <div class="card supply-peek">
+            <div class="supply-peek__row">
+              <span class="supply-peek__name">{con.name}</span>
+              <span class="supply-peek__pct">{consumablePercent(con)}%</span>
+            </div>
+            <div class="progress">
+              <div
+                class="progress__fill {consumableBarClass(con)}"
+                style="width: {consumablePercent(con)}%"
+                role="progressbar"
+                aria-valuenow={consumablePercent(con)}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-label="{con.name} verbleibend"
+              ></div>
+            </div>
+          </div>
+        {/each}
+      </section>
     {/if}
-  </section>
+  </div>
 </div>
 
 <style>
+  /* Quick actions bar */
+  .quick-actions {
+    display: flex;
+    gap: var(--space-3);
+    overflow-x: auto;
+  }
+
+  .quick-action {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-5);
+    text-decoration: none;
+    white-space: nowrap;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .quick-action:hover {
+    text-decoration: none;
+  }
+
+  .quick-action__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--radius-md);
+    flex-shrink: 0;
+  }
+
+  .quick-action__icon--green {
+    background: var(--color-green-50);
+    color: var(--color-green-600);
+  }
+
+  .quick-action__icon--orange {
+    background: var(--color-orange-50);
+    color: var(--color-orange-600);
+  }
+
+  .quick-action__icon--neutral {
+    background: var(--color-surface-sunken);
+    color: var(--color-text-secondary);
+  }
+
+  .quick-action__label {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--color-text);
+  }
+
+  @media (max-width: 600px) {
+    .quick-actions {
+      gap: var(--space-2);
+    }
+
+    .quick-action {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-2);
+      padding: var(--space-3) var(--space-4);
+    }
+
+    .quick-action__label {
+      font-size: var(--text-xs);
+    }
+  }
+
   .dashboard-cols {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -206,7 +320,7 @@
 
   .stat-card {
     display: flex;
-    flex-direction: column;
+    align-items: center;
     gap: var(--space-3);
   }
 
@@ -214,9 +328,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: var(--radius-lg);
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--radius-md);
+    flex-shrink: 0;
   }
 
   .stat-card__icon--green {
@@ -243,7 +358,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: var(--space-5);
+    margin-bottom: var(--space-4);
   }
 
   .section-header .section__title { margin-bottom: 0; }
@@ -264,10 +379,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2.25rem;
+    height: 2.25rem;
     background: var(--color-green-50);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
     color: var(--color-green-600);
     flex-shrink: 0;
   }
@@ -294,8 +409,8 @@
   .cycle-card__meta {
     display: flex;
     gap: var(--space-4);
-    margin-top: var(--space-4);
-    padding-top: var(--space-4);
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
     border-top: 1px solid var(--color-border-light);
   }
 

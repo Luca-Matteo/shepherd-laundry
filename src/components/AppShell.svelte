@@ -42,9 +42,12 @@
   <aside class="sidebar" aria-label="Hauptnavigation">
     <div class="sidebar__brand">
       <div class="sidebar__logo">
-        <Icon name="shepherd" size={26} />
+        <Icon name="shepherd" size={22} />
       </div>
-      <span class="sidebar__name">Shepherd</span>
+      <div class="sidebar__brand-text">
+        <span class="sidebar__name">Shepherd</span>
+        <span class="sidebar__tagline">Wäsche, organisiert.</span>
+      </div>
     </div>
 
     <nav class="sidebar__nav">
@@ -82,9 +85,9 @@
   <header class="mobile-header" aria-label="App-Kopfzeile">
     <div class="mobile-header__brand">
       <div class="mobile-header__logo">
-        <Icon name="shepherd" size={22} />
+        <Icon name="shepherd" size={20} />
       </div>
-      <span>Shepherd</span>
+      <span class="mobile-header__name">Shepherd</span>
     </div>
     <button class="mobile-header__avatar" aria-label="Kontomenü">A</button>
   </header>
@@ -133,7 +136,7 @@
     display: flex;
     flex-direction: column;
     background: var(--color-surface-raised);
-    box-shadow: 2px 0 16px rgba(30, 30, 20, 0.04);
+    border-right: 1px solid var(--color-border-light);
     padding: var(--space-6) 0;
     position: sticky;
     top: 0;
@@ -147,7 +150,7 @@
     display: flex;
     align-items: center;
     gap: var(--space-3);
-    padding: 0 var(--space-6);
+    padding: 0 var(--space-5);
     margin-bottom: var(--space-8);
   }
 
@@ -157,10 +160,16 @@
     justify-content: center;
     width: 2.5rem;
     height: 2.5rem;
-    background: linear-gradient(135deg, var(--color-green-600), var(--color-green-400));
-    border-radius: var(--radius-lg);
-    color: var(--color-text-inverse);
-    box-shadow: 0 2px 8px rgba(74, 124, 89, 0.2);
+    background: var(--color-green-900);
+    border-radius: var(--radius-md);
+    color: var(--color-green-400);
+    flex-shrink: 0;
+  }
+
+  .sidebar__brand-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
   }
 
   .sidebar__name {
@@ -168,6 +177,14 @@
     font-weight: var(--weight-bold);
     letter-spacing: var(--tracking-tight);
     color: var(--color-text);
+    line-height: 1.2;
+  }
+
+  .sidebar__tagline {
+    font-size: 0.6875rem;
+    color: var(--color-text-tertiary);
+    letter-spacing: 0.02em;
+    line-height: 1.2;
   }
 
   .sidebar__nav {
@@ -225,7 +242,7 @@
   }
 
   .sidebar__footer {
-    padding: var(--space-5) var(--space-6);
+    padding: var(--space-5) var(--space-5);
     border-top: 1px solid var(--color-border-light);
     margin-top: var(--space-6);
   }
@@ -237,17 +254,16 @@
   }
 
   .sidebar__avatar {
-    width: 2.25rem;
-    height: 2.25rem;
+    width: 2rem;
+    height: 2rem;
     border-radius: var(--radius-full);
-    background: linear-gradient(135deg, var(--color-green-600), var(--color-green-400));
-    color: var(--color-text-inverse);
+    background: var(--color-green-900);
+    color: var(--color-green-400);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: var(--text-sm);
+    font-size: var(--text-xs);
     font-weight: var(--weight-bold);
-    box-shadow: 0 2px 6px rgba(74, 124, 89, 0.15);
   }
 
   .sidebar__user-info {
@@ -273,8 +289,9 @@
 
   /* ---- Main ---- */
   .main {
-    padding: var(--space-10);
+    padding: var(--space-8) var(--space-10);
     overflow-y: auto;
+    background: var(--color-surface);
   }
 
   .main__inner {
@@ -303,9 +320,10 @@
       align-items: center;
       justify-content: space-between;
       padding: 0 var(--space-5);
-      background: rgba(246, 244, 239, 0.75);
+      background: rgba(246, 244, 239, 0.8);
       backdrop-filter: blur(16px) saturate(1.8);
       -webkit-backdrop-filter: blur(16px) saturate(1.8);
+      border-bottom: 1px solid var(--color-border-light);
       position: sticky;
       top: 0;
       z-index: 30;
@@ -314,11 +332,7 @@
     .mobile-header__brand {
       display: flex;
       align-items: center;
-      gap: var(--space-3);
-      font-weight: var(--weight-bold);
-      font-size: var(--text-base);
-      color: var(--color-text);
-      letter-spacing: var(--tracking-tight);
+      gap: var(--space-2);
     }
 
     .mobile-header__logo {
@@ -327,17 +341,24 @@
       justify-content: center;
       width: 1.75rem;
       height: 1.75rem;
-      background: linear-gradient(135deg, var(--color-green-600), var(--color-green-400));
-      border-radius: var(--radius-sm);
-      color: var(--color-text-inverse);
+      background: var(--color-green-900);
+      border-radius: 0.375rem;
+      color: var(--color-green-400);
+    }
+
+    .mobile-header__name {
+      font-weight: var(--weight-bold);
+      font-size: var(--text-base);
+      color: var(--color-text);
+      letter-spacing: var(--tracking-tight);
     }
 
     .mobile-header__avatar {
       width: 1.75rem;
       height: 1.75rem;
       border-radius: var(--radius-full);
-      background: linear-gradient(135deg, var(--color-green-600), var(--color-green-400));
-      color: var(--color-text-inverse);
+      background: var(--color-green-900);
+      color: var(--color-green-400);
       display: flex;
       align-items: center;
       justify-content: center;

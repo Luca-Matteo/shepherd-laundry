@@ -1,5 +1,6 @@
 <script lang="ts">
   import Icon from "./Icon.svelte";
+  import { categoryLabels, label } from "../lib/labels";
   import { consumables, type Consumable } from "../lib/stores";
 
   function percent(c: Consumable): number {
@@ -135,7 +136,7 @@
           </div>
           <div class="consumable-card__info">
             <h3 class="consumable-card__name">{con.name}</h3>
-            <span class="consumable-card__category badge badge--neutral">{con.category}</span>
+            <span class="consumable-card__category badge badge--neutral">{label(categoryLabels, con.category)}</span>
           </div>
         </div>
 
