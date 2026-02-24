@@ -21,7 +21,7 @@
   function statusColor(status: WashCycle["status"]): string {
     switch (status) {
       case "running": return "badge--green";
-      case "scheduled": return "badge--orange";
+      case "scheduled": return "badge--neutral";
       case "completed": return "badge--neutral";
       case "cancelled": return "badge--danger";
       default: return "badge--neutral";
@@ -67,69 +67,25 @@
   </p>
 </div>
 
-<!-- Quick actions -->
-<div class="quick-actions section">
-  <a href="/schedule" class="quick-action card card--interactive">
-    <div class="quick-action__icon quick-action__icon--green">
-      <Icon name="plus" size={20} />
-    </div>
-    <span class="quick-action__label">Waschgang planen</span>
-  </a>
-  <a href="/items" class="quick-action card card--interactive">
-    <div class="quick-action__icon quick-action__icon--orange">
-      <Icon name="items" size={20} />
-    </div>
-    <span class="quick-action__label">Wäsche verwalten</span>
-  </a>
-  <a href="/consumables" class="quick-action card card--interactive">
-    <div class="quick-action__icon quick-action__icon--neutral">
-      <Icon name="consumables" size={20} />
-    </div>
-    <span class="quick-action__label">Vorräte prüfen</span>
-  </a>
-</div>
-
-<!-- Stats row -->
-<section class="grid grid--stats section" aria-label="Schnellstatistik">
-  <div class="card stat-card">
-    <div class="stat-card__icon stat-card__icon--green">
-      <Icon name="items" size={18} />
-    </div>
-    <div>
-      <div class="stat__value">{$hamperItems.length}</div>
-      <div class="stat__label">Im Wäschekorb</div>
-    </div>
+<!-- Stats -->
+<section class="stats-row section" aria-label="Schnellstatistik">
+  <div class="stat-item">
+    <span class="stat-item__value">{$hamperItems.length}</span>
+    <span class="stat-item__label">Im Korb</span>
   </div>
-  <div class="card stat-card">
-    <div class="stat-card__icon stat-card__icon--orange">
-      <Icon name="washing-machine" size={18} />
-    </div>
-    <div>
-      <div class="stat__value">{$activeCycles.length}</div>
-      <div class="stat__label">Aktive Waschgänge</div>
-    </div>
+  <div class="stat-item">
+    <span class="stat-item__value">{$activeCycles.length}</span>
+    <span class="stat-item__label">Waschgänge</span>
   </div>
-  <div class="card stat-card">
-    <div class="stat-card__icon stat-card__icon--green">
-      <Icon name="wind" size={18} />
-    </div>
-    <div>
-      <div class="stat__value">
-        {$dryingSessions.filter((d) => d.status === "active").length}
-      </div>
-      <div class="stat__label">Trocknet gerade</div>
-    </div>
+  <div class="stat-item">
+    <span class="stat-item__value">
+      {$dryingSessions.filter((d) => d.status === "active").length}
+    </span>
+    <span class="stat-item__label">Trocknet</span>
   </div>
-  <div class="card stat-card">
-    <div class="stat-card__icon" class:stat-card__icon--danger={$lowConsumables.length > 0} class:stat-card__icon--neutral={$lowConsumables.length === 0}>
-      <Icon name="alert" size={18} />
-    </div>
-    <div>
-      <div class="stat__value">{$lowConsumables.length}</div>
-      <div class="stat__label">
-        {$lowConsumables.length === 1 ? "Vorrat knapp" : "Vorräte knapp"}
-      </div>
-    </div>
+  <div class="stat-item" class:stat-item--alert={$lowConsumables.length > 0}>
+    <span class="stat-item__value">{$lowConsumables.length}</span>
+    <span class="stat-item__label">Knapp</span>
   </div>
 </section>
 
@@ -139,39 +95,25 @@
     <div class="section-header">
       <h2 class="section__title">Nächste Waschgänge</h2>
       <a href="/schedule" class="btn btn--ghost btn--sm">
-        Alle <Icon name="chevron-right" size={14} />
+        Alle ansehen
       </a>
     </div>
     <div class="cycle-list">
       {#each $activeCycles as cycle (cycle.id)}
-        <div class="card card--interactive cycle-card">
-          <div class="cycle-card__header">
-            <div class="cycle-card__icon">
-              <Icon name="washing-machine" size={18} />
-            </div>
-            <div class="cycle-card__info">
-              <span class="cycle-card__name">{cycle.name}</span>
-              <span class="cycle-card__time">
-                {cycle.scheduledDate} · {cycle.scheduledTime}
-              </span>
-            </div>
-            <span class="badge {statusColor(cycle.status)}">{label(statusLabels, cycle.status)}</span>
-          </div>
-          <div class="cycle-card__meta">
-            <span class="cycle-card__detail">
-              <Icon name="thermometer" size={14} /> {cycle.temperature}°C
+        <a href="/schedule" class="cycle-row">
+          <div class="cycle-row__left">
+            <span class="cycle-row__name">{cycle.name}</span>
+            <span class="cycle-row__meta">
+              {cycle.scheduledDate} · {cycle.scheduledTime} · {cycle.temperature}°C · {cycle.duration} min
             </span>
-            <span class="cycle-card__detail">
-              <Icon name="clock" size={14} /> {cycle.duration} min
-            </span>
-            <span class="cycle-card__detail">Beladung: {cycle.machineLoad}%</span>
           </div>
-        </div>
+          <span class="badge {statusColor(cycle.status)}">{label(statusLabels, cycle.status)}</span>
+        </a>
       {:else}
         <div class="empty-state">
-          <p class="empty-state__text">Keine bevorstehenden Waschgänge geplant.</p>
+          <p class="empty-state__text">Keine bevorstehenden Waschgänge.</p>
           <a href="/schedule" class="btn btn--primary btn--sm">
-            <Icon name="plus" size={16} /> Waschgang erstellen
+            <Icon name="plus" size={14} /> Waschgang erstellen
           </a>
         </div>
       {/each}
@@ -182,25 +124,18 @@
     <section class="section">
       <div class="section-header">
         <h2 class="section__title">Erfordert Aufmerksamkeit</h2>
-        <a href="/items" class="btn btn--ghost btn--sm">
-          Alle <Icon name="chevron-right" size={14} />
-        </a>
       </div>
       <div class="attention-list">
         {#each $urgentItems as item (item.id)}
-          <div class="card card--interactive attention-card">
-            <div class="attention-card__row">
-              <div>
-                <span class="attention-card__name">{item.name}</span>
-                <span class="attention-card__owner">{ownerName(item.owner)}</span>
-              </div>
-              <span class="badge {priorityColor(item.priority)}">{label(priorityLabels, item.priority)}</span>
+          <div class="attention-row">
+            <div class="attention-row__left">
+              <span class="attention-row__name">{item.name}</span>
+              <span class="attention-row__owner">{ownerName(item.owner)}</span>
             </div>
+            <span class="badge {priorityColor(item.priority)}">{label(priorityLabels, item.priority)}</span>
           </div>
         {:else}
-          <div class="empty-state">
-            <p class="empty-state__text">Aktuell nichts Dringendes.</p>
-          </div>
+          <p class="section-empty">Aktuell nichts Dringendes.</p>
         {/each}
       </div>
     </section>
@@ -209,15 +144,12 @@
       <section class="section">
         <div class="section-header">
           <h2 class="section__title">Knappe Vorräte</h2>
-          <a href="/consumables" class="btn btn--ghost btn--sm">
-            Alle <Icon name="chevron-right" size={14} />
-          </a>
         </div>
         {#each $lowConsumables as con (con.id)}
-          <div class="card supply-peek">
-            <div class="supply-peek__row">
-              <span class="supply-peek__name">{con.name}</span>
-              <span class="supply-peek__pct">{consumablePercent(con)}%</span>
+          <div class="supply-row">
+            <div class="supply-row__top">
+              <span class="supply-row__name">{con.name}</span>
+              <span class="supply-row__pct">{consumablePercent(con)}%</span>
             </div>
             <div class="progress">
               <div
@@ -238,120 +170,57 @@
 </div>
 
 <style>
-  /* Quick actions bar */
-  .quick-actions {
+  /* Stats row — large numbers, no cards */
+  .stats-row {
     display: flex;
-    gap: var(--space-3);
-    overflow-x: auto;
+    gap: var(--space-10);
+    padding-bottom: var(--space-8);
+    border-bottom: 1px solid var(--color-border-light);
   }
 
-  .quick-action {
+  .stat-item {
     display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    padding: var(--space-4) var(--space-5);
-    text-decoration: none;
-    white-space: nowrap;
-    flex: 1;
-    min-width: 0;
+    flex-direction: column;
   }
 
-  .quick-action:hover {
-    text-decoration: none;
-  }
-
-  .quick-action__icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.25rem;
-    height: 2.25rem;
-    border-radius: var(--radius-md);
-    flex-shrink: 0;
-  }
-
-  .quick-action__icon--green {
-    background: var(--color-green-50);
-    color: var(--color-green-600);
-  }
-
-  .quick-action__icon--orange {
-    background: var(--color-orange-50);
-    color: var(--color-orange-600);
-  }
-
-  .quick-action__icon--neutral {
-    background: var(--color-surface-sunken);
-    color: var(--color-text-secondary);
-  }
-
-  .quick-action__label {
-    font-size: var(--text-sm);
-    font-weight: var(--weight-semibold);
+  .stat-item__value {
+    font-size: var(--text-3xl);
+    font-weight: var(--weight-light);
     color: var(--color-text);
+    line-height: 1;
+    letter-spacing: var(--tracking-tight);
+  }
+
+  .stat-item__label {
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    margin-top: var(--space-2);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+  }
+
+  .stat-item--alert .stat-item__value {
+    color: var(--color-danger);
   }
 
   @media (max-width: 600px) {
-    .quick-actions {
-      gap: var(--space-2);
+    .stats-row {
+      gap: var(--space-6);
     }
-
-    .quick-action {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: var(--space-2);
-      padding: var(--space-3) var(--space-4);
-    }
-
-    .quick-action__label {
-      font-size: var(--text-xs);
+    .stat-item__value {
+      font-size: var(--text-2xl);
     }
   }
 
+  /* Dashboard columns */
   .dashboard-cols {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-8);
+    gap: var(--space-12);
   }
 
   @media (max-width: 900px) {
     .dashboard-cols { grid-template-columns: 1fr; }
-  }
-
-  .stat-card {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-  }
-
-  .stat-card__icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.25rem;
-    height: 2.25rem;
-    border-radius: var(--radius-md);
-    flex-shrink: 0;
-  }
-
-  .stat-card__icon--green {
-    background: var(--color-green-50);
-    color: var(--color-green-600);
-  }
-
-  .stat-card__icon--orange {
-    background: var(--color-orange-50);
-    color: var(--color-orange-600);
-  }
-
-  .stat-card__icon--danger {
-    background: var(--color-danger-light);
-    color: var(--color-danger);
-  }
-
-  .stat-card__icon--neutral {
-    background: var(--color-surface-sunken);
-    color: var(--color-text-tertiary);
   }
 
   .section-header {
@@ -363,106 +232,117 @@
 
   .section-header .section__title { margin-bottom: 0; }
 
+  /* Cycle rows — clean list, no cards */
   .cycle-list {
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
   }
 
-  .cycle-card__header {
+  .cycle-row {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: var(--space-3);
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--color-border-light);
+    text-decoration: none;
+    transition: opacity var(--transition-fast);
   }
 
-  .cycle-card__icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.25rem;
-    height: 2.25rem;
-    background: var(--color-green-50);
-    border-radius: var(--radius-md);
-    color: var(--color-green-600);
-    flex-shrink: 0;
+  .cycle-row:last-child {
+    border-bottom: none;
   }
 
-  .cycle-card__info {
-    flex: 1;
+  .cycle-row:hover {
+    opacity: 0.7;
+    text-decoration: none;
+  }
+
+  .cycle-row__left {
     display: flex;
     flex-direction: column;
     min-width: 0;
   }
 
-  .cycle-card__name {
-    font-weight: var(--weight-semibold);
+  .cycle-row__name {
     font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
     color: var(--color-text);
   }
 
-  .cycle-card__time {
+  .cycle-row__meta {
     font-size: var(--text-xs);
     color: var(--color-text-tertiary);
-    margin-top: 1px;
+    margin-top: 2px;
   }
 
-  .cycle-card__meta {
-    display: flex;
-    gap: var(--space-4);
-    margin-top: var(--space-3);
-    padding-top: var(--space-3);
-    border-top: 1px solid var(--color-border-light);
-  }
-
-  .cycle-card__detail {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-1);
-    font-size: var(--text-xs);
-    color: var(--color-text-secondary);
-  }
-
+  /* Attention list */
   .attention-list {
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
   }
 
-  .attention-card__row {
+  .attention-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: var(--space-3);
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--color-border-light);
   }
 
-  .attention-card__name {
+  .attention-row:last-child {
+    border-bottom: none;
+  }
+
+  .attention-row__left {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .attention-row__name {
     font-size: var(--text-sm);
-    font-weight: var(--weight-semibold);
-    display: block;
+    font-weight: var(--weight-medium);
+    color: var(--color-text);
   }
 
-  .attention-card__owner {
+  .attention-row__owner {
     font-size: var(--text-xs);
     color: var(--color-text-tertiary);
     margin-top: 1px;
   }
 
-  .supply-peek { margin-top: var(--space-3); }
+  .section-empty {
+    font-size: var(--text-sm);
+    color: var(--color-text-tertiary);
+    padding: var(--space-4) 0;
+  }
 
-  .supply-peek__row {
+  /* Supply rows */
+  .supply-row {
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .supply-row:last-child {
+    border-bottom: none;
+  }
+
+  .supply-row__top {
     display: flex;
     justify-content: space-between;
     margin-bottom: var(--space-2);
   }
 
-  .supply-peek__name {
+  .supply-row__name {
     font-size: var(--text-sm);
     font-weight: var(--weight-medium);
+    color: var(--color-text);
   }
 
-  .supply-peek__pct {
+  .supply-row__pct {
     font-size: var(--text-xs);
-    font-weight: var(--weight-semibold);
     color: var(--color-text-secondary);
   }
 </style>

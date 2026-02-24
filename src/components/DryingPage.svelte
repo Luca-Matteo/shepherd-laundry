@@ -32,32 +32,6 @@
     }
   }
 
-  function methodColor(method: DryingSession["method"]): string {
-    switch (method) {
-      case "dryer":
-        return "var(--color-orange-600)";
-      case "indoor":
-        return "var(--color-green-600)";
-      case "outdoor":
-        return "var(--color-green-500)";
-      case "combo":
-        return "var(--color-orange-500)";
-    }
-  }
-
-  function methodBg(method: DryingSession["method"]): string {
-    switch (method) {
-      case "dryer":
-        return "var(--color-orange-50)";
-      case "indoor":
-        return "var(--color-green-50)";
-      case "outdoor":
-        return "var(--color-green-50)";
-      case "combo":
-        return "var(--color-orange-50)";
-    }
-  }
-
   function itemName(id: string): string {
     return $allItems.find((i) => i.id === id)?.name ?? id;
   }
@@ -94,34 +68,26 @@
     <div>
       <h1 class="page-header__title">Trocknung</h1>
       <p class="page-header__subtitle">
-        Verfolge trocknende Wäsche und verwalte Trocknungsmethoden.
+        Trocknende Wäsche verfolgen und Methoden verwalten.
       </p>
     </div>
     <button class="btn btn--primary" on:click={handleNewSession}>
-      <Icon name="plus" size={16} />
+      <Icon name="plus" size={14} />
       Neue Sitzung
     </button>
   </div>
 </div>
 
-<!-- Method summary cards -->
+<!-- Method summary -->
 <section class="section" aria-label="Übersicht Trocknungsmethoden">
-  <div class="grid grid--stats">
+  <div class="method-stats">
     {#each ["dryer", "indoor", "outdoor", "combo"] as method}
       {@const count = $dryingSessions.filter(
         (d) => d.method === method && d.status === "active",
       ).length}
-      <div class="card method-stat">
-        <div
-          class="method-stat__icon"
-          style="background: {methodBg(method)}; color: {methodColor(method)};"
-        >
-          <Icon name={methodIcon(method)} size={20} />
-        </div>
-        <div class="method-stat__info">
-          <span class="stat__value">{count}</span>
-          <span class="stat__label">{methodLabel(method)}</span>
-        </div>
+      <div class="method-stat">
+        <span class="method-stat__value">{count}</span>
+        <span class="method-stat__label">{methodLabel(method)}</span>
       </div>
     {/each}
   </div>
@@ -132,57 +98,45 @@
   <h2 class="section__title">Aktive Sitzungen</h2>
 
   {#if activeSessions.length === 0}
-    <div class="empty-state card">
+    <div class="empty-state">
       <div class="empty-state__icon">
-        <Icon name="wind" size={48} />
+        <Icon name="wind" size={32} />
       </div>
       <h3 class="empty-state__title">Nichts trocknet</h3>
       <p class="empty-state__text">Starte eine Trocknungssitzung, nachdem ein Waschgang abgeschlossen ist.</p>
     </div>
   {:else}
-    <div class="sessions-grid">
+    <div class="sessions-list">
       {#each activeSessions as session (session.id)}
-        <article class="card card--interactive session-card" aria-label="Trocknungssitzung: {methodLabel(session.method)}">
-          <div class="session-card__header">
-            <div
-              class="session-card__icon"
-              style="background: {methodBg(session.method)}; color: {methodColor(session.method)};"
-            >
-              <Icon name={methodIcon(session.method)} size={20} />
-            </div>
-            <div>
-              <h3 class="session-card__method">{methodLabel(session.method)}</h3>
-              <span class="session-card__time">
-                {formatTime(session.startedAt)} — est. {formatTime(session.estimatedEnd)}
+        <article class="session-entry" aria-label="Trocknungssitzung: {methodLabel(session.method)}">
+          <div class="session-entry__top">
+            <div class="session-entry__info">
+              <h3 class="session-entry__method">{methodLabel(session.method)}</h3>
+              <span class="session-entry__time">
+                {formatTime(session.startedAt)} — {formatTime(session.estimatedEnd)}
               </span>
             </div>
+            <span class="session-entry__pct">{progress(session)}%</span>
           </div>
 
-          <div class="session-card__progress">
-            <div class="session-card__progress-header">
-              <span>Fortschritt</span>
-              <span>{progress(session)}%</span>
-            </div>
-            <div class="progress">
-              <div
-                class="progress__fill progress__fill--green"
-                style="width: {progress(session)}%"
-                role="progressbar"
-                aria-valuenow={progress(session)}
-                aria-valuemin={0}
-                aria-valuemax={100}
-              ></div>
-            </div>
+          <div class="progress" style="margin: var(--space-3) 0;">
+            <div
+              class="progress__fill progress__fill--green"
+              style="width: {progress(session)}%"
+              role="progressbar"
+              aria-valuenow={progress(session)}
+              aria-valuemin={0}
+              aria-valuemax={100}
+            ></div>
           </div>
 
-          <div class="session-card__items">
-            <span class="session-card__items-label">Teile:</span>
+          <div class="session-entry__items">
             {#each session.items as itemId}
-              <span class="badge badge--neutral">{itemName(itemId)}</span>
+              <span class="session-entry__item">{itemName(itemId)}</span>
             {/each}
           </div>
 
-          <div class="session-card__actions">
+          <div class="session-entry__actions">
             <button class="btn btn--primary btn--sm">
               <Icon name="check" size={14} />
               Fertig
@@ -195,35 +149,26 @@
   {/if}
 </section>
 
-<!-- Recommendations -->
+<!-- Tips -->
 <section class="section">
   <h2 class="section__title">Trocknungstipps</h2>
-  <div class="grid grid--cards">
-    <div class="card tip-card">
-      <div class="tip-card__icon" style="color: var(--color-orange-600);">
-        <Icon name="thermometer" size={20} />
-      </div>
-      <h3 class="tip-card__title">Niedrige Hitze für Synthetik</h3>
-      <p class="tip-card__text">
-        Synthetische Stoffe können bei hohen Temperaturen schmelzen oder einlaufen. Verwende niedrige Hitze oder Lufttrocknung.
+  <div class="tips-list">
+    <div class="tip-row">
+      <h3 class="tip-row__title">Niedrige Hitze für Synthetik</h3>
+      <p class="tip-row__text">
+        Synthetische Stoffe bei hohen Temperaturen vermeiden. Lufttrocknung bevorzugen.
       </p>
     </div>
-    <div class="card tip-card">
-      <div class="tip-card__icon" style="color: var(--color-green-600);">
-        <Icon name="sun" size={20} />
-      </div>
-      <h3 class="tip-card__title">Draußen trocknen spart Energie</h3>
-      <p class="tip-card__text">
-        Bei gutem Wetter verbraucht das Trocknen im Freien keine Energie und verleiht der Wäsche einen frischen Duft.
+    <div class="tip-row">
+      <h3 class="tip-row__title">Draußen trocknen spart Energie</h3>
+      <p class="tip-row__text">
+        Bei gutem Wetter: kein Energieverbrauch, frischer Duft.
       </p>
     </div>
-    <div class="card tip-card">
-      <div class="tip-card__icon" style="color: var(--color-green-700);">
-        <Icon name="wind" size={20} />
-      </div>
-      <h3 class="tip-card__title">Luftzirkulation verbessern</h3>
-      <p class="tip-card__text">
-        Öffne Fenster oder stelle einen Ventilator neben den Wäscheständer, um die Trocknung zu beschleunigen und Schimmel zu vermeiden.
+    <div class="tip-row">
+      <h3 class="tip-row__title">Luftzirkulation verbessern</h3>
+      <p class="tip-row__text">
+        Fenster öffnen oder Ventilator nutzen, um Trocknung zu beschleunigen.
       </p>
     </div>
   </div>
@@ -238,111 +183,127 @@
     flex-wrap: wrap;
   }
 
+  /* Method stats — inline, no cards */
+  .method-stats {
+    display: flex;
+    gap: var(--space-10);
+    padding-bottom: var(--space-6);
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
   .method-stat {
     display: flex;
-    align-items: center;
-    gap: var(--space-3);
+    flex-direction: column;
   }
 
-  .method-stat__icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: var(--radius-lg);
-    flex-shrink: 0;
+  .method-stat__value {
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-light);
+    color: var(--color-text);
+    line-height: 1;
   }
 
-  .method-stat__info {
+  .method-stat__label {
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    margin-top: var(--space-1);
+  }
+
+  @media (max-width: 600px) {
+    .method-stats {
+      gap: var(--space-6);
+    }
+  }
+
+  /* Sessions list — no cards */
+  .sessions-list {
     display: flex;
     flex-direction: column;
   }
 
-  .sessions-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
-    gap: var(--space-4);
+  .session-entry {
+    padding: var(--space-5) 0;
+    border-bottom: 1px solid var(--color-border-light);
   }
 
-  .session-card__header {
+  .session-entry:last-child {
+    border-bottom: none;
+  }
+
+  .session-entry__top {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: var(--space-3);
-    margin-bottom: var(--space-4);
   }
 
-  .session-card__icon {
+  .session-entry__info {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: var(--radius-lg);
-    flex-shrink: 0;
+    align-items: baseline;
+    gap: var(--space-3);
   }
 
-  .session-card__method {
-    font-size: var(--text-sm);
-    font-weight: var(--weight-semibold);
+  .session-entry__method {
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
     margin: 0;
   }
 
-  .session-card__time {
-    font-size: var(--text-xs);
+  .session-entry__time {
+    font-size: var(--text-sm);
     color: var(--color-text-tertiary);
   }
 
-  .session-card__progress {
-    margin-bottom: var(--space-3);
-  }
-
-  .session-card__progress-header {
-    display: flex;
-    justify-content: space-between;
-    font-size: var(--text-xs);
+  .session-entry__pct {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
     color: var(--color-text-secondary);
-    margin-bottom: var(--space-1);
   }
 
-  .session-card__items {
+  .session-entry__items {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
     gap: var(--space-2);
-    margin-bottom: var(--space-3);
+    margin-top: var(--space-2);
   }
 
-  .session-card__items-label {
+  .session-entry__item {
     font-size: var(--text-xs);
-    color: var(--color-text-tertiary);
-    font-weight: var(--weight-medium);
+    color: var(--color-text-secondary);
+    padding: 0.125rem 0.5rem;
+    background: var(--color-surface-sunken);
+    border-radius: var(--radius-full);
   }
 
-  .session-card__actions {
+  .session-entry__actions {
     display: flex;
     gap: var(--space-2);
-    padding-top: var(--space-3);
-    border-top: 1px solid var(--color-border-light);
+    margin-top: var(--space-4);
   }
 
-  .tip-card {
+  /* Tips — clean rows */
+  .tips-list {
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
   }
 
-  .tip-card__icon {
-    margin-bottom: var(--space-1);
+  .tip-row {
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--color-border-light);
   }
 
-  .tip-card__title {
+  .tip-row:last-child {
+    border-bottom: none;
+  }
+
+  .tip-row__title {
     font-size: var(--text-sm);
-    font-weight: var(--weight-semibold);
-    margin: 0;
+    font-weight: var(--weight-medium);
+    color: var(--color-text);
+    margin: 0 0 var(--space-1) 0;
   }
 
-  .tip-card__text {
+  .tip-row__text {
     font-size: var(--text-sm);
     color: var(--color-text-secondary);
     line-height: var(--leading-relaxed);

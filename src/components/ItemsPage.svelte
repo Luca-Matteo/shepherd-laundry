@@ -24,21 +24,6 @@
     return $members.find((m) => m.id === ownerId)?.name ?? "Unbekannt";
   }
 
-  function statusIcon(status: LaundryItem["status"]): string {
-    switch (status) {
-      case "clean":
-        return "check";
-      case "hamper":
-        return "items";
-      case "washing":
-        return "washing-machine";
-      case "drying":
-        return "wind";
-      default:
-        return "items";
-    }
-  }
-
   function statusBadge(status: LaundryItem["status"]): string {
     switch (status) {
       case "clean":
@@ -85,11 +70,11 @@
     <div>
       <h1 class="page-header__title">Wäsche</h1>
       <p class="page-header__subtitle">
-        Alle Wäschestücke des Haushalts und ihren Status verfolgen.
+        Alle Wäschestücke und ihren aktuellen Status verfolgen.
       </p>
     </div>
     <button class="btn btn--primary" on:click={handleAddItem}>
-      <Icon name="plus" size={16} />
+      <Icon name="plus" size={14} />
       Hinzufügen
     </button>
   </div>
@@ -129,48 +114,40 @@
 </div>
 
 <!-- Items list -->
-<div class="items-grid">
+<div class="items-list">
   {#each filtered as item (item.id)}
-    <article class="card card--interactive item-card" aria-label="{item.name}">
-      <div class="item-card__top">
-        <div class="item-card__icon" aria-hidden="true">
-          <Icon name={statusIcon(item.status)} size={18} />
+    <article class="item-row" aria-label="{item.name}">
+      <div class="item-row__main">
+        <div class="item-row__info">
+          <h3 class="item-row__name">{item.name}</h3>
+          <span class="item-row__owner">{ownerName(item.owner)}</span>
         </div>
-        <div class="item-card__info">
-          <h3 class="item-card__name">{item.name}</h3>
-          <span class="item-card__owner">{ownerName(item.owner)}</span>
+        <div class="item-row__badges">
+          <span class="badge {statusBadge(item.status)}">{label(statusLabels, item.status)}</span>
+          {#if item.priority !== "normal" && item.priority !== "low"}
+            <span class="badge {priorityBadge(item.priority)}">{label(priorityLabels, item.priority)}</span>
+          {/if}
         </div>
       </div>
-
-      <div class="item-card__badges">
-        <span class="badge {statusBadge(item.status)}">{label(statusLabels, item.status)}</span>
-        {#if item.priority !== "normal" && item.priority !== "low"}
-          <span class="badge {priorityBadge(item.priority)}">{label(priorityLabels, item.priority)}</span>
-        {/if}
-        <span class="badge badge--neutral">{label(fabricLabels, item.fabricType)}</span>
-        <span class="badge badge--neutral">{label(colorLabels, item.color)}</span>
-      </div>
-
-      <div class="item-card__meta">
-        <div class="item-card__detail">
-          <span class="item-card__detail-label">Zuletzt gewaschen</span>
-          <span class="item-card__detail-value">{daysSince(item.lastWashed)}</span>
-        </div>
-        <div class="item-card__detail">
-          <span class="item-card__detail-label">Waschen alle</span>
-          <span class="item-card__detail-value">{item.hygieneLimit} T</span>
-        </div>
+      <div class="item-row__meta">
+        <span>{label(fabricLabels, item.fabricType)}</span>
+        <span class="item-row__sep"></span>
+        <span>{label(colorLabels, item.color)}</span>
+        <span class="item-row__sep"></span>
+        <span>Gewaschen: {daysSince(item.lastWashed)}</span>
+        <span class="item-row__sep"></span>
+        <span>Intervall: {item.hygieneLimit}T</span>
       </div>
     </article>
   {:else}
-    <div class="empty-state card" style="grid-column: 1 / -1;">
+    <div class="empty-state">
       <div class="empty-state__icon">
-        <Icon name="items" size={48} />
+        <Icon name="items" size={32} />
       </div>
       <h3 class="empty-state__title">Keine Wäsche gefunden</h3>
       <p class="empty-state__text">Passe die Filter an oder füge dein erstes Wäschestück hinzu.</p>
       <button class="btn btn--primary btn--sm" on:click={handleAddItem}>
-        <Icon name="plus" size={16} />
+        <Icon name="plus" size={14} />
         Hinzufügen
       </button>
     </div>
@@ -194,76 +171,74 @@
   }
 
   .filter-bar__group {
-    min-width: 10rem;
+    min-width: 9rem;
   }
 
-  .items-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
-    gap: var(--space-4);
+  .items-list {
+    display: flex;
+    flex-direction: column;
   }
 
-  .item-card__top {
+  .item-row {
+    padding: var(--space-5) 0;
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .item-row:last-child {
+    border-bottom: none;
+  }
+
+  .item-row__main {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: var(--space-3);
-    margin-bottom: var(--space-3);
   }
 
-  .item-card__icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.25rem;
-    height: 2.25rem;
-    background: var(--color-green-50);
-    border-radius: var(--radius-lg);
-    color: var(--color-green-600);
-    flex-shrink: 0;
-  }
-
-  .item-card__info {
+  .item-row__info {
     min-width: 0;
   }
 
-  .item-card__name {
-    font-size: var(--text-sm);
-    font-weight: var(--weight-semibold);
-    color: var(--color-text);
-    margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .item-card__owner {
-    font-size: var(--text-xs);
-    color: var(--color-text-tertiary);
-  }
-
-  .item-card__badges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-1);
-    margin-bottom: var(--space-3);
-  }
-
-  .item-card__meta {
-    display: flex;
-    gap: var(--space-4);
-    padding-top: var(--space-3);
-    border-top: 1px solid var(--color-border-light);
-  }
-
-  .item-card__detail-label {
-    display: block;
-    font-size: var(--text-xs);
-    color: var(--color-text-tertiary);
-  }
-
-  .item-card__detail-value {
-    font-size: var(--text-sm);
+  .item-row__name {
+    font-size: var(--text-base);
     font-weight: var(--weight-medium);
     color: var(--color-text);
+    margin: 0;
+  }
+
+  .item-row__owner {
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    margin-top: 1px;
+    display: block;
+  }
+
+  .item-row__badges {
+    display: flex;
+    gap: var(--space-2);
+    flex-shrink: 0;
+  }
+
+  .item-row__meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+  }
+
+  .item-row__sep {
+    width: 3px;
+    height: 3px;
+    border-radius: var(--radius-full);
+    background: var(--color-text-tertiary);
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 600px) {
+    .item-row__meta {
+      flex-wrap: wrap;
+    }
   }
 </style>
