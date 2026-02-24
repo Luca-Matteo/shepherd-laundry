@@ -260,20 +260,23 @@
   .tabs {
     display: flex;
     gap: var(--space-1);
-    border-bottom: 1px solid var(--color-border);
-    margin-bottom: var(--space-6);
+    margin-bottom: var(--space-8);
     overflow-x: auto;
+    background: var(--color-surface-sunken);
+    border-radius: var(--radius-lg);
+    padding: var(--space-1);
   }
 
   .tab {
-    padding: var(--space-2) var(--space-4);
+    padding: 0.5rem 1rem;
     font-size: var(--text-sm);
     font-weight: var(--weight-medium);
-    color: var(--color-text-secondary);
-    border-bottom: 2px solid transparent;
+    color: var(--color-text-tertiary);
+    border-radius: var(--radius-md);
     transition:
       color var(--transition-fast),
-      border-color var(--transition-fast);
+      background var(--transition-fast),
+      box-shadow var(--transition-fast);
     white-space: nowrap;
   }
 
@@ -283,7 +286,9 @@
 
   .tab--active {
     color: var(--color-green-700);
-    border-bottom-color: var(--color-green-600);
+    background: var(--color-surface-raised);
+    box-shadow: var(--shadow-sm);
+    font-weight: var(--weight-semibold);
   }
 
   .settings-section__header {

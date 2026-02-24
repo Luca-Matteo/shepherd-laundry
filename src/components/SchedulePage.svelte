@@ -222,29 +222,31 @@
   .filter-chip {
     display: inline-flex;
     align-items: center;
-    padding: var(--space-1) var(--space-3);
+    padding: 0.375rem 0.875rem;
     border-radius: var(--radius-full);
     font-size: var(--text-sm);
     font-weight: var(--weight-medium);
-    color: var(--color-text-secondary);
+    color: var(--color-text-tertiary);
     background: var(--color-surface-raised);
-    border: 1px solid var(--color-border);
+    box-shadow: inset 0 0 0 1.5px var(--color-border-light);
+    border: none;
     cursor: pointer;
     transition:
       background var(--transition-fast),
-      border-color var(--transition-fast),
+      box-shadow var(--transition-fast),
       color var(--transition-fast);
   }
 
   .filter-chip:hover {
-    border-color: var(--color-green-400);
+    box-shadow: inset 0 0 0 1.5px var(--color-green-400);
     color: var(--color-text);
   }
 
   .filter-chip--active {
     background: var(--color-green-50);
-    border-color: var(--color-green-500);
+    box-shadow: inset 0 0 0 1.5px var(--color-green-500);
     color: var(--color-green-700);
+    font-weight: var(--weight-semibold);
   }
 
   .timeline {
@@ -255,10 +257,11 @@
 
   .timeline__date {
     font-size: var(--text-base);
-    font-weight: var(--weight-semibold);
+    font-weight: var(--weight-bold);
     color: var(--color-text);
-    margin-bottom: var(--space-3);
-    padding-bottom: var(--space-2);
+    letter-spacing: var(--tracking-tight);
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-3);
     border-bottom: 2px solid var(--color-green-100);
   }
 

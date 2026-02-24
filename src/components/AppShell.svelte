@@ -1,8 +1,8 @@
 <!--
   AppShell — responsive layout shell.
   • Desktop (≥768px): sidebar on the left, content on the right.
-  • Mobile (<768px): header on top, bottom tab bar.
-  Uses semantic HTML5 elements and full ARIA landmarks.
+  • Mobile (<768px): frosted header, floating bottom nav pill.
+  Semantic HTML5, full ARIA landmarks.
 -->
 <script lang="ts">
   import Icon from "./Icon.svelte";
@@ -30,25 +30,19 @@
     return currentPath.startsWith(href);
   }
 
-  // Bottom nav shows a subset to avoid overcrowding
   const bottomNav: NavItem[] = [
-    nav[0], // Dashboard
-    nav[1], // Schedule
-    nav[2], // Items
-    nav[4], // Supplies
-    nav[6], // Settings
+    nav[0], nav[1], nav[2], nav[4], nav[6],
   ];
 </script>
 
 <div class="shell">
-  <!-- Skip-to-content link -->
   <a class="skip-link" href="#main-content">Skip to content</a>
 
   <!-- ====== Sidebar (desktop) ====== -->
   <aside class="sidebar" aria-label="Main navigation">
     <div class="sidebar__brand">
       <div class="sidebar__logo">
-        <Icon name="shepherd" size={28} />
+        <Icon name="shepherd" size={26} />
       </div>
       <span class="sidebar__name">Shepherd</span>
     </div>
@@ -63,7 +57,9 @@
               class:sidebar__link--active={isActive(item.href)}
               aria-current={isActive(item.href) ? "page" : undefined}
             >
-              <Icon name={item.icon} size={20} />
+              <span class="sidebar__link-icon">
+                <Icon name={item.icon} size={20} />
+              </span>
               <span>{item.label}</span>
             </a>
           </li>
@@ -85,12 +81,12 @@
   <!-- ====== Mobile header ====== -->
   <header class="mobile-header" aria-label="App header">
     <div class="mobile-header__brand">
-      <Icon name="shepherd" size={24} />
+      <div class="mobile-header__logo">
+        <Icon name="shepherd" size={22} />
+      </div>
       <span>Shepherd</span>
     </div>
-    <button class="mobile-header__avatar" aria-label="Account menu">
-      A
-    </button>
+    <button class="mobile-header__avatar" aria-label="Account menu">A</button>
   </header>
 
   <!-- ====== Main content ====== -->
@@ -102,24 +98,28 @@
 
   <!-- ====== Bottom nav (mobile) ====== -->
   <nav class="bottom-nav" aria-label="Main navigation">
-    {#each bottomNav as item (item.href)}
-      <a
-        href={item.href}
-        class="bottom-nav__item"
-        class:bottom-nav__item--active={isActive(item.href)}
-        aria-current={isActive(item.href) ? "page" : undefined}
-      >
-        <Icon name={item.icon} size={20} />
-        <span class="bottom-nav__label">{item.label}</span>
-      </a>
-    {/each}
+    <div class="bottom-nav__pill">
+      {#each bottomNav as item (item.href)}
+        <a
+          href={item.href}
+          class="bottom-nav__item"
+          class:bottom-nav__item--active={isActive(item.href)}
+          aria-current={isActive(item.href) ? "page" : undefined}
+        >
+          <span class="bottom-nav__icon-wrap">
+            <Icon name={item.icon} size={20} />
+            {#if isActive(item.href)}
+              <span class="bottom-nav__dot"></span>
+            {/if}
+          </span>
+          <span class="bottom-nav__label">{item.label}</span>
+        </a>
+      {/each}
+    </div>
   </nav>
 </div>
 
 <style>
-  /* ============================================
-     Shell grid
-     ============================================ */
   .shell {
     display: grid;
     grid-template-columns: var(--sidebar-width) 1fr;
@@ -128,15 +128,13 @@
     min-height: 100dvh;
   }
 
-  /* ============================================
-     Sidebar
-     ============================================ */
+  /* ---- Sidebar ---- */
   .sidebar {
     display: flex;
     flex-direction: column;
     background: var(--color-surface-raised);
-    border-right: 1px solid var(--color-border-light);
-    padding: var(--space-5) 0;
+    box-shadow: 2px 0 16px rgba(30, 30, 20, 0.04);
+    padding: var(--space-6) 0;
     position: sticky;
     top: 0;
     height: 100vh;
@@ -149,26 +147,27 @@
     display: flex;
     align-items: center;
     gap: var(--space-3);
-    padding: 0 var(--space-5);
-    margin-bottom: var(--space-6);
-    color: var(--color-green-700);
+    padding: 0 var(--space-6);
+    margin-bottom: var(--space-8);
   }
 
   .sidebar__logo {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 2.25rem;
-    height: 2.25rem;
-    background: var(--color-green-100);
+    width: 2.5rem;
+    height: 2.5rem;
+    background: linear-gradient(135deg, var(--color-green-600), var(--color-green-400));
     border-radius: var(--radius-lg);
-    color: var(--color-green-700);
+    color: var(--color-text-inverse);
+    box-shadow: 0 2px 8px rgba(74, 124, 89, 0.2);
   }
 
   .sidebar__name {
     font-size: var(--text-lg);
     font-weight: var(--weight-bold);
-    letter-spacing: -0.01em;
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-text);
   }
 
   .sidebar__nav {
@@ -180,18 +179,18 @@
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: var(--space-1);
+    gap: 2px;
   }
 
   .sidebar__link {
     display: flex;
     align-items: center;
     gap: var(--space-3);
-    padding: var(--space-2) var(--space-3);
+    padding: 0.625rem var(--space-4);
     border-radius: var(--radius-md);
     font-size: var(--text-sm);
     font-weight: var(--weight-medium);
-    color: var(--color-text-secondary);
+    color: var(--color-text-tertiary);
     text-decoration: none;
     transition:
       background var(--transition-fast),
@@ -204,9 +203,20 @@
     text-decoration: none;
   }
 
+  .sidebar__link-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    flex-shrink: 0;
+  }
+
   .sidebar__link--active {
     background: var(--color-green-50);
     color: var(--color-green-700);
+    font-weight: var(--weight-semibold);
+    box-shadow: inset 3px 0 0 var(--color-green-500);
   }
 
   .sidebar__link--active:hover {
@@ -215,9 +225,9 @@
   }
 
   .sidebar__footer {
-    padding: var(--space-4) var(--space-5);
+    padding: var(--space-5) var(--space-6);
     border-top: 1px solid var(--color-border-light);
-    margin-top: var(--space-4);
+    margin-top: var(--space-6);
   }
 
   .sidebar__user {
@@ -227,16 +237,17 @@
   }
 
   .sidebar__avatar {
-    width: 2rem;
-    height: 2rem;
+    width: 2.25rem;
+    height: 2.25rem;
     border-radius: var(--radius-full);
-    background: var(--color-green-600);
+    background: linear-gradient(135deg, var(--color-green-600), var(--color-green-400));
     color: var(--color-text-inverse);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: var(--text-sm);
-    font-weight: var(--weight-semibold);
+    font-weight: var(--weight-bold);
+    box-shadow: 0 2px 6px rgba(74, 124, 89, 0.15);
   }
 
   .sidebar__user-info {
@@ -246,7 +257,7 @@
 
   .sidebar__user-name {
     font-size: var(--text-sm);
-    font-weight: var(--weight-medium);
+    font-weight: var(--weight-semibold);
     color: var(--color-text);
   }
 
@@ -255,18 +266,14 @@
     color: var(--color-text-tertiary);
   }
 
-  /* ============================================
-     Mobile header (hidden on desktop)
-     ============================================ */
+  /* ---- Mobile header ---- */
   .mobile-header {
     display: none;
   }
 
-  /* ============================================
-     Main content
-     ============================================ */
+  /* ---- Main ---- */
   .main {
-    padding: var(--space-8);
+    padding: var(--space-10);
     overflow-y: auto;
   }
 
@@ -275,20 +282,16 @@
     margin: 0 auto;
   }
 
-  /* ============================================
-     Bottom nav (hidden on desktop)
-     ============================================ */
+  /* ---- Bottom nav ---- */
   .bottom-nav {
     display: none;
   }
 
-  /* ============================================
-     Mobile layout (< 768px)
-     ============================================ */
+  /* ---- Mobile ---- */
   @media (max-width: 767px) {
     .shell {
       grid-template-columns: 1fr;
-      grid-template-rows: var(--header-height) 1fr var(--bottom-nav-height);
+      grid-template-rows: var(--header-height) 1fr auto;
     }
 
     .sidebar {
@@ -299,68 +302,89 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 var(--space-4);
-      background: var(--color-surface-raised);
-      border-bottom: 1px solid var(--color-border-light);
+      padding: 0 var(--space-5);
+      background: rgba(246, 244, 239, 0.75);
+      backdrop-filter: blur(16px) saturate(1.8);
+      -webkit-backdrop-filter: blur(16px) saturate(1.8);
       position: sticky;
       top: 0;
-      z-index: 20;
+      z-index: 30;
     }
 
     .mobile-header__brand {
       display: flex;
       align-items: center;
-      gap: var(--space-2);
-      color: var(--color-green-700);
+      gap: var(--space-3);
       font-weight: var(--weight-bold);
       font-size: var(--text-base);
+      color: var(--color-text);
+      letter-spacing: var(--tracking-tight);
+    }
+
+    .mobile-header__logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.75rem;
+      height: 1.75rem;
+      background: linear-gradient(135deg, var(--color-green-600), var(--color-green-400));
+      border-radius: var(--radius-sm);
+      color: var(--color-text-inverse);
     }
 
     .mobile-header__avatar {
-      width: 2rem;
-      height: 2rem;
+      width: 1.75rem;
+      height: 1.75rem;
       border-radius: var(--radius-full);
-      background: var(--color-green-600);
+      background: linear-gradient(135deg, var(--color-green-600), var(--color-green-400));
       color: var(--color-text-inverse);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: var(--text-sm);
-      font-weight: var(--weight-semibold);
+      font-size: 0.625rem;
+      font-weight: var(--weight-bold);
     }
 
     .main {
-      padding: var(--space-4);
-      padding-bottom: var(--space-8);
+      padding: var(--space-5);
+      padding-bottom: calc(var(--bottom-nav-height) + var(--space-8));
     }
 
     .bottom-nav {
+      display: block;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 30;
+      padding: 0 var(--space-4) env(safe-area-inset-bottom, var(--space-2));
+    }
+
+    .bottom-nav__pill {
       display: flex;
       align-items: center;
       justify-content: space-around;
       background: var(--color-surface-raised);
-      border-top: 1px solid var(--color-border-light);
-      position: sticky;
-      bottom: 0;
-      z-index: 20;
-      padding: var(--space-1) 0;
-      padding-bottom: env(safe-area-inset-bottom, var(--space-1));
+      border-radius: var(--radius-2xl);
+      box-shadow: var(--shadow-lg);
+      padding: var(--space-1) var(--space-1);
+      margin-bottom: var(--space-2);
     }
 
     .bottom-nav__item {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 2px;
-      padding: var(--space-1) var(--space-2);
-      border-radius: var(--radius-md);
+      gap: 1px;
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-lg);
       color: var(--color-text-tertiary);
-      font-size: var(--text-xs);
+      font-size: 0.625rem;
       text-decoration: none;
       transition:
         color var(--transition-fast),
         background var(--transition-fast);
-      min-width: 3.5rem;
+      min-width: 3.25rem;
     }
 
     .bottom-nav__item:hover {
@@ -370,10 +394,27 @@
 
     .bottom-nav__item--active {
       color: var(--color-green-700);
+      background: var(--color-green-50);
+    }
+
+    .bottom-nav__icon-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .bottom-nav__dot {
+      display: block;
+      width: 4px;
+      height: 4px;
+      border-radius: var(--radius-full);
+      background: var(--color-green-500);
+      margin-top: 2px;
     }
 
     .bottom-nav__label {
-      font-weight: var(--weight-medium);
+      font-weight: var(--weight-semibold);
+      letter-spacing: 0.01em;
     }
   }
 </style>
