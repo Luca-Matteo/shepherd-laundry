@@ -20,53 +20,7 @@
   }
 
   function daysRemaining(c: Consumable): number {
-    // Assume ~1 wash per day on average
     return washesRemaining(c);
-  }
-
-  function categoryIcon(cat: Consumable["category"]): string {
-    switch (cat) {
-      case "detergent":
-        return "droplet";
-      case "softener":
-        return "wind";
-      case "bleach":
-        return "zap";
-      case "stain-remover":
-        return "alert";
-      default:
-        return "consumables";
-    }
-  }
-
-  function categoryColor(cat: Consumable["category"]): string {
-    switch (cat) {
-      case "detergent":
-        return "var(--color-green-600)";
-      case "softener":
-        return "var(--color-green-500)";
-      case "bleach":
-        return "var(--color-orange-600)";
-      case "stain-remover":
-        return "var(--color-orange-500)";
-      default:
-        return "var(--color-text-secondary)";
-    }
-  }
-
-  function categoryBg(cat: Consumable["category"]): string {
-    switch (cat) {
-      case "detergent":
-        return "var(--color-green-50)";
-      case "softener":
-        return "var(--color-green-50)";
-      case "bleach":
-        return "var(--color-orange-50)";
-      case "stain-remover":
-        return "var(--color-orange-50)";
-      default:
-        return "var(--color-surface-sunken)";
-    }
   }
 
   function handleRefill(c: Consumable) {
@@ -89,100 +43,80 @@
     <div>
       <h1 class="page-header__title">Vorräte</h1>
       <p class="page-header__subtitle">
-        Waschmittel und Verbrauchsmaterial verfolgen. Warnungen erhalten, bevor sie aufgebraucht sind.
+        Waschmittel und Verbrauchsmaterial verfolgen.
       </p>
     </div>
     <button class="btn btn--primary" on:click={handleAdd}>
-      <Icon name="plus" size={16} />
+      <Icon name="plus" size={14} />
       Hinzufügen
     </button>
   </div>
 </div>
 
-<!-- Summary strip -->
+<!-- Summary -->
 <section class="section" aria-label="Übersicht Vorratsstand">
-  <div class="grid grid--stats">
-    <div class="card stat">
-      <div class="stat__value">{$consumables.length}</div>
-      <div class="stat__label">Verfolgte Vorräte</div>
+  <div class="summary-stats">
+    <div class="summary-stat">
+      <span class="summary-stat__value">{$consumables.length}</span>
+      <span class="summary-stat__label">Verfolgt</span>
     </div>
-    <div class="card stat">
-      <div class="stat__value">
+    <div class="summary-stat">
+      <span class="summary-stat__value">
         {$consumables.filter((c) => percent(c) < 30).length}
-      </div>
-      <div class="stat__label">Wird knapp</div>
+      </span>
+      <span class="summary-stat__label">Wird knapp</span>
     </div>
-    <div class="card stat">
-      <div class="stat__value">
+    <div class="summary-stat" class:summary-stat--alert={$consumables.filter((c) => percent(c) < 10).length > 0}>
+      <span class="summary-stat__value">
         {$consumables.filter((c) => percent(c) < 10).length}
-      </div>
-      <div class="stat__label">Kritisch</div>
+      </span>
+      <span class="summary-stat__label">Kritisch</span>
     </div>
   </div>
 </section>
 
-<!-- Consumable cards -->
+<!-- Consumable list -->
 <section class="section">
   <h2 class="section__title">Alle Vorräte</h2>
-  <div class="consumable-grid">
+  <div class="consumable-list">
     {#each $consumables as con (con.id)}
-      <article class="card card--interactive consumable-card" aria-label="{con.name}">
-        <div class="consumable-card__header">
+      <article class="consumable-row" aria-label="{con.name}">
+        <div class="consumable-row__top">
+          <div class="consumable-row__info">
+            <h3 class="consumable-row__name">{con.name}</h3>
+            <span class="consumable-row__category">{label(categoryLabels, con.category)}</span>
+          </div>
+          <div class="consumable-row__right">
+            <span class="consumable-row__pct">{percent(con)}%</span>
+            <button
+              class="btn btn--secondary btn--sm"
+              on:click={() => handleRefill(con)}
+            >
+              Auffüllen
+            </button>
+          </div>
+        </div>
+
+        <div class="progress" style="margin: var(--space-3) 0;">
           <div
-            class="consumable-card__icon"
-            style="background: {categoryBg(con.category)}; color: {categoryColor(con.category)};"
-          >
-            <Icon name={categoryIcon(con.category)} size={20} />
-          </div>
-          <div class="consumable-card__info">
-            <h3 class="consumable-card__name">{con.name}</h3>
-            <span class="consumable-card__category badge badge--neutral">{label(categoryLabels, con.category)}</span>
-          </div>
+            class="progress__fill {barClass(con)}"
+            style="width: {percent(con)}%"
+            role="progressbar"
+            aria-valuenow={percent(con)}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-label="{con.name} level"
+          ></div>
         </div>
 
-        <!-- Level bar -->
-        <div class="consumable-card__level">
-          <div class="consumable-card__level-header">
-            <span>
-              {con.currentAmount}{con.unit} / {con.maxAmount}{con.unit}
-            </span>
-            <span class="consumable-card__pct">{percent(con)}%</span>
-          </div>
-          <div class="progress">
-            <div
-              class="progress__fill {barClass(con)}"
-              style="width: {percent(con)}%"
-              role="progressbar"
-              aria-valuenow={percent(con)}
-              aria-valuemin={0}
-              aria-valuemax={100}
-              aria-label="{con.name} level"
-            ></div>
-          </div>
-        </div>
-
-        <!-- Predictions -->
-        <div class="consumable-card__predictions">
-          <div class="consumable-card__pred">
-            <Icon name="washing-machine" size={14} />
-            <span>~{washesRemaining(con)} Waschgänge übrig</span>
-          </div>
-          <div class="consumable-card__pred">
-            <Icon name="clock" size={14} />
-            <span>~{daysRemaining(con)} Tage übrig</span>
-          </div>
-        </div>
-
-        <div class="consumable-card__footer">
-          <span class="consumable-card__refilled">
-            Aufgefüllt: {con.lastRefilled}
-          </span>
-          <button
-            class="btn btn--secondary btn--sm"
-            on:click={() => handleRefill(con)}
-          >
-            Auffüllen
-          </button>
+        <div class="consumable-row__meta">
+          <span>{con.currentAmount}{con.unit} / {con.maxAmount}{con.unit}</span>
+          <span class="consumable-row__sep"></span>
+          <span>~{washesRemaining(con)} Waschgänge</span>
+          <span class="consumable-row__sep"></span>
+          <span>~{daysRemaining(con)} Tage</span>
+          <span class="consumable-row__sep"></span>
+          <span>Aufgefüllt: {con.lastRefilled}</span>
         </div>
       </article>
     {/each}
@@ -198,83 +132,110 @@
     flex-wrap: wrap;
   }
 
-  .consumable-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
-    gap: var(--space-4);
-  }
-
-  .consumable-card__header {
+  .summary-stats {
     display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    margin-bottom: var(--space-4);
+    gap: var(--space-10);
+    padding-bottom: var(--space-6);
+    border-bottom: 1px solid var(--color-border-light);
   }
 
-  .consumable-card__icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: var(--radius-lg);
-    flex-shrink: 0;
-  }
-
-  .consumable-card__info {
+  .summary-stat {
     display: flex;
     flex-direction: column;
-    gap: var(--space-1);
+  }
+
+  .summary-stat__value {
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-light);
+    color: var(--color-text);
+    line-height: 1;
+  }
+
+  .summary-stat__label {
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    margin-top: var(--space-1);
+  }
+
+  .summary-stat--alert .summary-stat__value {
+    color: var(--color-danger);
+  }
+
+  .consumable-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .consumable-row {
+    padding: var(--space-5) 0;
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .consumable-row:last-child {
+    border-bottom: none;
+  }
+
+  .consumable-row__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  .consumable-row__info {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
     min-width: 0;
   }
 
-  .consumable-card__name {
-    font-size: var(--text-sm);
-    font-weight: var(--weight-semibold);
+  .consumable-row__name {
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
+    color: var(--color-text);
     margin: 0;
   }
 
-  .consumable-card__level {
-    margin-bottom: var(--space-3);
-  }
-
-  .consumable-card__level-header {
-    display: flex;
-    justify-content: space-between;
+  .consumable-row__category {
     font-size: var(--text-xs);
-    color: var(--color-text-secondary);
-    margin-bottom: var(--space-1);
+    color: var(--color-text-tertiary);
   }
 
-  .consumable-card__pct {
-    font-weight: var(--weight-semibold);
-  }
-
-  .consumable-card__predictions {
+  .consumable-row__right {
     display: flex;
-    flex-direction: column;
-    gap: var(--space-1);
-    margin-bottom: var(--space-3);
+    align-items: center;
+    gap: var(--space-3);
+    flex-shrink: 0;
   }
 
-  .consumable-card__pred {
+  .consumable-row__pct {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    color: var(--color-text-secondary);
+  }
+
+  .consumable-row__meta {
     display: flex;
     align-items: center;
     gap: var(--space-2);
-    font-size: var(--text-xs);
+    font-size: var(--text-sm);
     color: var(--color-text-secondary);
   }
 
-  .consumable-card__footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: var(--space-3);
-    border-top: 1px solid var(--color-border-light);
+  .consumable-row__sep {
+    width: 3px;
+    height: 3px;
+    border-radius: var(--radius-full);
+    background: var(--color-text-tertiary);
+    flex-shrink: 0;
   }
 
-  .consumable-card__refilled {
-    font-size: var(--text-xs);
-    color: var(--color-text-tertiary);
+  @media (max-width: 600px) {
+    .consumable-row__meta {
+      flex-wrap: wrap;
+    }
+    .summary-stats {
+      gap: var(--space-6);
+    }
   }
 </style>

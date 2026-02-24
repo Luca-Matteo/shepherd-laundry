@@ -1,8 +1,8 @@
 <!--
   AppShell — responsive layout shell.
-  • Desktop (≥768px): sidebar on the left, content on the right.
-  • Mobile (<768px): frosted header, floating bottom nav pill.
-  Semantic HTML5, full ARIA landmarks.
+  LoveFrom-inspired: navigation that guides without demanding attention.
+  • Desktop (>=768px): quiet sidebar, generous spacing.
+  • Mobile (<768px): clean header, understated bottom nav.
 -->
 <script lang="ts">
   import Icon from "./Icon.svelte";
@@ -41,12 +41,10 @@
   <!-- ====== Sidebar (desktop) ====== -->
   <aside class="sidebar" aria-label="Hauptnavigation">
     <div class="sidebar__brand">
-      <div class="sidebar__logo">
-        <Icon name="shepherd" size={22} />
-      </div>
+      <Icon name="shepherd" size={18} />
       <div class="sidebar__brand-text">
         <span class="sidebar__name">Shepherd</span>
-        <span class="sidebar__tagline">Wäsche, organisiert.</span>
+        <span class="sidebar__tagline">Laundry</span>
       </div>
     </div>
 
@@ -61,7 +59,7 @@
               aria-current={isActive(item.href) ? "page" : undefined}
             >
               <span class="sidebar__link-icon">
-                <Icon name={item.icon} size={20} />
+                <Icon name={item.icon} size={18} />
               </span>
               <span>{item.label}</span>
             </a>
@@ -84,9 +82,7 @@
   <!-- ====== Mobile header ====== -->
   <header class="mobile-header" aria-label="App-Kopfzeile">
     <div class="mobile-header__brand">
-      <div class="mobile-header__logo">
-        <Icon name="shepherd" size={20} />
-      </div>
+      <Icon name="shepherd" size={16} />
       <span class="mobile-header__name">Shepherd</span>
     </div>
     <button class="mobile-header__avatar" aria-label="Kontomenü">A</button>
@@ -101,7 +97,7 @@
 
   <!-- ====== Bottom nav (mobile) ====== -->
   <nav class="bottom-nav" aria-label="Hauptnavigation">
-    <div class="bottom-nav__pill">
+    <div class="bottom-nav__bar">
       {#each bottomNav as item (item.href)}
         <a
           href={item.href}
@@ -109,12 +105,7 @@
           class:bottom-nav__item--active={isActive(item.href)}
           aria-current={isActive(item.href) ? "page" : undefined}
         >
-          <span class="bottom-nav__icon-wrap">
-            <Icon name={item.icon} size={20} />
-            {#if isActive(item.href)}
-              <span class="bottom-nav__dot"></span>
-            {/if}
-          </span>
+          <Icon name={item.icon} size={18} />
           <span class="bottom-nav__label">{item.label}</span>
         </a>
       {/each}
@@ -137,7 +128,7 @@
     flex-direction: column;
     background: var(--color-surface-raised);
     border-right: 1px solid var(--color-border-light);
-    padding: var(--space-6) 0;
+    padding: var(--space-8) 0;
     position: sticky;
     top: 0;
     height: 100vh;
@@ -150,72 +141,62 @@
     display: flex;
     align-items: center;
     gap: var(--space-3);
-    padding: 0 var(--space-5);
-    margin-bottom: var(--space-8);
-  }
-
-  .sidebar__logo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
-    background: var(--color-green-900);
-    border-radius: var(--radius-md);
-    color: var(--color-green-400);
-    flex-shrink: 0;
+    padding: 0 var(--space-6);
+    margin-bottom: var(--space-10);
+    color: var(--color-text);
   }
 
   .sidebar__brand-text {
     display: flex;
-    flex-direction: column;
-    min-width: 0;
+    align-items: baseline;
+    gap: var(--space-2);
   }
 
   .sidebar__name {
-    font-size: var(--text-lg);
-    font-weight: var(--weight-bold);
+    font-size: var(--text-base);
+    font-weight: var(--weight-semibold);
     letter-spacing: var(--tracking-tight);
     color: var(--color-text);
-    line-height: 1.2;
+    line-height: 1;
   }
 
   .sidebar__tagline {
-    font-size: 0.6875rem;
+    font-size: var(--text-xs);
     color: var(--color-text-tertiary);
-    letter-spacing: 0.02em;
-    line-height: 1.2;
+    font-weight: var(--weight-normal);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    line-height: 1;
   }
 
   .sidebar__nav {
     flex: 1;
-    padding: 0 var(--space-3);
+    padding: 0 var(--space-4);
   }
 
   .sidebar__nav ul {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 1px;
   }
 
   .sidebar__link {
     display: flex;
     align-items: center;
     gap: var(--space-3);
-    padding: 0.625rem var(--space-4);
+    padding: 0.5rem var(--space-4);
     border-radius: var(--radius-md);
     font-size: var(--text-sm);
-    font-weight: var(--weight-medium);
+    font-weight: var(--weight-normal);
     color: var(--color-text-tertiary);
     text-decoration: none;
     transition:
-      background var(--transition-fast),
-      color var(--transition-fast);
+      color var(--transition-fast),
+      background var(--transition-fast);
   }
 
   .sidebar__link:hover {
-    background: var(--color-surface-sunken);
     color: var(--color-text);
     text-decoration: none;
   }
@@ -224,27 +205,25 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 1.75rem;
-    height: 1.75rem;
+    width: 1.5rem;
+    height: 1.5rem;
     flex-shrink: 0;
   }
 
   .sidebar__link--active {
-    background: var(--color-green-50);
-    color: var(--color-green-700);
-    font-weight: var(--weight-semibold);
-    box-shadow: inset 3px 0 0 var(--color-green-500);
+    color: var(--color-text);
+    font-weight: var(--weight-medium);
+    background: var(--color-surface-sunken);
   }
 
   .sidebar__link--active:hover {
-    background: var(--color-green-100);
-    color: var(--color-green-700);
+    background: var(--color-surface-sunken);
   }
 
   .sidebar__footer {
-    padding: var(--space-5) var(--space-5);
+    padding: var(--space-6) var(--space-6) 0;
     border-top: 1px solid var(--color-border-light);
-    margin-top: var(--space-6);
+    margin-top: var(--space-8);
   }
 
   .sidebar__user {
@@ -254,16 +233,16 @@
   }
 
   .sidebar__avatar {
-    width: 2rem;
-    height: 2rem;
+    width: 1.75rem;
+    height: 1.75rem;
     border-radius: var(--radius-full);
-    background: var(--color-green-900);
-    color: var(--color-green-400);
+    background: var(--color-text);
+    color: var(--color-text-inverse);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: var(--text-xs);
-    font-weight: var(--weight-bold);
+    font-weight: var(--weight-medium);
   }
 
   .sidebar__user-info {
@@ -273,8 +252,9 @@
 
   .sidebar__user-name {
     font-size: var(--text-sm);
-    font-weight: var(--weight-semibold);
+    font-weight: var(--weight-medium);
     color: var(--color-text);
+    line-height: 1.2;
   }
 
   .sidebar__user-role {
@@ -289,7 +269,7 @@
 
   /* ---- Main ---- */
   .main {
-    padding: var(--space-8) var(--space-10);
+    padding: var(--space-10) var(--space-12);
     overflow-y: auto;
     background: var(--color-surface);
   }
@@ -320,9 +300,9 @@
       align-items: center;
       justify-content: space-between;
       padding: 0 var(--space-5);
-      background: rgba(246, 244, 239, 0.8);
-      backdrop-filter: blur(16px) saturate(1.8);
-      -webkit-backdrop-filter: blur(16px) saturate(1.8);
+      background: rgba(248, 248, 245, 0.85);
+      backdrop-filter: blur(20px) saturate(1.5);
+      -webkit-backdrop-filter: blur(20px) saturate(1.5);
       border-bottom: 1px solid var(--color-border-light);
       position: sticky;
       top: 0;
@@ -333,41 +313,31 @@
       display: flex;
       align-items: center;
       gap: var(--space-2);
-    }
-
-    .mobile-header__logo {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 1.75rem;
-      height: 1.75rem;
-      background: var(--color-green-900);
-      border-radius: 0.375rem;
-      color: var(--color-green-400);
+      color: var(--color-text);
     }
 
     .mobile-header__name {
-      font-weight: var(--weight-bold);
-      font-size: var(--text-base);
+      font-weight: var(--weight-semibold);
+      font-size: var(--text-sm);
       color: var(--color-text);
       letter-spacing: var(--tracking-tight);
     }
 
     .mobile-header__avatar {
-      width: 1.75rem;
-      height: 1.75rem;
+      width: 1.625rem;
+      height: 1.625rem;
       border-radius: var(--radius-full);
-      background: var(--color-green-900);
-      color: var(--color-green-400);
+      background: var(--color-text);
+      color: var(--color-text-inverse);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.625rem;
-      font-weight: var(--weight-bold);
+      font-size: 0.5625rem;
+      font-weight: var(--weight-medium);
     }
 
     .main {
-      padding: var(--space-5);
+      padding: var(--space-6);
       padding-bottom: calc(var(--bottom-nav-height) + var(--space-8));
     }
 
@@ -378,34 +348,31 @@
       left: 0;
       right: 0;
       z-index: 30;
-      padding: 0 var(--space-4) env(safe-area-inset-bottom, var(--space-2));
+      background: rgba(248, 248, 245, 0.9);
+      backdrop-filter: blur(20px) saturate(1.5);
+      -webkit-backdrop-filter: blur(20px) saturate(1.5);
+      border-top: 1px solid var(--color-border-light);
+      padding-bottom: env(safe-area-inset-bottom, 0);
     }
 
-    .bottom-nav__pill {
+    .bottom-nav__bar {
       display: flex;
       align-items: center;
       justify-content: space-around;
-      background: var(--color-surface-raised);
-      border-radius: var(--radius-2xl);
-      box-shadow: var(--shadow-lg);
-      padding: var(--space-1) var(--space-1);
-      margin-bottom: var(--space-2);
+      padding: var(--space-2) 0;
     }
 
     .bottom-nav__item {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1px;
-      padding: var(--space-2) var(--space-3);
-      border-radius: var(--radius-lg);
+      gap: 2px;
+      padding: var(--space-1) var(--space-3);
       color: var(--color-text-tertiary);
-      font-size: 0.625rem;
+      font-size: 0.5625rem;
       text-decoration: none;
-      transition:
-        color var(--transition-fast),
-        background var(--transition-fast);
-      min-width: 3.25rem;
+      transition: color var(--transition-fast);
+      min-width: 3rem;
     }
 
     .bottom-nav__item:hover {
@@ -414,27 +381,11 @@
     }
 
     .bottom-nav__item--active {
-      color: var(--color-green-700);
-      background: var(--color-green-50);
-    }
-
-    .bottom-nav__icon-wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .bottom-nav__dot {
-      display: block;
-      width: 4px;
-      height: 4px;
-      border-radius: var(--radius-full);
-      background: var(--color-green-500);
-      margin-top: 2px;
+      color: var(--color-text);
     }
 
     .bottom-nav__label {
-      font-weight: var(--weight-semibold);
+      font-weight: var(--weight-medium);
       letter-spacing: 0.01em;
     }
   }

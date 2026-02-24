@@ -15,7 +15,6 @@
       ? $cycles
       : $cycles.filter((c) => c.status === filterStatus);
 
-  // Group cycles by date
   $: groupedByDate = filteredCycles.reduce(
     (acc, cycle) => {
       if (!acc[cycle.scheduledDate]) acc[cycle.scheduledDate] = [];
@@ -32,28 +31,13 @@
       case "running":
         return "badge--green";
       case "scheduled":
-        return "badge--orange";
+        return "badge--neutral";
       case "completed":
         return "badge--neutral";
       case "cancelled":
         return "badge--danger";
       default:
         return "badge--neutral";
-    }
-  }
-
-  function statusIcon(status: WashCycle["status"]): string {
-    switch (status) {
-      case "running":
-        return "play";
-      case "scheduled":
-        return "clock";
-      case "completed":
-        return "check";
-      case "cancelled":
-        return "x";
-      default:
-        return "clock";
     }
   }
 
@@ -80,7 +64,6 @@
   }
 
   function handleOptimize() {
-    // Placeholder — would call OR-Tools backend
     alert(
       "Optimierung ruft den Backend-Solver auf, um Waschgänge optimal zu planen.",
     );
@@ -97,11 +80,11 @@
     </div>
     <div class="page-header__actions">
       <button class="btn btn--secondary" on:click={handleOptimize}>
-        <Icon name="zap" size={16} />
+        <Icon name="zap" size={14} />
         Optimieren
       </button>
       <button class="btn btn--primary">
-        <Icon name="plus" size={16} />
+        <Icon name="plus" size={14} />
         Neuer Waschgang
       </button>
     </div>
@@ -140,50 +123,36 @@
       <h2 class="timeline__date">{formatDate(date)}</h2>
       <div class="timeline__cycles">
         {#each groupedByDate[date] as cycle (cycle.id)}
-          <article class="card card--interactive cycle-detail" aria-label="Waschgang: {cycle.name}">
-            <div class="cycle-detail__top">
-              <div class="cycle-detail__status-icon {cycle.status}">
-                <Icon name={statusIcon(cycle.status)} size={18} />
-              </div>
-              <div class="cycle-detail__info">
-                <h3 class="cycle-detail__name">{cycle.name}</h3>
-                <span class="cycle-detail__time">{cycle.scheduledTime}</span>
+          <article class="cycle-entry" aria-label="Waschgang: {cycle.name}">
+            <div class="cycle-entry__top">
+              <div class="cycle-entry__info">
+                <h3 class="cycle-entry__name">{cycle.name}</h3>
+                <span class="cycle-entry__time">{cycle.scheduledTime}</span>
               </div>
               <span class="badge {statusColor(cycle.status)}">{label(statusLabels, cycle.status)}</span>
             </div>
 
-            <div class="cycle-detail__props">
-              <div class="cycle-detail__prop">
-                <Icon name="thermometer" size={14} />
-                <span>{cycle.temperature}°C</span>
-              </div>
-              <div class="cycle-detail__prop">
-                <Icon name="clock" size={14} />
-                <span>{cycle.duration} min</span>
-              </div>
-              <div class="cycle-detail__prop">
-                <span>Beladung: {cycle.machineLoad}%</span>
-              </div>
-              <div class="cycle-detail__prop">
-                <span>Farbe: {label(colorLabels, cycle.colorGroup)}</span>
-              </div>
+            <div class="cycle-entry__details">
+              <span>{cycle.temperature}°C</span>
+              <span class="cycle-entry__sep"></span>
+              <span>{cycle.duration} min</span>
+              <span class="cycle-entry__sep"></span>
+              <span>{cycle.machineLoad}% Beladung</span>
+              <span class="cycle-entry__sep"></span>
+              <span>{label(colorLabels, cycle.colorGroup)}</span>
             </div>
 
-            <div class="cycle-detail__items">
-              <span class="cycle-detail__items-label">Teile:</span>
+            <div class="cycle-entry__items">
               {#each cycle.items as itemId}
-                <span class="badge badge--neutral">{itemName(itemId)}</span>
+                <span class="cycle-entry__item">{itemName(itemId)}</span>
               {/each}
             </div>
 
             {#if cycle.status === "scheduled"}
-              <div class="cycle-detail__actions">
-                <button class="btn btn--primary btn--sm">
-                  <Icon name="play" size={14} />
-                  Starten
-                </button>
+              <div class="cycle-entry__actions">
+                <button class="btn btn--primary btn--sm">Starten</button>
                 <button class="btn btn--ghost btn--sm">Bearbeiten</button>
-                <button class="btn btn--ghost btn--sm" style="color: var(--color-danger);">Abbrechen</button>
+                <button class="btn btn--ghost btn--sm cycle-entry__cancel">Abbrechen</button>
               </div>
             {/if}
           </article>
@@ -191,9 +160,9 @@
       </div>
     </section>
   {:else}
-    <div class="empty-state card">
+    <div class="empty-state">
       <div class="empty-state__icon">
-        <Icon name="schedule" size={48} />
+        <Icon name="schedule" size={32} />
       </div>
       <h3 class="empty-state__title">Keine Waschgänge gefunden</h3>
       <p class="empty-state__text">Passe den Filter an oder erstelle einen neuen Waschgang.</p>
@@ -216,7 +185,7 @@
   }
 
   .filters {
-    margin-bottom: var(--space-6);
+    margin-bottom: var(--space-8);
   }
 
   .filter-group {
@@ -229,144 +198,127 @@
   .filter-chip {
     display: inline-flex;
     align-items: center;
-    padding: 0.375rem 0.875rem;
+    padding: 0.3125rem 0.75rem;
     border-radius: var(--radius-full);
     font-size: var(--text-sm);
-    font-weight: var(--weight-medium);
+    font-weight: var(--weight-normal);
     color: var(--color-text-tertiary);
-    background: var(--color-surface-raised);
-    box-shadow: inset 0 0 0 1.5px var(--color-border-light);
-    border: none;
+    background: transparent;
+    border: 1px solid var(--color-border);
     cursor: pointer;
     transition:
       background var(--transition-fast),
-      box-shadow var(--transition-fast),
+      border-color var(--transition-fast),
       color var(--transition-fast);
   }
 
   .filter-chip:hover {
-    box-shadow: inset 0 0 0 1.5px var(--color-green-400);
-    color: var(--color-text);
+    border-color: var(--color-text-tertiary);
+    color: var(--color-text-secondary);
   }
 
   .filter-chip--active {
-    background: var(--color-green-50);
-    box-shadow: inset 0 0 0 1.5px var(--color-green-500);
-    color: var(--color-green-700);
-    font-weight: var(--weight-semibold);
+    background: var(--color-text);
+    border-color: var(--color-text);
+    color: var(--color-text-inverse);
+    font-weight: var(--weight-medium);
   }
 
   .timeline {
     display: flex;
     flex-direction: column;
-    gap: var(--space-8);
+    gap: var(--space-10);
   }
 
   .timeline__date {
-    font-size: var(--text-base);
-    font-weight: var(--weight-bold);
-    color: var(--color-text);
-    letter-spacing: var(--tracking-tight);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
+    color: var(--color-text-tertiary);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
     margin-bottom: var(--space-4);
-    padding-bottom: var(--space-3);
-    border-bottom: 2px solid var(--color-green-100);
   }
 
   .timeline__cycles {
     display: flex;
     flex-direction: column;
+    gap: 0;
+  }
+
+  .cycle-entry {
+    padding: var(--space-5) 0;
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .cycle-entry:last-child {
+    border-bottom: none;
+  }
+
+  .cycle-entry__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     gap: var(--space-3);
   }
 
-  .cycle-detail__top {
+  .cycle-entry__info {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     gap: var(--space-3);
-  }
-
-  .cycle-detail__status-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.25rem;
-    height: 2.25rem;
-    border-radius: var(--radius-full);
-    flex-shrink: 0;
-  }
-
-  .cycle-detail__status-icon.running {
-    background: var(--color-green-100);
-    color: var(--color-green-700);
-  }
-
-  .cycle-detail__status-icon.scheduled {
-    background: var(--color-orange-100);
-    color: var(--color-orange-700);
-  }
-
-  .cycle-detail__status-icon.completed {
-    background: var(--color-surface-sunken);
-    color: var(--color-text-secondary);
-  }
-
-  .cycle-detail__status-icon.cancelled {
-    background: var(--color-danger-light);
-    color: var(--color-danger);
-  }
-
-  .cycle-detail__info {
-    flex: 1;
     min-width: 0;
   }
 
-  .cycle-detail__name {
-    font-size: var(--text-sm);
-    font-weight: var(--weight-semibold);
+  .cycle-entry__name {
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
     color: var(--color-text);
     margin: 0;
   }
 
-  .cycle-detail__time {
-    font-size: var(--text-xs);
+  .cycle-entry__time {
+    font-size: var(--text-sm);
     color: var(--color-text-tertiary);
   }
 
-  .cycle-detail__props {
+  .cycle-entry__details {
     display: flex;
-    gap: var(--space-4);
-    flex-wrap: wrap;
-    margin-top: var(--space-3);
-    padding-top: var(--space-3);
-    border-top: 1px solid var(--color-border-light);
-  }
-
-  .cycle-detail__prop {
-    display: inline-flex;
     align-items: center;
-    gap: var(--space-1);
-    font-size: var(--text-xs);
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+    font-size: var(--text-sm);
     color: var(--color-text-secondary);
   }
 
-  .cycle-detail__items {
+  .cycle-entry__sep {
+    width: 3px;
+    height: 3px;
+    border-radius: var(--radius-full);
+    background: var(--color-text-tertiary);
+    flex-shrink: 0;
+  }
+
+  .cycle-entry__items {
     display: flex;
-    align-items: center;
     flex-wrap: wrap;
     gap: var(--space-2);
     margin-top: var(--space-3);
   }
 
-  .cycle-detail__items-label {
+  .cycle-entry__item {
     font-size: var(--text-xs);
-    color: var(--color-text-tertiary);
-    font-weight: var(--weight-medium);
+    color: var(--color-text-secondary);
+    padding: 0.125rem 0.5rem;
+    background: var(--color-surface-sunken);
+    border-radius: var(--radius-full);
   }
 
-  .cycle-detail__actions {
+  .cycle-entry__actions {
     display: flex;
     gap: var(--space-2);
-    margin-top: var(--space-3);
-    padding-top: var(--space-3);
-    border-top: 1px solid var(--color-border-light);
+    margin-top: var(--space-4);
+  }
+
+  .cycle-entry__cancel {
+    color: var(--color-danger);
   }
 </style>

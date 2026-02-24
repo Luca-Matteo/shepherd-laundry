@@ -1,7 +1,6 @@
 <script lang="ts">
   import Icon from "./Icon.svelte";
 
-  // Mock analytics data (would come from API)
   const weeklyWashes = [
     { day: "Mo", count: 2 },
     { day: "Di", count: 1 },
@@ -17,28 +16,28 @@
   const monthlyStats = {
     totalWashes: 42,
     totalItems: 186,
-    waterUsed: 2520, // liters
-    energyUsed: 63, // kWh
-    avgLoadEfficiency: 72, // percent
+    waterUsed: 2520,
+    energyUsed: 63,
+    avgLoadEfficiency: 72,
     mostWashedFabric: "Baumwolle",
     busiestDay: "Samstag",
     avgCyclesPerWeek: 10.5,
   };
 
   const fabricBreakdown = [
-    { fabric: "Baumwolle", percent: 45, color: "var(--color-green-600)" },
-    { fabric: "Synthetik", percent: 22, color: "var(--color-orange-600)" },
-    { fabric: "Mischgewebe", percent: 18, color: "var(--color-green-400)" },
-    { fabric: "Wolle", percent: 8, color: "var(--color-orange-400)" },
-    { fabric: "Feinwäsche", percent: 5, color: "var(--color-text-tertiary)" },
-    { fabric: "Leinen", percent: 2, color: "var(--color-border)" },
+    { fabric: "Baumwolle", percent: 45 },
+    { fabric: "Synthetik", percent: 22 },
+    { fabric: "Mischgewebe", percent: 18 },
+    { fabric: "Wolle", percent: 8 },
+    { fabric: "Feinwäsche", percent: 5 },
+    { fabric: "Leinen", percent: 2 },
   ];
 
   const colorBreakdown = [
-    { group: "Weiß", percent: 35, color: "var(--color-border)" },
-    { group: "Dunkel", percent: 30, color: "var(--color-text)" },
-    { group: "Bunt", percent: 25, color: "var(--color-orange-500)" },
-    { group: "Hell", percent: 10, color: "var(--color-green-100)" },
+    { group: "Weiß", percent: 35 },
+    { group: "Dunkel", percent: 30 },
+    { group: "Bunt", percent: 25 },
+    { group: "Hell", percent: 10 },
   ];
 
   let period = "month";
@@ -49,7 +48,7 @@
     <div>
       <h1 class="page-header__title">Statistik</h1>
       <p class="page-header__subtitle">
-        Verfolge deine Waschgewohnheiten, Ressourcenverbrauch und Effizienz.
+        Waschgewohnheiten, Ressourcenverbrauch und Effizienz.
       </p>
     </div>
     <div class="period-toggle">
@@ -70,151 +69,132 @@
   </div>
 </div>
 
-<!-- Key metrics -->
+<!-- Key metrics — large numbers, no cards -->
 <section class="section" aria-label="Wichtige Kennzahlen">
-  <div class="grid grid--stats">
-    <div class="card stat">
-      <div class="stat__value">{monthlyStats.totalWashes}</div>
-      <div class="stat__label">Waschgänge gesamt</div>
-      <div class="stat__trend stat__trend--up">+12% gg. Vormonat</div>
+  <div class="metrics-row">
+    <div class="metric">
+      <span class="metric__value">{monthlyStats.totalWashes}</span>
+      <span class="metric__label">Waschgänge</span>
+      <span class="metric__trend metric__trend--up">+12%</span>
     </div>
-    <div class="card stat">
-      <div class="stat__value">{monthlyStats.totalItems}</div>
-      <div class="stat__label">Teile gewaschen</div>
+    <div class="metric">
+      <span class="metric__value">{monthlyStats.totalItems}</span>
+      <span class="metric__label">Teile gewaschen</span>
     </div>
-    <div class="card stat">
-      <div class="stat__value">{monthlyStats.waterUsed}L</div>
-      <div class="stat__label">Wasserverbrauch</div>
-      <div class="stat__trend stat__trend--down">-5% gg. Vormonat</div>
+    <div class="metric">
+      <span class="metric__value">{monthlyStats.waterUsed}<span class="metric__unit">L</span></span>
+      <span class="metric__label">Wasser</span>
+      <span class="metric__trend metric__trend--down">-5%</span>
     </div>
-    <div class="card stat">
-      <div class="stat__value">{monthlyStats.energyUsed} kWh</div>
-      <div class="stat__label">Energieverbrauch</div>
-      <div class="stat__trend stat__trend--down">-8% gg. Vormonat</div>
+    <div class="metric">
+      <span class="metric__value">{monthlyStats.energyUsed}<span class="metric__unit">kWh</span></span>
+      <span class="metric__label">Energie</span>
+      <span class="metric__trend metric__trend--down">-8%</span>
     </div>
   </div>
 </section>
 
-<!-- Charts row -->
+<!-- Charts -->
 <div class="analytics-cols">
-  <!-- Weekly distribution bar chart -->
+  <!-- Weekly distribution -->
   <section class="section">
-    <h2 class="section__title">Waschgänge diese Woche</h2>
-    <div class="card">
-      <div class="bar-chart" role="img" aria-label="Balkendiagramm: Waschgänge pro Tag diese Woche">
-        {#each weeklyWashes as day}
-          <div class="bar-chart__col">
-            <div class="bar-chart__bar-wrap">
-              <div
-                class="bar-chart__bar"
-                style="height: {(day.count / maxWashes) * 100}%"
-                aria-label="{day.day}: {day.count} washes"
-              >
-                {#if day.count > 0}
-                  <span class="bar-chart__value">{day.count}</span>
-                {/if}
-              </div>
+    <h2 class="section__title">Diese Woche</h2>
+    <div class="bar-chart" role="img" aria-label="Waschgänge pro Tag">
+      {#each weeklyWashes as day}
+        <div class="bar-chart__col">
+          <div class="bar-chart__bar-wrap">
+            <div
+              class="bar-chart__bar"
+              style="height: {day.count > 0 ? (day.count / maxWashes) * 100 : 0}%"
+            >
+              {#if day.count > 0}
+                <span class="bar-chart__value">{day.count}</span>
+              {/if}
             </div>
-            <span class="bar-chart__label">{day.day}</span>
           </div>
-        {/each}
-      </div>
+          <span class="bar-chart__label">{day.day}</span>
+        </div>
+      {/each}
     </div>
   </section>
 
   <!-- Efficiency -->
   <section class="section">
     <h2 class="section__title">Effizienz</h2>
-    <div class="card">
-      <div class="efficiency-ring" aria-label="Beladungseffizienz: {monthlyStats.avgLoadEfficiency}%">
-        <svg viewBox="0 0 120 120" class="ring-svg">
-          <defs>
-            <linearGradient id="ring-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="var(--color-green-400)" />
-              <stop offset="100%" stop-color="var(--color-green-700)" />
-            </linearGradient>
-          </defs>
-          <circle cx="60" cy="60" r="52" fill="none" stroke="var(--color-surface-sunken)" stroke-width="8" />
+    <div class="efficiency">
+      <div class="efficiency__ring" aria-label="Beladungseffizienz: {monthlyStats.avgLoadEfficiency}%">
+        <svg viewBox="0 0 120 120" class="efficiency__svg">
+          <circle cx="60" cy="60" r="52" fill="none" stroke="var(--color-border-light)" stroke-width="6" />
           <circle
             cx="60"
             cy="60"
             r="52"
             fill="none"
-            stroke="url(#ring-grad)"
-            stroke-width="8"
+            stroke="var(--color-text)"
+            stroke-width="6"
             stroke-linecap="round"
             stroke-dasharray="{(monthlyStats.avgLoadEfficiency / 100) * 326.7} 326.7"
             transform="rotate(-90 60 60)"
           />
         </svg>
-        <div class="ring-label">
-          <span class="ring-value">{monthlyStats.avgLoadEfficiency}%</span>
-          <span class="ring-text">Ø Beladung</span>
+        <div class="efficiency__ring-label">
+          <span class="efficiency__ring-value">{monthlyStats.avgLoadEfficiency}%</span>
+          <span class="efficiency__ring-text">Beladung</span>
         </div>
       </div>
-      <div class="efficiency-details">
-        <div class="efficiency-detail">
-          <span class="efficiency-detail__label">Stärkster Tag</span>
-          <span class="efficiency-detail__value">{monthlyStats.busiestDay}</span>
+      <div class="efficiency__details">
+        <div class="efficiency__detail">
+          <span class="efficiency__detail-label">Stärkster Tag</span>
+          <span class="efficiency__detail-value">{monthlyStats.busiestDay}</span>
         </div>
-        <div class="efficiency-detail">
-          <span class="efficiency-detail__label">Ø/Woche</span>
-          <span class="efficiency-detail__value">{monthlyStats.avgCyclesPerWeek}</span>
+        <div class="efficiency__detail">
+          <span class="efficiency__detail-label">Ø pro Woche</span>
+          <span class="efficiency__detail-value">{monthlyStats.avgCyclesPerWeek}</span>
         </div>
-        <div class="efficiency-detail">
-          <span class="efficiency-detail__label">Top-Stoff</span>
-          <span class="efficiency-detail__value">{monthlyStats.mostWashedFabric}</span>
+        <div class="efficiency__detail">
+          <span class="efficiency__detail-label">Top-Stoff</span>
+          <span class="efficiency__detail-value">{monthlyStats.mostWashedFabric}</span>
         </div>
       </div>
     </div>
   </section>
 </div>
 
-<!-- Breakdown rows -->
+<!-- Breakdowns -->
 <div class="analytics-cols">
   <section class="section">
     <h2 class="section__title">Stoffverteilung</h2>
-    <div class="card">
-      <div class="breakdown-list">
-        {#each fabricBreakdown as fb}
-          <div class="breakdown-row">
-            <span class="breakdown-row__label">{fb.fabric}</span>
-            <div class="breakdown-row__bar-wrap">
-              <div
-                class="breakdown-row__bar"
-                style="width: {fb.percent}%; background: {fb.color};"
-              ></div>
-            </div>
-            <span class="breakdown-row__pct">{fb.percent}%</span>
+    <div class="breakdown-list">
+      {#each fabricBreakdown as fb}
+        <div class="breakdown-row">
+          <span class="breakdown-row__label">{fb.fabric}</span>
+          <div class="breakdown-row__bar-wrap">
+            <div
+              class="breakdown-row__bar"
+              style="width: {fb.percent}%;"
+            ></div>
           </div>
-        {/each}
-      </div>
+          <span class="breakdown-row__pct">{fb.percent}%</span>
+        </div>
+      {/each}
     </div>
   </section>
 
   <section class="section">
     <h2 class="section__title">Farbverteilung</h2>
-    <div class="card">
-      <div class="breakdown-list">
-        {#each colorBreakdown as cb}
-          <div class="breakdown-row">
-            <span class="breakdown-row__label">
-              <span
-                class="color-dot"
-                style="background: {cb.color}; {cb.group === 'Weiß' ? 'border: 1px solid var(--color-border);' : ''}"
-              ></span>
-              {cb.group}
-            </span>
-            <div class="breakdown-row__bar-wrap">
-              <div
-                class="breakdown-row__bar"
-                style="width: {cb.percent}%; background: {cb.color}; {cb.group === 'Weiß' ? 'border: 1px solid var(--color-border);' : ''}"
-              ></div>
-            </div>
-            <span class="breakdown-row__pct">{cb.percent}%</span>
+    <div class="breakdown-list">
+      {#each colorBreakdown as cb}
+        <div class="breakdown-row">
+          <span class="breakdown-row__label">{cb.group}</span>
+          <div class="breakdown-row__bar-wrap">
+            <div
+              class="breakdown-row__bar"
+              style="width: {cb.percent}%;"
+            ></div>
           </div>
-        {/each}
-      </div>
+          <span class="breakdown-row__pct">{cb.percent}%</span>
+        </div>
+      {/each}
     </div>
   </section>
 </div>
@@ -237,34 +217,87 @@
   .filter-chip {
     display: inline-flex;
     align-items: center;
-    padding: 0.375rem 0.875rem;
+    padding: 0.3125rem 0.75rem;
     border-radius: var(--radius-full);
     font-size: var(--text-sm);
-    font-weight: var(--weight-medium);
+    font-weight: var(--weight-normal);
     color: var(--color-text-tertiary);
-    background: var(--color-surface-raised);
-    box-shadow: inset 0 0 0 1.5px var(--color-border-light);
-    border: none;
+    background: transparent;
+    border: 1px solid var(--color-border);
     cursor: pointer;
-    transition: background var(--transition-fast), box-shadow var(--transition-fast), color var(--transition-fast);
+    transition:
+      background var(--transition-fast),
+      border-color var(--transition-fast),
+      color var(--transition-fast);
   }
 
   .filter-chip:hover {
-    box-shadow: inset 0 0 0 1.5px var(--color-green-400);
-    color: var(--color-text);
+    border-color: var(--color-text-tertiary);
+    color: var(--color-text-secondary);
   }
 
   .filter-chip--active {
-    background: var(--color-green-50);
-    box-shadow: inset 0 0 0 1.5px var(--color-green-500);
-    color: var(--color-green-700);
-    font-weight: var(--weight-semibold);
+    background: var(--color-text);
+    border-color: var(--color-text);
+    color: var(--color-text-inverse);
+    font-weight: var(--weight-medium);
+  }
+
+  /* Metrics row — open, no cards */
+  .metrics-row {
+    display: flex;
+    gap: var(--space-10);
+    padding-bottom: var(--space-8);
+    border-bottom: 1px solid var(--color-border-light);
+    flex-wrap: wrap;
+  }
+
+  .metric {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .metric__value {
+    font-size: var(--text-3xl);
+    font-weight: var(--weight-light);
+    color: var(--color-text);
+    line-height: 1;
+    letter-spacing: var(--tracking-tight);
+  }
+
+  .metric__unit {
+    font-size: var(--text-lg);
+    font-weight: var(--weight-light);
+    color: var(--color-text-secondary);
+    margin-left: 1px;
+  }
+
+  .metric__label {
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    margin-top: var(--space-2);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+  }
+
+  .metric__trend {
+    font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
+    margin-top: var(--space-1);
+  }
+
+  .metric__trend--up {
+    color: var(--color-success);
+  }
+
+  .metric__trend--down {
+    color: var(--color-danger);
   }
 
   .analytics-cols {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-6);
+    gap: var(--space-12);
   }
 
   @media (max-width: 900px) {
@@ -273,7 +306,16 @@
     }
   }
 
-  /* Bar chart */
+  @media (max-width: 600px) {
+    .metrics-row {
+      gap: var(--space-6);
+    }
+    .metric__value {
+      font-size: var(--text-2xl);
+    }
+  }
+
+  /* Bar chart — monochrome */
   .bar-chart {
     display: flex;
     align-items: flex-end;
@@ -299,11 +341,11 @@
   }
 
   .bar-chart__bar {
-    width: 70%;
-    max-width: 2.5rem;
-    background: linear-gradient(180deg, var(--color-green-400), var(--color-green-600));
-    border-radius: var(--radius-md) var(--radius-md) var(--radius-sm) var(--radius-sm);
-    min-height: 4px;
+    width: 60%;
+    max-width: 2rem;
+    background: var(--color-text);
+    border-radius: var(--radius-sm) var(--radius-sm) 2px 2px;
+    min-height: 2px;
     display: flex;
     align-items: flex-start;
     justify-content: center;
@@ -312,31 +354,37 @@
 
   .bar-chart__value {
     font-size: var(--text-xs);
-    font-weight: var(--weight-semibold);
+    font-weight: var(--weight-medium);
     color: var(--color-text-inverse);
     padding-top: var(--space-1);
   }
 
   .bar-chart__label {
     font-size: var(--text-xs);
-    color: var(--color-text-secondary);
+    color: var(--color-text-tertiary);
     margin-top: var(--space-2);
   }
 
-  /* Efficiency ring */
-  .efficiency-ring {
-    position: relative;
-    width: 7.5rem;
-    height: 7.5rem;
-    margin: 0 auto var(--space-4);
+  /* Efficiency ring — monochrome */
+  .efficiency {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
-  .ring-svg {
+  .efficiency__ring {
+    position: relative;
+    width: 7rem;
+    height: 7rem;
+    margin-bottom: var(--space-6);
+  }
+
+  .efficiency__svg {
     width: 100%;
     height: 100%;
   }
 
-  .ring-label {
+  .efficiency__ring-label {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -344,43 +392,45 @@
     text-align: center;
   }
 
-  .ring-value {
+  .efficiency__ring-value {
     display: block;
     font-size: var(--text-xl);
-    font-weight: var(--weight-bold);
+    font-weight: var(--weight-light);
     color: var(--color-text);
     line-height: 1;
   }
 
-  .ring-text {
+  .efficiency__ring-text {
     font-size: var(--text-xs);
     color: var(--color-text-tertiary);
   }
 
-  .efficiency-details {
+  .efficiency__details {
     display: flex;
-    justify-content: space-around;
-    padding-top: var(--space-3);
-    border-top: 1px solid var(--color-border-light);
+    gap: var(--space-8);
   }
 
-  .efficiency-detail {
+  .efficiency__detail {
     text-align: center;
   }
 
-  .efficiency-detail__label {
+  .efficiency__detail-label {
     display: block;
     font-size: var(--text-xs);
     color: var(--color-text-tertiary);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
   }
 
-  .efficiency-detail__value {
+  .efficiency__detail-value {
     font-size: var(--text-sm);
-    font-weight: var(--weight-semibold);
+    font-weight: var(--weight-medium);
     color: var(--color-text);
+    margin-top: var(--space-1);
+    display: block;
   }
 
-  /* Breakdown bars */
+  /* Breakdown bars — monochrome */
   .breakdown-list {
     display: flex;
     flex-direction: column;
@@ -394,27 +444,16 @@
   }
 
   .breakdown-row__label {
-    width: 5rem;
+    width: 5.5rem;
     font-size: var(--text-sm);
-    font-weight: var(--weight-medium);
+    font-weight: var(--weight-normal);
     color: var(--color-text);
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    flex-shrink: 0;
-  }
-
-  .color-dot {
-    display: inline-block;
-    width: 0.625rem;
-    height: 0.625rem;
-    border-radius: var(--radius-full);
     flex-shrink: 0;
   }
 
   .breakdown-row__bar-wrap {
     flex: 1;
-    height: 0.5rem;
+    height: 3px;
     background: var(--color-surface-sunken);
     border-radius: var(--radius-full);
     overflow: hidden;
@@ -423,6 +462,7 @@
   .breakdown-row__bar {
     height: 100%;
     border-radius: var(--radius-full);
+    background: var(--color-text);
     transition: width var(--transition-slow);
   }
 
@@ -431,6 +471,5 @@
     text-align: right;
     font-size: var(--text-xs);
     color: var(--color-text-secondary);
-    font-weight: var(--weight-medium);
   }
 </style>

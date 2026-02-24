@@ -75,7 +75,7 @@ const MEMBERS: FamilyMember[] = [
     email: "alex@home.local",
     role: "admin",
     avatar: "A",
-    color: "var(--color-green-600)",
+    color: "var(--color-accent)",
   },
   {
     id: "m2",
@@ -83,7 +83,7 @@ const MEMBERS: FamilyMember[] = [
     email: "jordan@home.local",
     role: "member",
     avatar: "J",
-    color: "var(--color-orange-600)",
+    color: "var(--color-text-secondary)",
   },
   {
     id: "m3",

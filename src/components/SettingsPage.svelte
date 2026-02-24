@@ -6,7 +6,6 @@
   let activeTab: "general" | "members" | "machines" | "notifications" =
     "general";
 
-  // Machine settings (mock)
   let machineName = "Samsung WW90";
   let machineCapacity = "9";
   let preferredStartTime = "07:00";
@@ -33,7 +32,7 @@
 <div class="page-header">
   <h1 class="page-header__title">Einstellungen</h1>
   <p class="page-header__subtitle">
-    Verwalte deinen Haushalt, Geräte und Voreinstellungen.
+    Haushalt, Geräte und Voreinstellungen verwalten.
   </p>
 </div>
 
@@ -61,7 +60,7 @@
 <div class="tab-panel">
   <!-- General -->
   {#if activeTab === "general"}
-    <section class="card settings-section" aria-label="Allgemeine Einstellungen">
+    <section class="settings-section" aria-label="Allgemeine Einstellungen">
       <h2 class="settings-section__title">Haushalt</h2>
       <div class="form-grid">
         <div class="form-group">
@@ -84,8 +83,8 @@
         </div>
       </div>
 
-      <h2 class="settings-section__title" style="margin-top: var(--space-6);">
-        Zeitplan-Einstellungen
+      <h2 class="settings-section__title settings-section__title--spaced">
+        Zeitplan
       </h2>
       <div class="form-grid">
         <div class="form-group">
@@ -108,13 +107,13 @@
         </div>
       </div>
 
-      <div class="form-group" style="margin-top: var(--space-4);">
+      <div class="form-group" style="margin-top: var(--space-5);">
         <label class="toggle-row">
           <input type="checkbox" bind:checked={energySaveMode} />
           <span class="toggle-label">
             <span class="toggle-label__text">Energiesparmodus</span>
             <span class="toggle-label__hint">
-              Bevorzugt Nebenzeiten und niedrigere Temperaturen wenn möglich.
+              Bevorzugt Nebenzeiten und niedrigere Temperaturen.
             </span>
           </span>
         </label>
@@ -122,7 +121,7 @@
 
       <div class="settings-section__footer">
         <button class="btn btn--primary" on:click={handleSave}>
-          Änderungen speichern
+          Speichern
         </button>
       </div>
     </section>
@@ -130,11 +129,11 @@
 
   <!-- Members -->
   {#if activeTab === "members"}
-    <section class="card settings-section" aria-label="Familienmitglieder">
+    <section class="settings-section" aria-label="Familienmitglieder">
       <div class="settings-section__header">
-        <h2 class="settings-section__title">Familienmitglieder</h2>
+        <h2 class="settings-section__title">Mitglieder</h2>
         <button class="btn btn--primary btn--sm" on:click={handleInvite}>
-          <Icon name="mail" size={16} />
+          <Icon name="mail" size={14} />
           Einladen
         </button>
       </div>
@@ -161,7 +160,7 @@
               aria-label="{member.name} entfernen"
               disabled={member.role === "admin"}
             >
-              <Icon name="x" size={16} />
+              <Icon name="x" size={14} />
             </button>
           </div>
         {/each}
@@ -171,7 +170,7 @@
 
   <!-- Machines -->
   {#if activeTab === "machines"}
-    <section class="card settings-section" aria-label="Geräte-Einstellungen">
+    <section class="settings-section" aria-label="Geräte-Einstellungen">
       <h2 class="settings-section__title">Waschmaschine</h2>
       <div class="form-grid">
         <div class="form-group">
@@ -194,12 +193,12 @@
         </div>
       </div>
 
-      <h2 class="settings-section__title" style="margin-top: var(--space-6);">
+      <h2 class="settings-section__title settings-section__title--spaced">
         Trockner
       </h2>
       <div class="form-grid">
         <div class="form-group">
-          <label class="label" for="dryer-name">Trocknername</label>
+          <label class="label" for="dryer-name">Gerätename</label>
           <input
             id="dryer-name"
             type="text"
@@ -220,7 +219,7 @@
 
       <div class="settings-section__footer">
         <button class="btn btn--primary" on:click={handleSave}>
-          Änderungen speichern
+          Speichern
         </button>
       </div>
     </section>
@@ -228,15 +227,15 @@
 
   <!-- Notifications -->
   {#if activeTab === "notifications"}
-    <section class="card settings-section" aria-label="Benachrichtigungseinstellungen">
+    <section class="settings-section" aria-label="Benachrichtigungseinstellungen">
       <h2 class="settings-section__title">E-Mail-Benachrichtigungen</h2>
       <div class="notification-list">
         {#each [
           { id: "cycle-done", label: "Waschgang abgeschlossen", hint: "Benachrichtigung, wenn ein Waschgang fertig ist.", checked: true },
           { id: "drying-done", label: "Trocknung fertig", hint: "Meldung, wenn die Wäsche getrocknet ist.", checked: true },
-          { id: "supply-low", label: "Vorrat wird knapp", hint: "Warnung, wenn Verbrauchsmaterial unter 20% fällt.", checked: true },
-          { id: "schedule-reminder", label: "Zeitplan-Erinnerung", hint: "Tägliche Zusammenfassung der bevorstehenden Waschgänge.", checked: false },
-          { id: "hygiene-alert", label: "Hygiene-Warnung", hint: "Wäschestücke, die ihr Waschintervall überschritten haben.", checked: true },
+          { id: "supply-low", label: "Vorrat wird knapp", hint: "Warnung bei Verbrauchsmaterial unter 20%.", checked: true },
+          { id: "schedule-reminder", label: "Zeitplan-Erinnerung", hint: "Tägliche Zusammenfassung bevorstehender Waschgänge.", checked: false },
+          { id: "hygiene-alert", label: "Hygiene-Warnung", hint: "Wäschestücke, die ihr Intervall überschritten haben.", checked: true },
         ] as notif}
           <label class="toggle-row">
             <input type="checkbox" checked={notif.checked} />
@@ -250,7 +249,7 @@
 
       <div class="settings-section__footer">
         <button class="btn btn--primary" on:click={handleSave}>
-          Änderungen speichern
+          Speichern
         </button>
       </div>
     </section>
@@ -260,43 +259,43 @@
 <style>
   .tabs {
     display: flex;
-    gap: var(--space-1);
-    margin-bottom: var(--space-8);
-    overflow-x: auto;
-    background: var(--color-surface-sunken);
-    border-radius: var(--radius-lg);
-    padding: var(--space-1);
+    gap: 0;
+    margin-bottom: var(--space-10);
+    border-bottom: 1px solid var(--color-border-light);
   }
 
   .tab {
-    padding: 0.5rem 1rem;
+    padding: var(--space-3) var(--space-5);
     font-size: var(--text-sm);
-    font-weight: var(--weight-medium);
+    font-weight: var(--weight-normal);
     color: var(--color-text-tertiary);
-    border-radius: var(--radius-md);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
     transition:
       color var(--transition-fast),
-      background var(--transition-fast),
-      box-shadow var(--transition-fast);
+      border-color var(--transition-fast);
     white-space: nowrap;
   }
 
   .tab:hover {
-    color: var(--color-text);
+    color: var(--color-text-secondary);
   }
 
   .tab--active {
-    color: var(--color-green-700);
-    background: var(--color-surface-raised);
-    box-shadow: var(--shadow-sm);
-    font-weight: var(--weight-semibold);
+    color: var(--color-text);
+    border-bottom-color: var(--color-text);
+    font-weight: var(--weight-medium);
+  }
+
+  .settings-section {
+    max-width: 36rem;
   }
 
   .settings-section__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-5);
   }
 
   .settings-section__header .settings-section__title {
@@ -304,14 +303,21 @@
   }
 
   .settings-section__title {
-    font-size: var(--text-base);
-    font-weight: var(--weight-semibold);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
+    color: var(--color-text-tertiary);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
     margin-bottom: var(--space-4);
   }
 
+  .settings-section__title--spaced {
+    margin-top: var(--space-8);
+  }
+
   .settings-section__footer {
-    margin-top: var(--space-6);
-    padding-top: var(--space-4);
+    margin-top: var(--space-8);
+    padding-top: var(--space-5);
     border-top: 1px solid var(--color-border-light);
   }
 
@@ -342,9 +348,9 @@
   }
 
   .toggle-row input[type="checkbox"] {
-    width: 1.125rem;
-    height: 1.125rem;
-    accent-color: var(--color-green-600);
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--color-accent);
     margin-top: 2px;
     flex-shrink: 0;
   }
@@ -364,16 +370,17 @@
     font-size: var(--text-xs);
     color: var(--color-text-tertiary);
     margin-top: 2px;
+    line-height: var(--leading-relaxed);
   }
 
   .notification-list {
     display: flex;
     flex-direction: column;
-    gap: var(--space-1);
   }
 
   .notification-list .toggle-row {
     border-bottom: 1px solid var(--color-border-light);
+    padding: var(--space-4) 0;
   }
 
   .notification-list .toggle-row:last-child {
@@ -384,32 +391,30 @@
   .members-list {
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
   }
 
   .member-row {
     display: flex;
     align-items: center;
     gap: var(--space-3);
-    padding: var(--space-3);
-    border-radius: var(--radius-md);
-    transition: background var(--transition-fast);
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--color-border-light);
   }
 
-  .member-row:hover {
-    background: var(--color-surface);
+  .member-row:last-child {
+    border-bottom: none;
   }
 
   .member-avatar {
-    width: 2.25rem;
-    height: 2.25rem;
+    width: 2rem;
+    height: 2rem;
     border-radius: var(--radius-full);
     color: var(--color-text-inverse);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: var(--text-sm);
-    font-weight: var(--weight-semibold);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
     flex-shrink: 0;
   }
 
@@ -422,6 +427,7 @@
     display: block;
     font-size: var(--text-sm);
     font-weight: var(--weight-medium);
+    color: var(--color-text);
   }
 
   .member-email {

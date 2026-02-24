@@ -1,7 +1,7 @@
 <!--
   Inline SVG icon component.
-  Uses a simple set of hand-crafted icons that match the shepherd laundry theme.
-  All icons are 24×24 viewBox with stroke-based rendering.
+  Refined line-weight icons for the shepherd laundry theme.
+  All icons: 24x24 viewBox, thin stroke-based rendering.
 -->
 <script lang="ts">
   export let name: string;
@@ -15,7 +15,7 @@
   viewBox="0 0 24 24"
   fill="none"
   stroke="currentColor"
-  stroke-width="1.75"
+  stroke-width="1.5"
   stroke-linecap="round"
   stroke-linejoin="round"
   aria-hidden={label ? "false" : "true"}
@@ -118,8 +118,8 @@
     <rect x="3" y="2" width="18" height="20" rx="2" />
     <circle cx="12" cy="13" r="5" />
     <circle cx="12" cy="13" r="2" />
-    <line x1="7" y1="6" x2="7.01" y2="6" stroke-width="2.5" />
-    <line x1="10" y1="6" x2="10.01" y2="6" stroke-width="2.5" />
+    <line x1="7" y1="6" x2="7.01" y2="6" stroke-width="2" />
+    <line x1="10" y1="6" x2="10.01" y2="6" stroke-width="2" />
   {:else if name === "shepherd"}
     <!-- Shepherd's crook / staff — brand icon -->
     <path d="M7 22V10" />
