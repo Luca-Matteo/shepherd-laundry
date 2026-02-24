@@ -88,6 +88,9 @@
     <button class="mobile-header__avatar" aria-label="Kontomenü">A</button>
   </header>
 
+  <!-- ====== Build number (prototype) ====== -->
+  <div class="build-tag">Build 0.1.0-alpha.3</div>
+
   <!-- ====== Main content ====== -->
   <main id="main-content" class="main" role="main">
     <div class="main__inner">
@@ -260,6 +263,21 @@
   .sidebar__user-role {
     font-size: var(--text-xs);
     color: var(--color-text-tertiary);
+  }
+
+  /* ---- Build tag ---- */
+  .build-tag {
+    position: fixed;
+    top: var(--space-3);
+    right: var(--space-4);
+    font-size: 0.5625rem;
+    font-weight: var(--weight-medium);
+    color: var(--color-text-tertiary);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    z-index: 40;
+    pointer-events: none;
+    user-select: none;
   }
 
   /* ---- Mobile header ---- */
