@@ -122,15 +122,21 @@
     <line x1="10" y1="6" x2="10.01" y2="6" stroke-width="2" />
   {:else if name === "shepherd"}
     <!-- Laundry basket — brand icon -->
-    <!-- Basket body — tapered, soft base -->
-    <path d="M4.5 9L6.5 20a2 2 0 002 2h7a2 2 0 002-2L19.5 9" />
-    <!-- Rim -->
-    <line x1="3" y1="9" x2="21" y2="9" />
-    <!-- Weave texture -->
-    <line x1="5.2" y1="13" x2="18.8" y2="13" opacity="0.4" />
-    <line x1="5.8" y1="17" x2="18.2" y2="17" opacity="0.4" />
-    <!-- Fabric drape -->
-    <path d="M15 9c-.5-3 .5-5.5 3.5-6.5" />
+    <!-- Basket body — gently tapered -->
+    <path d="M3.5 10L5.5 20a2 2 0 002 2h9a2 2 0 002-2L20.5 10" />
+    <!-- Rim — elliptical for dimension -->
+    <ellipse cx="12" cy="10" rx="8.5" ry="1.5" />
+    <!-- Weave — horizontal bands -->
+    <line x1="4.2" y1="13.5" x2="19.8" y2="13.5" opacity="0.35" />
+    <line x1="4.7" y1="17" x2="19.3" y2="17" opacity="0.35" />
+    <!-- Weave — vertical threads -->
+    <line x1="8.5" y1="10" x2="8" y2="22" opacity="0.2" />
+    <line x1="12" y1="10" x2="12" y2="22" opacity="0.2" />
+    <line x1="15.5" y1="10" x2="16" y2="22" opacity="0.2" />
+    <!-- Fresh laundry — cloth billowing out -->
+    <path d="M9.5 10C8.5 7.5 10 4.5 12 3.5C13.5 2.8 14.5 3.5 14 5.5C13.5 7 15 7 17 5.5C18.5 4.5 19.5 3 20.5 2" />
+    <!-- Second cloth piece — left -->
+    <path d="M6 10C5.5 8.5 6.5 6.5 8 6" />
   {/if}
 </svg>
 

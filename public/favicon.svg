@@ -1,15 +1,58 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <!-- Background — deep forest, quiet authority -->
-  <rect width="32" height="32" rx="7" fill="#1E3A25"/>
-  <g stroke="#7AB88A" fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <!-- Basket body — tapered, soft base -->
-    <path d="M7 13L9 24.5a2.5 2.5 0 002.5 2h9a2.5 2.5 0 002.5-2L25 13" stroke-width="2"/>
-    <!-- Rim — wider than body, the defining line -->
-    <line x1="5.5" y1="13" x2="26.5" y2="13" stroke-width="2"/>
-    <!-- Weave texture — material suggested, not described -->
-    <line x1="8" y1="17.5" x2="24" y2="17.5" stroke-width="1.2" opacity="0.45"/>
-    <line x1="8.5" y1="21.5" x2="23.5" y2="21.5" stroke-width="1.2" opacity="0.45"/>
-    <!-- Fabric — one graceful gesture over the rim -->
-    <path d="M19 13c-.5-3.5.5-6.5 4-8" stroke-width="2"/>
-  </g>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FAF7F2"/>
+      <stop offset="100%" stop-color="#EDE5D8"/>
+    </linearGradient>
+    <linearGradient id="basket" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#D4A76A"/>
+      <stop offset="100%" stop-color="#A8793E"/>
+    </linearGradient>
+    <linearGradient id="rim" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E0BC82"/>
+      <stop offset="100%" stop-color="#C89C5C"/>
+    </linearGradient>
+    <linearGradient id="cloth" x1="0.2" y1="0" x2="0.8" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#F0EBE2"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background — warm parchment -->
+  <rect width="32" height="32" rx="7" fill="url(#bg)"/>
+
+  <!-- Soft ground shadow -->
+  <ellipse cx="16" cy="28.5" rx="8.5" ry="1" fill="#BDB3A3" opacity="0.25"/>
+
+  <!-- Basket body — gentle taper, golden-brown -->
+  <path d="M6 15L8 26.5Q8.5 28.5 11 28.5L21 28.5Q23.5 28.5 24 26.5L26 15Z" fill="url(#basket)"/>
+
+  <!-- Weave — horizontal bands -->
+  <line x1="6.5" y1="18.5" x2="25.5" y2="18.5" stroke="#9A6F32" stroke-width="0.6" opacity="0.35"/>
+  <line x1="7" y1="22" x2="25" y2="22" stroke="#9A6F32" stroke-width="0.6" opacity="0.35"/>
+  <line x1="7.5" y1="25.5" x2="24.5" y2="25.5" stroke="#9A6F32" stroke-width="0.6" opacity="0.35"/>
+
+  <!-- Weave — vertical threads (slightly converging with taper) -->
+  <line x1="10.5" y1="15" x2="10.8" y2="28.5" stroke="#9A6F32" stroke-width="0.5" opacity="0.2"/>
+  <line x1="13.5" y1="15" x2="13.5" y2="28.5" stroke="#9A6F32" stroke-width="0.5" opacity="0.2"/>
+  <line x1="16" y1="15" x2="16" y2="28.5" stroke="#9A6F32" stroke-width="0.5" opacity="0.2"/>
+  <line x1="18.5" y1="15" x2="18.5" y2="28.5" stroke="#9A6F32" stroke-width="0.5" opacity="0.2"/>
+  <line x1="21.5" y1="15" x2="21.2" y2="28.5" stroke="#9A6F32" stroke-width="0.5" opacity="0.2"/>
+
+  <!-- Rim — elliptical, dimensional -->
+  <ellipse cx="16" cy="15" rx="10.5" ry="2.2" fill="url(#rim)" stroke="#B08548" stroke-width="0.5"/>
+  <!-- Rim highlight — top edge catching light -->
+  <ellipse cx="16" cy="14.3" rx="9" ry="0.8" fill="none" stroke="#E8D4A8" stroke-width="0.4" opacity="0.6"/>
+
+  <!-- Depth shadow inside basket -->
+  <ellipse cx="16" cy="15.8" rx="8" ry="1.2" fill="#906830" opacity="0.15"/>
+
+  <!-- Fresh laundry — main cloth, billowing -->
+  <path d="M10.5 14.5C9.5 11 10.5 7 13.5 5C15.5 3.5 17 4.5 16.5 7C16 9.5 17.5 9.5 19.5 8C21 7 22 5 23 3.5" fill="url(#cloth)" stroke="#D5CFC5" stroke-width="0.5" stroke-linejoin="round"/>
+
+  <!-- Second cloth piece — smaller, left side -->
+  <path d="M7.5 14C7 12 7.5 9.5 9.5 8C10.5 7.2 11 8 10.5 10" fill="url(#cloth)" stroke="#D5CFC5" stroke-width="0.4" stroke-linejoin="round"/>
+
+  <!-- Subtle fold line on main cloth -->
+  <path d="M14 5.5C14.5 7 15 9 14.5 11" stroke="#C8C0B5" stroke-width="0.3" fill="none" opacity="0.5"/>
 </svg>
