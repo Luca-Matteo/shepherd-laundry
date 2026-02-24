@@ -1,5 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <rect width="32" height="32" rx="7" fill="#1E3A25"/>
-  <path d="M10 28V14" stroke="#7AB88A" stroke-width="2.5" stroke-linecap="round"/>
-  <path d="M10 14c0-5.5 3-9.5 7-9.5s7 3 7 7-3 5.5-7 5.5H10" stroke="#7AB88A" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+
+  <!-- Basket rim — the anchor of the form -->
+  <line x1="6.5" y1="12" x2="25.5" y2="12" stroke="#7AB88A" stroke-width="1.8" stroke-linecap="round"/>
+
+  <!-- Basket body — gently tapered, soft rounded base -->
+  <path d="M7.5 12 L9 25 C9.2 26.5 10.2 27.5 12 27.5 L20 27.5 C21.8 27.5 22.8 26.5 23 25 L24.5 12" stroke="#7AB88A" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Weave texture — barely there, suggests materiality -->
+  <line x1="8.2" y1="16.5" x2="23.8" y2="16.5" stroke="#7AB88A" stroke-width="0.75" stroke-linecap="round" opacity="0.4"/>
+  <line x1="8.7" y1="21" x2="23.3" y2="21" stroke="#7AB88A" stroke-width="0.75" stroke-linecap="round" opacity="0.4"/>
+
+  <!-- Fabric drape — the soul of the mark -->
+  <path d="M13 12 C13 9 14.5 6.5 17 6 C19 5.6 20 7 19.5 9 L18.5 12" stroke="#7AB88A" stroke-width="1.5" fill="none" stroke-linecap="round"/>
 </svg>

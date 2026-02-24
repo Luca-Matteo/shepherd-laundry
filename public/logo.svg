@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="none">
+  <!--
+    Shepherd Laundry — Brand Mark
+    A laundry basket reduced to its essence.
+    LoveFrom-inspired: geometry, negative space, purposeful reduction.
+  -->
+
+  <!-- Basket rim — confident, anchoring horizontal -->
+  <line x1="14" y1="28" x2="66" y2="28" stroke="#5B7C52" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Basket body — tapered form, soft rounded base -->
+  <path d="M17 28 L21 63 C21.5 66 23.5 68 27 68 L53 68 C56.5 68 58.5 66 59 63 L63 28" stroke="#5B7C52" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Weave texture — three lines, quiet rhythm -->
+  <line x1="18.5" y1="38" x2="61.5" y2="38" stroke="#5B7C52" stroke-width="1.2" stroke-linecap="round" opacity="0.3"/>
+  <line x1="19.5" y1="48" x2="60.5" y2="48" stroke="#5B7C52" stroke-width="1.2" stroke-linecap="round" opacity="0.3"/>
+  <line x1="20.5" y1="58" x2="59.5" y2="58" stroke="#5B7C52" stroke-width="1.2" stroke-linecap="round" opacity="0.3"/>
+
+  <!-- Fabric drape — graceful curve, gives the mark humanity -->
+  <path d="M32 28 C32 21 35.5 13.5 42 12 C48 10.5 51 15 49.5 21 L47 28" stroke="#5B7C52" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+</svg>

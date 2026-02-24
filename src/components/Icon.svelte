@@ -120,6 +120,13 @@
     <circle cx="12" cy="13" r="2" />
     <line x1="7" y1="6" x2="7.01" y2="6" stroke-width="2" />
     <line x1="10" y1="6" x2="10.01" y2="6" stroke-width="2" />
+  {:else if name === "laundry-basket"}
+    <!-- Laundry basket — brand icon -->
+    <line x1="4" y1="9" x2="20" y2="9" />
+    <path d="M5 9 L6.5 19 C6.7 20.5 7.5 21 9 21 L15 21 C16.5 21 17.3 20.5 17.5 19 L19 9" />
+    <line x1="5.7" y1="12.5" x2="18.3" y2="12.5" stroke-width="0.75" opacity="0.4" />
+    <line x1="6" y1="16" x2="18" y2="16" stroke-width="0.75" opacity="0.4" />
+    <path d="M10 9 C10 7 11.5 4.5 13.5 4 C15.5 3.5 16.5 5 16 7 L15 9" />
   {:else if name === "shepherd"}
     <!-- Shepherd's crook / staff — brand icon -->
     <path d="M7 22V10" />
