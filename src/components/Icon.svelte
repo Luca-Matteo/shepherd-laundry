@@ -121,9 +121,16 @@
     <line x1="7" y1="6" x2="7.01" y2="6" stroke-width="2" />
     <line x1="10" y1="6" x2="10.01" y2="6" stroke-width="2" />
   {:else if name === "shepherd"}
-    <!-- Shepherd's crook / staff — brand icon -->
-    <path d="M7 22V10" />
-    <path d="M7 10c0-4 2-7 5-7s5 2 5 5-2 4-5 4H7" />
+    <!-- Laundry basket — brand icon -->
+    <!-- Basket body — tapered, soft base -->
+    <path d="M4.5 9L6.5 20a2 2 0 002 2h7a2 2 0 002-2L19.5 9" />
+    <!-- Rim -->
+    <line x1="3" y1="9" x2="21" y2="9" />
+    <!-- Weave texture -->
+    <line x1="5.2" y1="13" x2="18.8" y2="13" opacity="0.4" />
+    <line x1="5.8" y1="17" x2="18.2" y2="17" opacity="0.4" />
+    <!-- Fabric drape -->
+    <path d="M15 9c-.5-3 .5-5.5 3.5-6.5" />
   {/if}
 </svg>
 
