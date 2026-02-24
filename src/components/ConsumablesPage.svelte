@@ -81,42 +81,51 @@
   <div class="consumable-list">
     {#each $consumables as con (con.id)}
       <article class="consumable-row" aria-label="{con.name}">
-        <div class="consumable-row__top">
-          <div class="consumable-row__info">
-            <h3 class="consumable-row__name">{con.name}</h3>
-            <span class="consumable-row__category">{label(categoryLabels, con.category)}</span>
-          </div>
-          <div class="consumable-row__right">
-            <span class="consumable-row__pct">{percent(con)}%</span>
-            <button
-              class="btn btn--secondary btn--sm"
-              on:click={() => handleRefill(con)}
-            >
-              Auffüllen
-            </button>
-          </div>
-        </div>
+        <div class="consumable-row__body">
+          {#if con.image}
+            <div class="consumable-row__image">
+              <img src={con.image} alt={con.name} />
+            </div>
+          {/if}
+          <div class="consumable-row__content">
+            <div class="consumable-row__top">
+              <div class="consumable-row__info">
+                <h3 class="consumable-row__name">{con.name}</h3>
+                <span class="consumable-row__category">{label(categoryLabels, con.category)}</span>
+              </div>
+              <div class="consumable-row__right">
+                <span class="consumable-row__pct">{percent(con)}%</span>
+                <button
+                  class="btn btn--secondary btn--sm"
+                  on:click={() => handleRefill(con)}
+                >
+                  Auffüllen
+                </button>
+              </div>
+            </div>
 
-        <div class="progress" style="margin: var(--space-3) 0;">
-          <div
-            class="progress__fill {barClass(con)}"
-            style="width: {percent(con)}%"
-            role="progressbar"
-            aria-valuenow={percent(con)}
-            aria-valuemin={0}
-            aria-valuemax={100}
-            aria-label="{con.name} level"
-          ></div>
-        </div>
+            <div class="progress" style="margin: var(--space-3) 0;">
+              <div
+                class="progress__fill {barClass(con)}"
+                style="width: {percent(con)}%"
+                role="progressbar"
+                aria-valuenow={percent(con)}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-label="{con.name} level"
+              ></div>
+            </div>
 
-        <div class="consumable-row__meta">
-          <span>{con.currentAmount}{con.unit} / {con.maxAmount}{con.unit}</span>
-          <span class="consumable-row__sep"></span>
-          <span>~{washesRemaining(con)} Waschgänge</span>
-          <span class="consumable-row__sep"></span>
-          <span>~{daysRemaining(con)} Tage</span>
-          <span class="consumable-row__sep"></span>
-          <span>Aufgefüllt: {con.lastRefilled}</span>
+            <div class="consumable-row__meta">
+              <span>{con.currentAmount}{con.unit} / {con.maxAmount}{con.unit}</span>
+              <span class="consumable-row__sep"></span>
+              <span>~{washesRemaining(con)} Waschgänge</span>
+              <span class="consumable-row__sep"></span>
+              <span>~{daysRemaining(con)} Tage</span>
+              <span class="consumable-row__sep"></span>
+              <span>Aufgefüllt: {con.lastRefilled}</span>
+            </div>
+          </div>
         </div>
       </article>
     {/each}
@@ -173,6 +182,32 @@
 
   .consumable-row:last-child {
     border-bottom: none;
+  }
+
+  .consumable-row__body {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+  }
+
+  .consumable-row__image {
+    flex-shrink: 0;
+    width: 3.5rem;
+    height: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .consumable-row__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .consumable-row__content {
+    flex: 1;
+    min-width: 0;
   }
 
   .consumable-row__top {
