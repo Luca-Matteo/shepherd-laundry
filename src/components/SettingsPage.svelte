@@ -13,36 +13,36 @@
   let energySaveMode = true;
 
   function handleInvite() {
-    alert("Invite member dialog would open — sends email invitation.");
+    alert("Dialog zum Einladen — versendet eine E-Mail-Einladung.");
   }
 
   function handleRemoveMember(m: FamilyMember) {
     if (m.role === "admin") {
-      alert("Cannot remove the admin account.");
+      alert("Das Admin-Konto kann nicht entfernt werden.");
       return;
     }
     members.update((all) => all.filter((x) => x.id !== m.id));
   }
 
   function handleSave() {
-    alert("Settings saved (mock — would POST to API).");
+    alert("Einstellungen gespeichert (Mock — würde an API senden).");
   }
 </script>
 
 <div class="page-header">
-  <h1 class="page-header__title">Settings</h1>
+  <h1 class="page-header__title">Einstellungen</h1>
   <p class="page-header__subtitle">
-    Manage your household, machines, and preferences.
+    Verwalte deinen Haushalt, Geräte und Voreinstellungen.
   </p>
 </div>
 
 <!-- Tabs -->
-<div class="tabs" role="tablist" aria-label="Settings sections">
+<div class="tabs" role="tablist" aria-label="Einstellungsbereiche">
   {#each [
-    { key: "general", label: "General" },
-    { key: "members", label: "Members" },
-    { key: "machines", label: "Machines" },
-    { key: "notifications", label: "Notifications" },
+    { key: "general", label: "Allgemein" },
+    { key: "members", label: "Mitglieder" },
+    { key: "machines", label: "Geräte" },
+    { key: "notifications", label: "Benachrichtigungen" },
   ] as tab (tab.key)}
     <button
       role="tab"
@@ -60,20 +60,20 @@
 <div class="tab-panel">
   <!-- General -->
   {#if activeTab === "general"}
-    <section class="card settings-section" aria-label="General settings">
-      <h2 class="settings-section__title">Household</h2>
+    <section class="card settings-section" aria-label="Allgemeine Einstellungen">
+      <h2 class="settings-section__title">Haushalt</h2>
       <div class="form-grid">
         <div class="form-group">
-          <label class="label" for="household-name">Household name</label>
+          <label class="label" for="household-name">Haushaltsname</label>
           <input
             id="household-name"
             type="text"
             class="input"
-            value="The Shepherd Home"
+            value="Die Shepherd Familie"
           />
         </div>
         <div class="form-group">
-          <label class="label" for="timezone">Timezone</label>
+          <label class="label" for="timezone">Zeitzone</label>
           <select id="timezone" class="select">
             <option>Europe/Berlin</option>
             <option>US/Eastern</option>
@@ -84,11 +84,11 @@
       </div>
 
       <h2 class="settings-section__title" style="margin-top: var(--space-6);">
-        Schedule Preferences
+        Zeitplan-Einstellungen
       </h2>
       <div class="form-grid">
         <div class="form-group">
-          <label class="label" for="start-time">Earliest start time</label>
+          <label class="label" for="start-time">Früheste Startzeit</label>
           <input
             id="start-time"
             type="time"
@@ -97,7 +97,7 @@
           />
         </div>
         <div class="form-group">
-          <label class="label" for="end-time">Latest end time</label>
+          <label class="label" for="end-time">Späteste Endzeit</label>
           <input
             id="end-time"
             type="time"
@@ -111,9 +111,9 @@
         <label class="toggle-row">
           <input type="checkbox" bind:checked={energySaveMode} />
           <span class="toggle-label">
-            <span class="toggle-label__text">Energy saving mode</span>
+            <span class="toggle-label__text">Energiesparmodus</span>
             <span class="toggle-label__hint">
-              Prefer off-peak hours and lower temperatures when possible.
+              Bevorzugt Nebenzeiten und niedrigere Temperaturen wenn möglich.
             </span>
           </span>
         </label>
@@ -121,7 +121,7 @@
 
       <div class="settings-section__footer">
         <button class="btn btn--primary" on:click={handleSave}>
-          Save Changes
+          Änderungen speichern
         </button>
       </div>
     </section>
@@ -129,12 +129,12 @@
 
   <!-- Members -->
   {#if activeTab === "members"}
-    <section class="card settings-section" aria-label="Family members">
+    <section class="card settings-section" aria-label="Familienmitglieder">
       <div class="settings-section__header">
-        <h2 class="settings-section__title">Family Members</h2>
+        <h2 class="settings-section__title">Familienmitglieder</h2>
         <button class="btn btn--primary btn--sm" on:click={handleInvite}>
           <Icon name="mail" size={16} />
-          Invite
+          Einladen
         </button>
       </div>
 
@@ -157,7 +157,7 @@
             <button
               class="btn btn--ghost btn--sm"
               on:click={() => handleRemoveMember(member)}
-              aria-label="Remove {member.name}"
+              aria-label="{member.name} entfernen"
               disabled={member.role === "admin"}
             >
               <Icon name="x" size={16} />
@@ -170,11 +170,11 @@
 
   <!-- Machines -->
   {#if activeTab === "machines"}
-    <section class="card settings-section" aria-label="Machine settings">
-      <h2 class="settings-section__title">Washing Machine</h2>
+    <section class="card settings-section" aria-label="Geräte-Einstellungen">
+      <h2 class="settings-section__title">Waschmaschine</h2>
       <div class="form-grid">
         <div class="form-group">
-          <label class="label" for="machine-name">Machine name</label>
+          <label class="label" for="machine-name">Gerätename</label>
           <input
             id="machine-name"
             type="text"
@@ -183,7 +183,7 @@
           />
         </div>
         <div class="form-group">
-          <label class="label" for="machine-capacity">Capacity (kg)</label>
+          <label class="label" for="machine-capacity">Kapazität (kg)</label>
           <input
             id="machine-capacity"
             type="number"
@@ -194,11 +194,11 @@
       </div>
 
       <h2 class="settings-section__title" style="margin-top: var(--space-6);">
-        Dryer
+        Trockner
       </h2>
       <div class="form-grid">
         <div class="form-group">
-          <label class="label" for="dryer-name">Dryer name</label>
+          <label class="label" for="dryer-name">Trocknername</label>
           <input
             id="dryer-name"
             type="text"
@@ -207,7 +207,7 @@
           />
         </div>
         <div class="form-group">
-          <label class="label" for="dryer-capacity">Capacity (kg)</label>
+          <label class="label" for="dryer-capacity">Kapazität (kg)</label>
           <input
             id="dryer-capacity"
             type="number"
@@ -219,7 +219,7 @@
 
       <div class="settings-section__footer">
         <button class="btn btn--primary" on:click={handleSave}>
-          Save Changes
+          Änderungen speichern
         </button>
       </div>
     </section>
@@ -227,15 +227,15 @@
 
   <!-- Notifications -->
   {#if activeTab === "notifications"}
-    <section class="card settings-section" aria-label="Notification settings">
-      <h2 class="settings-section__title">Email Notifications</h2>
+    <section class="card settings-section" aria-label="Benachrichtigungseinstellungen">
+      <h2 class="settings-section__title">E-Mail-Benachrichtigungen</h2>
       <div class="notification-list">
         {#each [
-          { id: "cycle-done", label: "Cycle completed", hint: "Get notified when a wash cycle finishes.", checked: true },
-          { id: "drying-done", label: "Drying complete", hint: "Alert when items are done drying.", checked: true },
-          { id: "supply-low", label: "Supply running low", hint: "Warning when consumables drop below 20%.", checked: true },
-          { id: "schedule-reminder", label: "Schedule reminder", hint: "Daily digest of upcoming wash cycles.", checked: false },
-          { id: "hygiene-alert", label: "Hygiene alert", hint: "Items that have exceeded their wash interval.", checked: true },
+          { id: "cycle-done", label: "Waschgang abgeschlossen", hint: "Benachrichtigung, wenn ein Waschgang fertig ist.", checked: true },
+          { id: "drying-done", label: "Trocknung fertig", hint: "Meldung, wenn die Wäsche getrocknet ist.", checked: true },
+          { id: "supply-low", label: "Vorrat wird knapp", hint: "Warnung, wenn Verbrauchsmaterial unter 20% fällt.", checked: true },
+          { id: "schedule-reminder", label: "Zeitplan-Erinnerung", hint: "Tägliche Zusammenfassung der bevorstehenden Waschgänge.", checked: false },
+          { id: "hygiene-alert", label: "Hygiene-Warnung", hint: "Wäschestücke, die ihr Waschintervall überschritten haben.", checked: true },
         ] as notif}
           <label class="toggle-row">
             <input type="checkbox" checked={notif.checked} />
@@ -249,7 +249,7 @@
 
       <div class="settings-section__footer">
         <button class="btn btn--primary" on:click={handleSave}>
-          Save Changes
+          Änderungen speichern
         </button>
       </div>
     </section>

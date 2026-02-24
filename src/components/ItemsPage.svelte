@@ -65,31 +65,31 @@
   }
 
   function daysSince(date: string | null): string {
-    if (!date) return "Never";
+    if (!date) return "Nie";
     const d = new Date(date);
     const now = new Date("2026-02-24");
     const diff = Math.floor((now.getTime() - d.getTime()) / (1000 * 60 * 60 * 24));
-    if (diff === 0) return "Today";
-    if (diff === 1) return "Yesterday";
-    return `${diff}d ago`;
+    if (diff === 0) return "Heute";
+    if (diff === 1) return "Gestern";
+    return `vor ${diff}T`;
   }
 
   function handleAddItem() {
-    alert("Add item dialog would open here.");
+    alert("Dialog zum Hinzufügen eines Wäschestücks würde hier erscheinen.");
   }
 </script>
 
 <div class="page-header">
   <div class="page-header__row">
     <div>
-      <h1 class="page-header__title">Laundry Items</h1>
+      <h1 class="page-header__title">Wäsche</h1>
       <p class="page-header__subtitle">
-        Track all household laundry items and their status.
+        Alle Wäschestücke des Haushalts und ihren Status verfolgen.
       </p>
     </div>
     <button class="btn btn--primary" on:click={handleAddItem}>
       <Icon name="plus" size={16} />
-      Add Item
+      Hinzufügen
     </button>
   </div>
 </div>
@@ -99,18 +99,18 @@
   <div class="filter-bar__group">
     <label class="label" for="filter-status">Status</label>
     <select id="filter-status" class="select" bind:value={filterStatus}>
-      <option value="all">All statuses</option>
-      <option value="clean">Clean</option>
-      <option value="hamper">In hamper</option>
-      <option value="washing">Washing</option>
-      <option value="drying">Drying</option>
+      <option value="all">Alle Status</option>
+      <option value="clean">Sauber</option>
+      <option value="hamper">Im Wäschekorb</option>
+      <option value="washing">Wäscht</option>
+      <option value="drying">Trocknet</option>
     </select>
   </div>
 
   <div class="filter-bar__group">
-    <label class="label" for="filter-owner">Owner</label>
+    <label class="label" for="filter-owner">Besitzer</label>
     <select id="filter-owner" class="select" bind:value={filterOwner}>
-      <option value="all">Everyone</option>
+      <option value="all">Alle</option>
       {#each $members as member (member.id)}
         <option value={member.id}>{member.name}</option>
       {/each}
@@ -118,11 +118,11 @@
   </div>
 
   <div class="filter-bar__group">
-    <label class="label" for="sort-by">Sort by</label>
+    <label class="label" for="sort-by">Sortieren</label>
     <select id="sort-by" class="select" bind:value={sortBy}>
-      <option value="priority">Priority</option>
+      <option value="priority">Priorität</option>
       <option value="name">Name</option>
-      <option value="fabric">Fabric type</option>
+      <option value="fabric">Stoffart</option>
     </select>
   </div>
 </div>
@@ -152,12 +152,12 @@
 
       <div class="item-card__meta">
         <div class="item-card__detail">
-          <span class="item-card__detail-label">Last washed</span>
+          <span class="item-card__detail-label">Zuletzt gewaschen</span>
           <span class="item-card__detail-value">{daysSince(item.lastWashed)}</span>
         </div>
         <div class="item-card__detail">
-          <span class="item-card__detail-label">Wash every</span>
-          <span class="item-card__detail-value">{item.hygieneLimit}d</span>
+          <span class="item-card__detail-label">Waschen alle</span>
+          <span class="item-card__detail-value">{item.hygieneLimit} T</span>
         </div>
       </div>
     </article>
@@ -166,11 +166,11 @@
       <div class="empty-state__icon">
         <Icon name="items" size={48} />
       </div>
-      <h3 class="empty-state__title">No items found</h3>
-      <p class="empty-state__text">Adjust filters or add your first laundry item.</p>
+      <h3 class="empty-state__title">Keine Wäsche gefunden</h3>
+      <p class="empty-state__text">Passe die Filter an oder füge dein erstes Wäschestück hinzu.</p>
       <button class="btn btn--primary btn--sm" on:click={handleAddItem}>
         <Icon name="plus" size={16} />
-        Add Item
+        Hinzufügen
       </button>
     </div>
   {/each}

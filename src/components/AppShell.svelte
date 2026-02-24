@@ -14,13 +14,13 @@
   }
 
   const nav: NavItem[] = [
-    { href: "/", icon: "dashboard", label: "Dashboard" },
-    { href: "/schedule", icon: "schedule", label: "Schedule" },
-    { href: "/items", icon: "items", label: "Items" },
-    { href: "/drying", icon: "drying", label: "Drying" },
-    { href: "/consumables", icon: "consumables", label: "Supplies" },
-    { href: "/analytics", icon: "analytics", label: "Analytics" },
-    { href: "/settings", icon: "settings", label: "Settings" },
+    { href: "/", icon: "dashboard", label: "Übersicht" },
+    { href: "/schedule", icon: "schedule", label: "Waschplan" },
+    { href: "/items", icon: "items", label: "Wäsche" },
+    { href: "/drying", icon: "drying", label: "Trocknung" },
+    { href: "/consumables", icon: "consumables", label: "Vorräte" },
+    { href: "/analytics", icon: "analytics", label: "Statistik" },
+    { href: "/settings", icon: "settings", label: "Einstellungen" },
   ];
 
   export let currentPath: string = "/";
@@ -36,10 +36,10 @@
 </script>
 
 <div class="shell">
-  <a class="skip-link" href="#main-content">Skip to content</a>
+  <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
 
   <!-- ====== Sidebar (desktop) ====== -->
-  <aside class="sidebar" aria-label="Main navigation">
+  <aside class="sidebar" aria-label="Hauptnavigation">
     <div class="sidebar__brand">
       <div class="sidebar__logo">
         <Icon name="shepherd" size={26} />
@@ -79,14 +79,14 @@
   </aside>
 
   <!-- ====== Mobile header ====== -->
-  <header class="mobile-header" aria-label="App header">
+  <header class="mobile-header" aria-label="App-Kopfzeile">
     <div class="mobile-header__brand">
       <div class="mobile-header__logo">
         <Icon name="shepherd" size={22} />
       </div>
       <span>Shepherd</span>
     </div>
-    <button class="mobile-header__avatar" aria-label="Account menu">A</button>
+    <button class="mobile-header__avatar" aria-label="Kontomenü">A</button>
   </header>
 
   <!-- ====== Main content ====== -->
@@ -97,7 +97,7 @@
   </main>
 
   <!-- ====== Bottom nav (mobile) ====== -->
-  <nav class="bottom-nav" aria-label="Main navigation">
+  <nav class="bottom-nav" aria-label="Hauptnavigation">
     <div class="bottom-nav__pill">
       {#each bottomNav as item (item.href)}
         <a

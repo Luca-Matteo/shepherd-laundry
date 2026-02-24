@@ -79,50 +79,50 @@
   }
 
   function handleAdd() {
-    alert("Add consumable dialog would open here.");
+    alert("Dialog zum Hinzufügen eines Verbrauchsmaterials würde hier erscheinen.");
   }
 </script>
 
 <div class="page-header">
   <div class="page-header__row">
     <div>
-      <h1 class="page-header__title">Supplies</h1>
+      <h1 class="page-header__title">Vorräte</h1>
       <p class="page-header__subtitle">
-        Track detergent and consumables. Get alerts before they run out.
+        Waschmittel und Verbrauchsmaterial verfolgen. Warnungen erhalten, bevor sie aufgebraucht sind.
       </p>
     </div>
     <button class="btn btn--primary" on:click={handleAdd}>
       <Icon name="plus" size={16} />
-      Add Supply
+      Hinzufügen
     </button>
   </div>
 </div>
 
 <!-- Summary strip -->
-<section class="section" aria-label="Supply levels overview">
+<section class="section" aria-label="Übersicht Vorratsstand">
   <div class="grid grid--stats">
     <div class="card stat">
       <div class="stat__value">{$consumables.length}</div>
-      <div class="stat__label">Tracked supplies</div>
+      <div class="stat__label">Verfolgte Vorräte</div>
     </div>
     <div class="card stat">
       <div class="stat__value">
         {$consumables.filter((c) => percent(c) < 30).length}
       </div>
-      <div class="stat__label">Running low</div>
+      <div class="stat__label">Wird knapp</div>
     </div>
     <div class="card stat">
       <div class="stat__value">
         {$consumables.filter((c) => percent(c) < 10).length}
       </div>
-      <div class="stat__label">Critical</div>
+      <div class="stat__label">Kritisch</div>
     </div>
   </div>
 </section>
 
 <!-- Consumable cards -->
 <section class="section">
-  <h2 class="section__title">All Supplies</h2>
+  <h2 class="section__title">Alle Vorräte</h2>
   <div class="consumable-grid">
     {#each $consumables as con (con.id)}
       <article class="card card--interactive consumable-card" aria-label="{con.name}">
@@ -164,23 +164,23 @@
         <div class="consumable-card__predictions">
           <div class="consumable-card__pred">
             <Icon name="washing-machine" size={14} />
-            <span>~{washesRemaining(con)} washes left</span>
+            <span>~{washesRemaining(con)} Waschgänge übrig</span>
           </div>
           <div class="consumable-card__pred">
             <Icon name="clock" size={14} />
-            <span>~{daysRemaining(con)} days left</span>
+            <span>~{daysRemaining(con)} Tage übrig</span>
           </div>
         </div>
 
         <div class="consumable-card__footer">
           <span class="consumable-card__refilled">
-            Refilled: {con.lastRefilled}
+            Aufgefüllt: {con.lastRefilled}
           </span>
           <button
             class="btn btn--secondary btn--sm"
             on:click={() => handleRefill(con)}
           >
-            Refill
+            Auffüllen
           </button>
         </div>
       </article>

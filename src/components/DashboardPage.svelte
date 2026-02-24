@@ -51,27 +51,27 @@
 </script>
 
 <div class="page-header">
-  <h1 class="page-header__title">Dashboard</h1>
+  <h1 class="page-header__title">Übersicht</h1>
   <p class="page-header__subtitle">
-    Good morning — here's your laundry overview.
+    Guten Morgen — hier ist deine Wäscheübersicht.
   </p>
 </div>
 
 <!-- Stats row -->
-<section class="grid grid--stats section" aria-label="Quick statistics">
+<section class="grid grid--stats section" aria-label="Schnellstatistik">
   <div class="card stat-card">
     <div class="stat-card__icon stat-card__icon--green">
       <Icon name="items" size={20} />
     </div>
     <div class="stat__value">{$hamperItems.length}</div>
-    <div class="stat__label">In hamper</div>
+    <div class="stat__label">Im Wäschekorb</div>
   </div>
   <div class="card stat-card">
     <div class="stat-card__icon stat-card__icon--orange">
       <Icon name="washing-machine" size={20} />
     </div>
     <div class="stat__value">{$activeCycles.length}</div>
-    <div class="stat__label">Active cycles</div>
+    <div class="stat__label">Aktive Waschgänge</div>
   </div>
   <div class="card stat-card">
     <div class="stat-card__icon stat-card__icon--green">
@@ -80,7 +80,7 @@
     <div class="stat__value">
       {$dryingSessions.filter((d) => d.status === "active").length}
     </div>
-    <div class="stat__label">Drying now</div>
+    <div class="stat__label">Trocknet gerade</div>
   </div>
   <div class="card stat-card">
     <div class="stat-card__icon" class:stat-card__icon--danger={$lowConsumables.length > 0} class:stat-card__icon--neutral={$lowConsumables.length === 0}>
@@ -88,7 +88,7 @@
     </div>
     <div class="stat__value">{$lowConsumables.length}</div>
     <div class="stat__label">
-      {$lowConsumables.length === 1 ? "Supply low" : "Supplies low"}
+      {$lowConsumables.length === 1 ? "Vorrat knapp" : "Vorräte knapp"}
     </div>
   </div>
 </section>
@@ -97,9 +97,9 @@
 <div class="dashboard-cols">
   <section class="section">
     <div class="section-header">
-      <h2 class="section__title">Upcoming Cycles</h2>
+      <h2 class="section__title">Nächste Waschgänge</h2>
       <a href="/schedule" class="btn btn--ghost btn--sm">
-        View all <Icon name="chevron-right" size={14} />
+        Alle anzeigen <Icon name="chevron-right" size={14} />
       </a>
     </div>
     <div class="cycle-list">
@@ -129,9 +129,9 @@
         </div>
       {:else}
         <div class="empty-state">
-          <p class="empty-state__text">No upcoming cycles scheduled.</p>
+          <p class="empty-state__text">Keine bevorstehenden Waschgänge geplant.</p>
           <a href="/schedule" class="btn btn--primary btn--sm">
-            <Icon name="plus" size={16} /> Create cycle
+            <Icon name="plus" size={16} /> Waschgang erstellen
           </a>
         </div>
       {/each}
@@ -140,9 +140,9 @@
 
   <section class="section">
     <div class="section-header">
-      <h2 class="section__title">Needs Attention</h2>
+      <h2 class="section__title">Erfordert Aufmerksamkeit</h2>
       <a href="/items" class="btn btn--ghost btn--sm">
-        View all <Icon name="chevron-right" size={14} />
+        Alle anzeigen <Icon name="chevron-right" size={14} />
       </a>
     </div>
     <div class="attention-list">
@@ -158,16 +158,16 @@
         </div>
       {:else}
         <div class="empty-state">
-          <p class="empty-state__text">Nothing urgent right now.</p>
+          <p class="empty-state__text">Aktuell nichts Dringendes.</p>
         </div>
       {/each}
     </div>
 
     {#if $lowConsumables.length > 0}
       <div class="section-header" style="margin-top: var(--space-8);">
-        <h2 class="section__title">Low Supplies</h2>
+        <h2 class="section__title">Knappe Vorräte</h2>
         <a href="/consumables" class="btn btn--ghost btn--sm">
-          View all <Icon name="chevron-right" size={14} />
+          Alle anzeigen <Icon name="chevron-right" size={14} />
         </a>
       </div>
       {#each $lowConsumables as con (con.id)}
