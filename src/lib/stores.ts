@@ -53,6 +53,7 @@ export interface Consumable {
   unit: string;
   depletionRate: number; // units per wash
   lastRefilled: string;
+  image?: string; // path to product image
 }
 
 export interface FamilyMember {
@@ -298,23 +299,25 @@ const DRYING: DryingSession[] = [
 const CONSUMABLES: Consumable[] = [
   {
     id: "s1",
-    name: "Öko-Waschmittel",
+    name: "Miele UltraPhase 1",
     category: "detergent",
-    currentAmount: 1200,
-    maxAmount: 3000,
+    currentAmount: 950,
+    maxAmount: 1400,
     unit: "ml",
-    depletionRate: 60,
+    depletionRate: 30,
     lastRefilled: "2026-02-01",
+    image: "/images/ultraphase-1.svg",
   },
   {
     id: "s2",
-    name: "Weichspüler",
-    category: "softener",
-    currentAmount: 800,
-    maxAmount: 2000,
+    name: "Miele UltraPhase 2",
+    category: "detergent",
+    currentAmount: 480,
+    maxAmount: 1400,
     unit: "ml",
-    depletionRate: 40,
-    lastRefilled: "2026-02-05",
+    depletionRate: 30,
+    lastRefilled: "2026-02-01",
+    image: "/images/ultraphase-2.svg",
   },
   {
     id: "s3",
