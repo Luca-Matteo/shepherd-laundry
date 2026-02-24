@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 200" fill="none">
+  <!-- Bottle body -->
+  <path d="M30 60 L30 172 Q30 185 42 185 L78 185 Q90 185 90 172 L90 60 Z" fill="#EDF5F0" stroke="#C8D8CE" stroke-width="1.2"/>
+  <!-- Bottle neck -->
+  <rect x="42" y="30" width="36" height="32" rx="3" fill="#EDF5F0" stroke="#C8D8CE" stroke-width="1.2"/>
+  <!-- Cap -->
+  <rect x="38" y="12" width="44" height="22" rx="5" fill="#4AAF6E" stroke="#3A9A5C" stroke-width="1"/>
+  <rect x="46" y="8" width="28" height="8" rx="3" fill="#3A9A5C"/>
+  <!-- Handle detail on cap -->
+  <path d="M44 18 L76 18" stroke="white" stroke-width="1" opacity="0.4"/>
+  <!-- Label area -->
+  <rect x="32" y="68" width="56" height="95" rx="4" fill="white" stroke="#C8D8CE" stroke-width="0.8"/>
+  <!-- Sagrotan brand bar -->
+  <rect x="32" y="68" width="56" height="22" rx="4" fill="#4AAF6E"/>
+  <rect x="32" y="82" width="56" height="8" fill="#4AAF6E"/>
+  <text x="60" y="83" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="800" fill="white" letter-spacing="0.3">Sagrotan</text>
+  <!-- Product name -->
+  <text x="60" y="103" text-anchor="middle" font-family="system-ui, sans-serif" font-size="5.5" font-weight="700" fill="#2D7A47">Hygiene-</text>
+  <text x="60" y="112" text-anchor="middle" font-family="system-ui, sans-serif" font-size="5.5" font-weight="700" fill="#2D7A47">spüler</text>
+  <!-- Sensitiv badge -->
+  <rect x="38" y="120" width="44" height="12" rx="6" fill="#F0E6F0" stroke="#C9A0C9" stroke-width="0.6"/>
+  <text x="60" y="129" text-anchor="middle" font-family="system-ui, sans-serif" font-size="5.5" font-weight="600" fill="#9B5C9B">Sensitiv</text>
+  <!-- Decorative flower/soft element -->
+  <circle cx="60" cy="146" r="6" fill="#F5E8F5" opacity="0.8"/>
+  <circle cx="60" cy="146" r="3" fill="#D4A8D4" opacity="0.5"/>
+  <!-- Volume -->
+  <text x="60" y="175" text-anchor="middle" font-family="system-ui, sans-serif" font-size="6" fill="#888">1,5 L</text>
+</svg>
