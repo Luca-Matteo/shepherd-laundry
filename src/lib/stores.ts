@@ -98,7 +98,7 @@ const MEMBERS: FamilyMember[] = [
 const ITEMS: LaundryItem[] = [
   {
     id: "i1",
-    name: "White T-Shirts (x5)",
+    name: "Weiße T-Shirts (x5)",
     fabricType: "cotton",
     color: "white",
     owner: "m1",
@@ -120,7 +120,7 @@ const ITEMS: LaundryItem[] = [
   },
   {
     id: "i3",
-    name: "Bed Sheets — Master",
+    name: "Bettwäsche — Schlafzimmer",
     fabricType: "cotton",
     color: "white",
     owner: "m1",
@@ -131,7 +131,7 @@ const ITEMS: LaundryItem[] = [
   },
   {
     id: "i4",
-    name: "Sports Wear",
+    name: "Sportkleidung",
     fabricType: "synthetic",
     color: "color",
     owner: "m2",
@@ -142,7 +142,7 @@ const ITEMS: LaundryItem[] = [
   },
   {
     id: "i5",
-    name: "Wool Sweater",
+    name: "Wollpullover",
     fabricType: "wool",
     color: "dark",
     owner: "m2",
@@ -153,7 +153,7 @@ const ITEMS: LaundryItem[] = [
   },
   {
     id: "i6",
-    name: "Kids Uniforms (x3)",
+    name: "Kinderuniformen (x3)",
     fabricType: "mixed",
     color: "color",
     owner: "m3",
@@ -164,7 +164,7 @@ const ITEMS: LaundryItem[] = [
   },
   {
     id: "i7",
-    name: "Towels — Bathroom",
+    name: "Handtücher — Bad",
     fabricType: "cotton",
     color: "light",
     owner: "m1",
@@ -175,7 +175,7 @@ const ITEMS: LaundryItem[] = [
   },
   {
     id: "i8",
-    name: "Silk Blouse",
+    name: "Seidenbluse",
     fabricType: "delicate",
     color: "light",
     owner: "m2",
@@ -186,7 +186,7 @@ const ITEMS: LaundryItem[] = [
   },
   {
     id: "i9",
-    name: "Hoodie",
+    name: "Kapuzenpullover",
     fabricType: "cotton",
     color: "dark",
     owner: "m3",
@@ -197,7 +197,7 @@ const ITEMS: LaundryItem[] = [
   },
   {
     id: "i10",
-    name: "Linen Tablecloth",
+    name: "Leinen-Tischdecke",
     fabricType: "linen",
     color: "white",
     owner: "m1",
@@ -211,7 +211,7 @@ const ITEMS: LaundryItem[] = [
 const CYCLES: WashCycle[] = [
   {
     id: "c1",
-    name: "Whites — Hot 60°C",
+    name: "Weißwäsche — 60°C",
     scheduledDate: "2026-02-24",
     scheduledTime: "08:00",
     status: "completed",
@@ -224,7 +224,7 @@ const CYCLES: WashCycle[] = [
   },
   {
     id: "c2",
-    name: "Colors — Warm 40°C",
+    name: "Buntwäsche — 40°C",
     scheduledDate: "2026-02-24",
     scheduledTime: "10:00",
     status: "running",
@@ -237,7 +237,7 @@ const CYCLES: WashCycle[] = [
   },
   {
     id: "c3",
-    name: "Sportswear — Cold 30°C",
+    name: "Sportwäsche — 30°C",
     scheduledDate: "2026-02-25",
     scheduledTime: "07:30",
     status: "scheduled",
@@ -250,7 +250,7 @@ const CYCLES: WashCycle[] = [
   },
   {
     id: "c4",
-    name: "Darks — Warm 40°C",
+    name: "Dunkle Wäsche — 40°C",
     scheduledDate: "2026-02-25",
     scheduledTime: "09:30",
     status: "scheduled",
@@ -263,7 +263,7 @@ const CYCLES: WashCycle[] = [
   },
   {
     id: "c5",
-    name: "Whites — Hot 60°C",
+    name: "Weißwäsche — 60°C",
     scheduledDate: "2026-02-26",
     scheduledTime: "08:00",
     status: "scheduled",
@@ -298,7 +298,7 @@ const DRYING: DryingSession[] = [
 const CONSUMABLES: Consumable[] = [
   {
     id: "s1",
-    name: "Eco Detergent",
+    name: "Öko-Waschmittel",
     category: "detergent",
     currentAmount: 1200,
     maxAmount: 3000,
@@ -308,7 +308,7 @@ const CONSUMABLES: Consumable[] = [
   },
   {
     id: "s2",
-    name: "Fabric Softener",
+    name: "Weichspüler",
     category: "softener",
     currentAmount: 800,
     maxAmount: 2000,
@@ -318,7 +318,7 @@ const CONSUMABLES: Consumable[] = [
   },
   {
     id: "s3",
-    name: "Oxygen Bleach",
+    name: "Sauerstoffbleiche",
     category: "bleach",
     currentAmount: 150,
     maxAmount: 500,
@@ -328,7 +328,7 @@ const CONSUMABLES: Consumable[] = [
   },
   {
     id: "s4",
-    name: "Stain Remover Spray",
+    name: "Fleckenentferner-Spray",
     category: "stain-remover",
     currentAmount: 90,
     maxAmount: 400,

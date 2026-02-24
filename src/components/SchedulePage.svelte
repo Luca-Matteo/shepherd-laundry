@@ -68,10 +68,10 @@
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
-    if (d.getTime() === today.getTime()) return "Today";
-    if (d.getTime() === tomorrow.getTime()) return "Tomorrow";
+    if (d.getTime() === today.getTime()) return "Heute";
+    if (d.getTime() === tomorrow.getTime()) return "Morgen";
 
-    return d.toLocaleDateString("en-US", {
+    return d.toLocaleDateString("de-DE", {
       weekday: "short",
       month: "short",
       day: "numeric",
@@ -81,7 +81,7 @@
   function handleOptimize() {
     // Placeholder — would call OR-Tools backend
     alert(
-      "Optimize will call the backend constraint solver to rearrange cycles for optimal efficiency.",
+      "Optimierung ruft den Backend-Solver auf, um Waschgänge optimal zu planen.",
     );
   }
 </script>
@@ -89,19 +89,19 @@
 <div class="page-header">
   <div class="page-header__row">
     <div>
-      <h1 class="page-header__title">Schedule</h1>
+      <h1 class="page-header__title">Waschplan</h1>
       <p class="page-header__subtitle">
-        Manage and optimize your wash cycles.
+        Verwalte und optimiere deine Waschgänge.
       </p>
     </div>
     <div class="page-header__actions">
       <button class="btn btn--secondary" on:click={handleOptimize}>
         <Icon name="zap" size={16} />
-        Optimize
+        Optimieren
       </button>
       <button class="btn btn--primary">
         <Icon name="plus" size={16} />
-        New Cycle
+        Neuer Waschgang
       </button>
     </div>
   </div>
@@ -109,18 +109,24 @@
 
 <!-- Filters -->
 <div class="filters section">
-  <fieldset class="filter-group" role="radiogroup" aria-label="Filter by status">
-    <legend class="visually-hidden">Filter by status</legend>
-    {#each ["all", "scheduled", "running", "completed", "cancelled"] as status}
-      <label class="filter-chip" class:filter-chip--active={filterStatus === status}>
+  <fieldset class="filter-group" role="radiogroup" aria-label="Nach Status filtern">
+    <legend class="visually-hidden">Nach Status filtern</legend>
+    {#each [
+      { value: "all", label: "Alle" },
+      { value: "scheduled", label: "Geplant" },
+      { value: "running", label: "Läuft" },
+      { value: "completed", label: "Fertig" },
+      { value: "cancelled", label: "Abgebrochen" },
+    ] as status}
+      <label class="filter-chip" class:filter-chip--active={filterStatus === status.value}>
         <input
           type="radio"
           name="status-filter"
-          value={status}
+          value={status.value}
           bind:group={filterStatus}
           class="visually-hidden"
         />
-        {status === "all" ? "All" : status.charAt(0).toUpperCase() + status.slice(1)}
+        {status.label}
       </label>
     {/each}
   </fieldset>
@@ -133,7 +139,7 @@
       <h2 class="timeline__date">{formatDate(date)}</h2>
       <div class="timeline__cycles">
         {#each groupedByDate[date] as cycle (cycle.id)}
-          <article class="card card--interactive cycle-detail" aria-label="Wash cycle: {cycle.name}">
+          <article class="card card--interactive cycle-detail" aria-label="Waschgang: {cycle.name}">
             <div class="cycle-detail__top">
               <div class="cycle-detail__status-icon {cycle.status}">
                 <Icon name={statusIcon(cycle.status)} size={18} />
@@ -155,15 +161,15 @@
                 <span>{cycle.duration} min</span>
               </div>
               <div class="cycle-detail__prop">
-                <span>Load: {cycle.machineLoad}%</span>
+                <span>Beladung: {cycle.machineLoad}%</span>
               </div>
               <div class="cycle-detail__prop">
-                <span>Color: {cycle.colorGroup}</span>
+                <span>Farbe: {cycle.colorGroup}</span>
               </div>
             </div>
 
             <div class="cycle-detail__items">
-              <span class="cycle-detail__items-label">Items:</span>
+              <span class="cycle-detail__items-label">Teile:</span>
               {#each cycle.items as itemId}
                 <span class="badge badge--neutral">{itemName(itemId)}</span>
               {/each}
@@ -173,10 +179,10 @@
               <div class="cycle-detail__actions">
                 <button class="btn btn--primary btn--sm">
                   <Icon name="play" size={14} />
-                  Start
+                  Starten
                 </button>
-                <button class="btn btn--ghost btn--sm">Edit</button>
-                <button class="btn btn--ghost btn--sm" style="color: var(--color-danger);">Cancel</button>
+                <button class="btn btn--ghost btn--sm">Bearbeiten</button>
+                <button class="btn btn--ghost btn--sm" style="color: var(--color-danger);">Abbrechen</button>
               </div>
             {/if}
           </article>
@@ -188,8 +194,8 @@
       <div class="empty-state__icon">
         <Icon name="schedule" size={48} />
       </div>
-      <h3 class="empty-state__title">No cycles found</h3>
-      <p class="empty-state__text">Try adjusting the filter or create a new cycle.</p>
+      <h3 class="empty-state__title">Keine Waschgänge gefunden</h3>
+      <p class="empty-state__text">Passe den Filter an oder erstelle einen neuen Waschgang.</p>
     </div>
   {/each}
 </div>

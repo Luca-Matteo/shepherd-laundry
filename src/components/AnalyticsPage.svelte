@@ -3,13 +3,13 @@
 
   // Mock analytics data (would come from API)
   const weeklyWashes = [
-    { day: "Mon", count: 2 },
-    { day: "Tue", count: 1 },
-    { day: "Wed", count: 3 },
-    { day: "Thu", count: 0 },
-    { day: "Fri", count: 2 },
-    { day: "Sat", count: 4 },
-    { day: "Sun", count: 1 },
+    { day: "Mo", count: 2 },
+    { day: "Di", count: 1 },
+    { day: "Mi", count: 3 },
+    { day: "Do", count: 0 },
+    { day: "Fr", count: 2 },
+    { day: "Sa", count: 4 },
+    { day: "So", count: 1 },
   ];
 
   const maxWashes = Math.max(...weeklyWashes.map((w) => w.count), 1);
@@ -20,25 +20,25 @@
     waterUsed: 2520, // liters
     energyUsed: 63, // kWh
     avgLoadEfficiency: 72, // percent
-    mostWashedFabric: "Cotton",
-    busiestDay: "Saturday",
+    mostWashedFabric: "Baumwolle",
+    busiestDay: "Samstag",
     avgCyclesPerWeek: 10.5,
   };
 
   const fabricBreakdown = [
-    { fabric: "Cotton", percent: 45, color: "var(--color-green-600)" },
-    { fabric: "Synthetic", percent: 22, color: "var(--color-orange-600)" },
-    { fabric: "Mixed", percent: 18, color: "var(--color-green-400)" },
-    { fabric: "Wool", percent: 8, color: "var(--color-orange-400)" },
-    { fabric: "Delicate", percent: 5, color: "var(--color-text-tertiary)" },
-    { fabric: "Linen", percent: 2, color: "var(--color-border)" },
+    { fabric: "Baumwolle", percent: 45, color: "var(--color-green-600)" },
+    { fabric: "Synthetik", percent: 22, color: "var(--color-orange-600)" },
+    { fabric: "Mischgewebe", percent: 18, color: "var(--color-green-400)" },
+    { fabric: "Wolle", percent: 8, color: "var(--color-orange-400)" },
+    { fabric: "Feinwäsche", percent: 5, color: "var(--color-text-tertiary)" },
+    { fabric: "Leinen", percent: 2, color: "var(--color-border)" },
   ];
 
   const colorBreakdown = [
-    { group: "White", percent: 35, color: "var(--color-border)" },
-    { group: "Dark", percent: 30, color: "var(--color-text)" },
-    { group: "Color", percent: 25, color: "var(--color-orange-500)" },
-    { group: "Light", percent: 10, color: "var(--color-green-100)" },
+    { group: "Weiß", percent: 35, color: "var(--color-border)" },
+    { group: "Dunkel", percent: 30, color: "var(--color-text)" },
+    { group: "Bunt", percent: 25, color: "var(--color-orange-500)" },
+    { group: "Hell", percent: 10, color: "var(--color-green-100)" },
   ];
 
   let period = "month";
@@ -47,18 +47,22 @@
 <div class="page-header">
   <div class="page-header__row">
     <div>
-      <h1 class="page-header__title">Analytics</h1>
+      <h1 class="page-header__title">Statistik</h1>
       <p class="page-header__subtitle">
-        Track your laundry habits, resource usage, and efficiency.
+        Verfolge deine Waschgewohnheiten, Ressourcenverbrauch und Effizienz.
       </p>
     </div>
     <div class="period-toggle">
-      <fieldset class="filter-group" role="radiogroup" aria-label="Time period">
-        <legend class="visually-hidden">Time period</legend>
-        {#each ["week", "month", "year"] as p}
-          <label class="filter-chip" class:filter-chip--active={period === p}>
-            <input type="radio" name="period" value={p} bind:group={period} class="visually-hidden" />
-            {p.charAt(0).toUpperCase() + p.slice(1)}
+      <fieldset class="filter-group" role="radiogroup" aria-label="Zeitraum">
+        <legend class="visually-hidden">Zeitraum</legend>
+        {#each [
+          { value: "week", label: "Woche" },
+          { value: "month", label: "Monat" },
+          { value: "year", label: "Jahr" },
+        ] as p}
+          <label class="filter-chip" class:filter-chip--active={period === p.value}>
+            <input type="radio" name="period" value={p.value} bind:group={period} class="visually-hidden" />
+            {p.label}
           </label>
         {/each}
       </fieldset>
@@ -67,26 +71,26 @@
 </div>
 
 <!-- Key metrics -->
-<section class="section" aria-label="Key metrics">
+<section class="section" aria-label="Wichtige Kennzahlen">
   <div class="grid grid--stats">
     <div class="card stat">
       <div class="stat__value">{monthlyStats.totalWashes}</div>
-      <div class="stat__label">Total washes</div>
-      <div class="stat__trend stat__trend--up">+12% vs last month</div>
+      <div class="stat__label">Waschgänge gesamt</div>
+      <div class="stat__trend stat__trend--up">+12% gg. Vormonat</div>
     </div>
     <div class="card stat">
       <div class="stat__value">{monthlyStats.totalItems}</div>
-      <div class="stat__label">Items washed</div>
+      <div class="stat__label">Teile gewaschen</div>
     </div>
     <div class="card stat">
       <div class="stat__value">{monthlyStats.waterUsed}L</div>
-      <div class="stat__label">Water used</div>
-      <div class="stat__trend stat__trend--down">-5% vs last month</div>
+      <div class="stat__label">Wasserverbrauch</div>
+      <div class="stat__trend stat__trend--down">-5% gg. Vormonat</div>
     </div>
     <div class="card stat">
       <div class="stat__value">{monthlyStats.energyUsed} kWh</div>
-      <div class="stat__label">Energy used</div>
-      <div class="stat__trend stat__trend--down">-8% vs last month</div>
+      <div class="stat__label">Energieverbrauch</div>
+      <div class="stat__trend stat__trend--down">-8% gg. Vormonat</div>
     </div>
   </div>
 </section>
@@ -95,9 +99,9 @@
 <div class="analytics-cols">
   <!-- Weekly distribution bar chart -->
   <section class="section">
-    <h2 class="section__title">Washes This Week</h2>
+    <h2 class="section__title">Waschgänge diese Woche</h2>
     <div class="card">
-      <div class="bar-chart" role="img" aria-label="Bar chart showing washes per day this week">
+      <div class="bar-chart" role="img" aria-label="Balkendiagramm: Waschgänge pro Tag diese Woche">
         {#each weeklyWashes as day}
           <div class="bar-chart__col">
             <div class="bar-chart__bar-wrap">
@@ -120,9 +124,9 @@
 
   <!-- Efficiency -->
   <section class="section">
-    <h2 class="section__title">Efficiency</h2>
+    <h2 class="section__title">Effizienz</h2>
     <div class="card">
-      <div class="efficiency-ring" aria-label="Load efficiency: {monthlyStats.avgLoadEfficiency}%">
+      <div class="efficiency-ring" aria-label="Beladungseffizienz: {monthlyStats.avgLoadEfficiency}%">
         <svg viewBox="0 0 120 120" class="ring-svg">
           <defs>
             <linearGradient id="ring-grad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -145,20 +149,20 @@
         </svg>
         <div class="ring-label">
           <span class="ring-value">{monthlyStats.avgLoadEfficiency}%</span>
-          <span class="ring-text">Avg load</span>
+          <span class="ring-text">Ø Beladung</span>
         </div>
       </div>
       <div class="efficiency-details">
         <div class="efficiency-detail">
-          <span class="efficiency-detail__label">Busiest day</span>
+          <span class="efficiency-detail__label">Stärkster Tag</span>
           <span class="efficiency-detail__value">{monthlyStats.busiestDay}</span>
         </div>
         <div class="efficiency-detail">
-          <span class="efficiency-detail__label">Avg/week</span>
+          <span class="efficiency-detail__label">Ø/Woche</span>
           <span class="efficiency-detail__value">{monthlyStats.avgCyclesPerWeek}</span>
         </div>
         <div class="efficiency-detail">
-          <span class="efficiency-detail__label">Top fabric</span>
+          <span class="efficiency-detail__label">Top-Stoff</span>
           <span class="efficiency-detail__value">{monthlyStats.mostWashedFabric}</span>
         </div>
       </div>
@@ -169,7 +173,7 @@
 <!-- Breakdown rows -->
 <div class="analytics-cols">
   <section class="section">
-    <h2 class="section__title">Fabric Breakdown</h2>
+    <h2 class="section__title">Stoffverteilung</h2>
     <div class="card">
       <div class="breakdown-list">
         {#each fabricBreakdown as fb}
@@ -189,7 +193,7 @@
   </section>
 
   <section class="section">
-    <h2 class="section__title">Color Distribution</h2>
+    <h2 class="section__title">Farbverteilung</h2>
     <div class="card">
       <div class="breakdown-list">
         {#each colorBreakdown as cb}
@@ -197,14 +201,14 @@
             <span class="breakdown-row__label">
               <span
                 class="color-dot"
-                style="background: {cb.color}; {cb.group === 'White' ? 'border: 1px solid var(--color-border);' : ''}"
+                style="background: {cb.color}; {cb.group === 'Weiß' ? 'border: 1px solid var(--color-border);' : ''}"
               ></span>
               {cb.group}
             </span>
             <div class="breakdown-row__bar-wrap">
               <div
                 class="breakdown-row__bar"
-                style="width: {cb.percent}%; background: {cb.color}; {cb.group === 'White' ? 'border: 1px solid var(--color-border);' : ''}"
+                style="width: {cb.percent}%; background: {cb.color}; {cb.group === 'Weiß' ? 'border: 1px solid var(--color-border);' : ''}"
               ></div>
             </div>
             <span class="breakdown-row__pct">{cb.percent}%</span>

@@ -9,13 +9,13 @@
   function methodLabel(method: DryingSession["method"]): string {
     switch (method) {
       case "dryer":
-        return "Tumble Dryer";
+        return "Wäschetrockner";
       case "indoor":
-        return "Indoor Hang Dry";
+        return "Innen aufhängen";
       case "outdoor":
-        return "Outdoor Hang Dry";
+        return "Draußen aufhängen";
       case "combo":
-        return "Combination";
+        return "Kombination";
     }
   }
 
@@ -64,7 +64,7 @@
 
   function formatTime(iso: string): string {
     const d = new Date(iso);
-    return d.toLocaleTimeString("en-US", {
+    return d.toLocaleTimeString("de-DE", {
       hour: "2-digit",
       minute: "2-digit",
       hour12: false,
@@ -85,27 +85,27 @@
   );
 
   function handleNewSession() {
-    alert("New drying session dialog would open here.");
+    alert("Dialog für neue Trocknungssitzung würde hier erscheinen.");
   }
 </script>
 
 <div class="page-header">
   <div class="page-header__row">
     <div>
-      <h1 class="page-header__title">Drying Management</h1>
+      <h1 class="page-header__title">Trocknung</h1>
       <p class="page-header__subtitle">
-        Track items currently drying and manage methods.
+        Verfolge trocknende Wäsche und verwalte Trocknungsmethoden.
       </p>
     </div>
     <button class="btn btn--primary" on:click={handleNewSession}>
       <Icon name="plus" size={16} />
-      New Session
+      Neue Sitzung
     </button>
   </div>
 </div>
 
 <!-- Method summary cards -->
-<section class="section" aria-label="Drying methods overview">
+<section class="section" aria-label="Übersicht Trocknungsmethoden">
   <div class="grid grid--stats">
     {#each ["dryer", "indoor", "outdoor", "combo"] as method}
       {@const count = $dryingSessions.filter(
@@ -129,20 +129,20 @@
 
 <!-- Active sessions -->
 <section class="section">
-  <h2 class="section__title">Active Sessions</h2>
+  <h2 class="section__title">Aktive Sitzungen</h2>
 
   {#if activeSessions.length === 0}
     <div class="empty-state card">
       <div class="empty-state__icon">
         <Icon name="wind" size={48} />
       </div>
-      <h3 class="empty-state__title">Nothing drying</h3>
-      <p class="empty-state__text">Start a drying session after a wash cycle completes.</p>
+      <h3 class="empty-state__title">Nichts trocknet</h3>
+      <p class="empty-state__text">Starte eine Trocknungssitzung, nachdem ein Waschgang abgeschlossen ist.</p>
     </div>
   {:else}
     <div class="sessions-grid">
       {#each activeSessions as session (session.id)}
-        <article class="card card--interactive session-card" aria-label="Drying session: {methodLabel(session.method)}">
+        <article class="card card--interactive session-card" aria-label="Trocknungssitzung: {methodLabel(session.method)}">
           <div class="session-card__header">
             <div
               class="session-card__icon"
@@ -160,7 +160,7 @@
 
           <div class="session-card__progress">
             <div class="session-card__progress-header">
-              <span>Progress</span>
+              <span>Fortschritt</span>
               <span>{progress(session)}%</span>
             </div>
             <div class="progress">
@@ -176,7 +176,7 @@
           </div>
 
           <div class="session-card__items">
-            <span class="session-card__items-label">Items:</span>
+            <span class="session-card__items-label">Teile:</span>
             {#each session.items as itemId}
               <span class="badge badge--neutral">{itemName(itemId)}</span>
             {/each}
@@ -185,7 +185,7 @@
           <div class="session-card__actions">
             <button class="btn btn--primary btn--sm">
               <Icon name="check" size={14} />
-              Mark Done
+              Fertig
             </button>
             <button class="btn btn--ghost btn--sm">Details</button>
           </div>
@@ -197,33 +197,33 @@
 
 <!-- Recommendations -->
 <section class="section">
-  <h2 class="section__title">Drying Tips</h2>
+  <h2 class="section__title">Trocknungstipps</h2>
   <div class="grid grid--cards">
     <div class="card tip-card">
       <div class="tip-card__icon" style="color: var(--color-orange-600);">
         <Icon name="thermometer" size={20} />
       </div>
-      <h3 class="tip-card__title">Use low heat for synthetics</h3>
+      <h3 class="tip-card__title">Niedrige Hitze für Synthetik</h3>
       <p class="tip-card__text">
-        Synthetic fabrics can melt or shrink at high temperatures. Use low heat or air dry when possible.
+        Synthetische Stoffe können bei hohen Temperaturen schmelzen oder einlaufen. Verwende niedrige Hitze oder Lufttrocknung.
       </p>
     </div>
     <div class="card tip-card">
       <div class="tip-card__icon" style="color: var(--color-green-600);">
         <Icon name="sun" size={20} />
       </div>
-      <h3 class="tip-card__title">Outdoor drying saves energy</h3>
+      <h3 class="tip-card__title">Draußen trocknen spart Energie</h3>
       <p class="tip-card__text">
-        When weather permits, outdoor drying uses zero energy and gives clothes a fresh scent.
+        Bei gutem Wetter verbraucht das Trocknen im Freien keine Energie und verleiht der Wäsche einen frischen Duft.
       </p>
     </div>
     <div class="card tip-card">
       <div class="tip-card__icon" style="color: var(--color-green-700);">
         <Icon name="wind" size={20} />
       </div>
-      <h3 class="tip-card__title">Improve indoor airflow</h3>
+      <h3 class="tip-card__title">Luftzirkulation verbessern</h3>
       <p class="tip-card__text">
-        Open windows or use a fan near the drying rack to speed up indoor drying and prevent mildew.
+        Öffne Fenster oder stelle einen Ventilator neben den Wäscheständer, um die Trocknung zu beschleunigen und Schimmel zu vermeiden.
       </p>
     </div>
   </div>
