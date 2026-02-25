@@ -20,7 +20,6 @@
     { href: "/drying", icon: "drying", label: "Trocknung" },
     { href: "/consumables", icon: "consumables", label: "Vorräte" },
     { href: "/analytics", icon: "analytics", label: "Statistik" },
-    { href: "/settings", icon: "settings", label: "Einstellungen" },
   ];
 
   export let currentPath: string = "/";
@@ -31,7 +30,7 @@
   }
 
   const bottomNav: NavItem[] = [
-    nav[0], nav[1], nav[2], nav[4], nav[6],
+    nav[0], nav[1], nav[2], nav[4], nav[5],
   ];
 </script>
 
@@ -69,13 +68,18 @@
     </nav>
 
     <div class="sidebar__footer">
-      <div class="sidebar__user">
+      <a
+        href="/settings"
+        class="sidebar__user"
+        class:sidebar__user--active={isActive("/settings")}
+        aria-current={isActive("/settings") ? "page" : undefined}
+      >
         <div class="sidebar__avatar">A</div>
         <div class="sidebar__user-info">
           <span class="sidebar__user-name">Alex</span>
           <span class="sidebar__user-role">Admin</span>
         </div>
-      </div>
+      </a>
     </div>
   </aside>
 
@@ -84,12 +88,10 @@
     <div class="mobile-header__brand">
       <Icon name="shepherd" size={16} />
       <span class="mobile-header__name">Shepherd</span>
+      <span class="mobile-header__tagline">Laundry</span>
     </div>
-    <button class="mobile-header__avatar" aria-label="Kontomenü">A</button>
+    <a href="/settings" class="mobile-header__avatar" aria-label="Kontomenü">A</a>
   </header>
-
-  <!-- ====== Build number (prototype) ====== -->
-  <div class="build-tag">Build 0.1.0-alpha.3</div>
 
   <!-- ====== Main content ====== -->
   <main id="main-content" class="main" role="main">
@@ -233,6 +235,20 @@
     display: flex;
     align-items: center;
     gap: var(--space-3);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    padding: var(--space-2) var(--space-2);
+    margin: calc(-1 * var(--space-2));
+    transition: background var(--transition-fast);
+  }
+
+  .sidebar__user:hover {
+    background: var(--color-surface-sunken);
+    text-decoration: none;
+  }
+
+  .sidebar__user--active {
+    background: var(--color-surface-sunken);
   }
 
   .sidebar__avatar {
@@ -263,21 +279,6 @@
   .sidebar__user-role {
     font-size: var(--text-xs);
     color: var(--color-text-tertiary);
-  }
-
-  /* ---- Build tag ---- */
-  .build-tag {
-    position: fixed;
-    top: var(--space-3);
-    right: var(--space-4);
-    font-size: 0.5625rem;
-    font-weight: var(--weight-medium);
-    color: var(--color-text-tertiary);
-    letter-spacing: var(--tracking-wide);
-    text-transform: uppercase;
-    z-index: 40;
-    pointer-events: none;
-    user-select: none;
   }
 
   /* ---- Mobile header ---- */
@@ -339,6 +340,14 @@
       font-size: var(--text-sm);
       color: var(--color-text);
       letter-spacing: var(--tracking-tight);
+    }
+
+    .mobile-header__tagline {
+      font-size: var(--text-xs);
+      color: var(--color-text-tertiary);
+      font-weight: var(--weight-normal);
+      letter-spacing: var(--tracking-wide);
+      text-transform: uppercase;
     }
 
     .mobile-header__avatar {

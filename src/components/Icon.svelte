@@ -121,9 +121,39 @@
     <line x1="7" y1="6" x2="7.01" y2="6" stroke-width="2" />
     <line x1="10" y1="6" x2="10.01" y2="6" stroke-width="2" />
   {:else if name === "shepherd"}
-    <!-- Shepherd's crook / staff — brand icon -->
-    <path d="M7 22V10" />
-    <path d="M7 10c0-4 2-7 5-7s5 2 5 5-2 4-5 4H7" />
+    <!-- Laundry basket filled with towels — colored brand icon matching favicon -->
+    <defs>
+      <linearGradient id="sh-body" x1="12" y1="10" x2="12" y2="21.5" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#CC9A38"/>
+        <stop offset="1" stop-color="#A87A28"/>
+      </linearGradient>
+      <linearGradient id="sh-rim" x1="12" y1="7.5" x2="12" y2="12.5" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#DDBA55"/>
+        <stop offset="1" stop-color="#C8A040"/>
+      </linearGradient>
+      <linearGradient id="sh-towels" x1="12" y1="2" x2="12" y2="10" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#FFFFFF"/>
+        <stop offset="1" stop-color="#EBE5D8"/>
+      </linearGradient>
+      <clipPath id="sh-clip">
+        <path d="M3 10 L5.5 20 Q6 21.5 8 21.5 L16 21.5 Q18 21.5 18.5 20 L21 10 Z"/>
+      </clipPath>
+    </defs>
+    <!-- Basket body -->
+    <path d="M3 10 L5.5 20 Q6 21.5 8 21.5 L16 21.5 Q18 21.5 18.5 20 L21 10 Z" fill="url(#sh-body)" stroke="#8A6820" stroke-width=".6"/>
+    <!-- Weave bands -->
+    <g clip-path="url(#sh-clip)">
+      <rect x="2" y="13.5" width="20" height="1.5" fill="#8A6820" stroke="none" opacity=".18"/>
+      <rect x="2" y="17" width="20" height="1.5" fill="#8A6820" stroke="none" opacity=".18"/>
+    </g>
+    <!-- Rim -->
+    <ellipse cx="12" cy="10" rx="9" ry="2.3" fill="url(#sh-rim)" stroke="#8A6820" stroke-width=".6"/>
+    <!-- Interior shadow -->
+    <ellipse cx="12" cy="11.3" rx="6.5" ry="1.2" fill="#604010" stroke="none" opacity=".08"/>
+    <!-- Towels billowing over rim -->
+    <path d="M6.5 9.2 Q5.5 4 9.5 3 Q11.5 3.5 10.5 7.5" fill="url(#sh-towels)" stroke="#B8B0A0" stroke-width=".4"/>
+    <path d="M10 9 Q10.5 5.5 13 4.5 Q15 5 14 8.5" fill="url(#sh-towels)" stroke="#B8B0A0" stroke-width=".35"/>
+    <path d="M13.5 8.5 Q14.5 5 17.5 4.5 Q19 5.5 17 8.5" fill="url(#sh-towels)" stroke="#B8B0A0" stroke-width=".4"/>
   {/if}
 </svg>
 
