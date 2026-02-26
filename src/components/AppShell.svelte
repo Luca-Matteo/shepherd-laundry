@@ -1,6 +1,6 @@
 <!--
   AppShell — responsive layout shell.
-  LoveFrom-inspired: navigation that guides without demanding attention.
+  Navigation that guides without demanding attention.
   • Desktop (>=768px): quiet sidebar, generous spacing.
   • Mobile (<768px): clean header, understated bottom nav.
 -->
