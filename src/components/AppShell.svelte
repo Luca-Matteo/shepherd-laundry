@@ -40,7 +40,7 @@
   <!-- ====== Sidebar (desktop) ====== -->
   <aside class="sidebar" aria-label="Hauptnavigation">
     <div class="sidebar__brand">
-      <Icon name="laundry-basket" size={18} />
+      <Icon name="shepherd" size={18} />
       <div class="sidebar__brand-text">
         <span class="sidebar__name">Shepherd</span>
         <span class="sidebar__tagline">Laundry</span>
@@ -86,7 +86,7 @@
   <!-- ====== Mobile header ====== -->
   <header class="mobile-header" aria-label="App-Kopfzeile">
     <div class="mobile-header__brand">
-      <Icon name="laundry-basket" size={16} />
+      <Icon name="shepherd" size={16} />
       <span class="mobile-header__name">Shepherd</span>
       <span class="mobile-header__tagline">Laundry</span>
     </div>
