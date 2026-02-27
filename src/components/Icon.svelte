@@ -120,6 +120,9 @@
     <circle cx="12" cy="13" r="2" />
     <line x1="7" y1="6" x2="7.01" y2="6" stroke-width="2" />
     <line x1="10" y1="6" x2="10.01" y2="6" stroke-width="2" />
+  {:else if name === "search"}
+    <circle cx="11" cy="11" r="8" />
+    <line x1="21" y1="21" x2="16.65" y2="16.65" />
   {:else if name === "shepherd"}
     <!-- Laundry basket filled with towels — colored brand icon matching favicon -->
     <defs>

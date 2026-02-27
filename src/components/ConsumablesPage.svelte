@@ -33,6 +33,14 @@
     );
   }
 
+  let searchQuery: string = "";
+
+  $: normalizedQuery = searchQuery.toLowerCase().trim();
+
+  $: filteredConsumables = $consumables.filter(
+    (c) => !normalizedQuery || c.name.toLowerCase().includes(normalizedQuery) || c.category.toLowerCase().includes(normalizedQuery),
+  );
+
   function handleAdd() {
     alert("Dialog zum Hinzufügen eines Verbrauchsmaterials würde hier erscheinen.");
   }
@@ -75,11 +83,23 @@
   </div>
 </section>
 
+<!-- Search -->
+<div class="search-bar">
+  <Icon name="search" size={16} />
+  <input
+    type="search"
+    class="search-bar__input"
+    placeholder="Vorräte suchen…"
+    bind:value={searchQuery}
+    aria-label="Vorräte durchsuchen"
+  />
+</div>
+
 <!-- Consumable list -->
 <section class="section">
   <h2 class="section__title">Alle Vorräte</h2>
   <div class="consumable-list">
-    {#each $consumables as con (con.id)}
+    {#each filteredConsumables as con (con.id)}
       <article class="consumable-row" aria-label="{con.name}">
         <div class="consumable-row__body">
           {#if con.image}
@@ -141,6 +161,40 @@
     flex-wrap: wrap;
   }
 
+  .search-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: 0 var(--space-4);
+    min-height: 2.75rem;
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    margin-bottom: var(--space-5);
+    color: var(--color-text-tertiary);
+    transition: border-color var(--transition-fast);
+  }
+
+  .search-bar:focus-within {
+    border-color: var(--color-accent);
+    color: var(--color-text-secondary);
+  }
+
+  .search-bar__input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: var(--text-sm);
+    font-family: var(--font-sans);
+    color: var(--color-text);
+    outline: none;
+    min-height: 2.75rem;
+  }
+
+  .search-bar__input::placeholder {
+    color: var(--color-text-tertiary);
+  }
+
   .summary-stats {
     display: flex;
     gap: var(--space-10);
@@ -176,7 +230,7 @@
   }
 
   .consumable-row {
-    padding: var(--space-5) 0;
+    padding: var(--space-6) 0;
     border-bottom: 1px solid var(--color-border-light);
   }
 

@@ -3,11 +3,15 @@
   import { items, members, type LaundryItem } from "../lib/stores";
   import { statusLabels, priorityLabels, fabricLabels, colorLabels, label } from "../lib/labels";
 
+  let searchQuery: string = "";
   let filterStatus: string = "all";
   let filterOwner: string = "all";
   let sortBy: string = "priority";
 
+  $: normalizedQuery = searchQuery.toLowerCase().trim();
+
   $: filtered = $items
+    .filter((i) => !normalizedQuery || i.name.toLowerCase().includes(normalizedQuery) || ownerName(i.owner).toLowerCase().includes(normalizedQuery))
     .filter((i) => filterStatus === "all" || i.status === filterStatus)
     .filter((i) => filterOwner === "all" || i.owner === filterOwner)
     .sort((a, b) => {
@@ -78,6 +82,18 @@
       Hinzufügen
     </button>
   </div>
+</div>
+
+<!-- Search -->
+<div class="search-bar">
+  <Icon name="search" size={16} />
+  <input
+    type="search"
+    class="search-bar__input"
+    placeholder="Wäsche suchen…"
+    bind:value={searchQuery}
+    aria-label="Wäsche durchsuchen"
+  />
 </div>
 
 <!-- Filters -->
@@ -163,6 +179,40 @@
     flex-wrap: wrap;
   }
 
+  .search-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: 0 var(--space-4);
+    min-height: 2.75rem;
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    margin-bottom: var(--space-5);
+    color: var(--color-text-tertiary);
+    transition: border-color var(--transition-fast);
+  }
+
+  .search-bar:focus-within {
+    border-color: var(--color-accent);
+    color: var(--color-text-secondary);
+  }
+
+  .search-bar__input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: var(--text-sm);
+    font-family: var(--font-sans);
+    color: var(--color-text);
+    outline: none;
+    min-height: 2.75rem;
+  }
+
+  .search-bar__input::placeholder {
+    color: var(--color-text-tertiary);
+  }
+
   .filter-bar {
     display: flex;
     gap: var(--space-4);
@@ -180,7 +230,7 @@
   }
 
   .item-row {
-    padding: var(--space-5) 0;
+    padding: var(--space-6) 0;
     border-bottom: 1px solid var(--color-border-light);
   }
 

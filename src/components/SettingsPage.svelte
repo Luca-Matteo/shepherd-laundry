@@ -16,12 +16,22 @@
     alert("Dialog zum Einladen — versendet eine E-Mail-Einladung.");
   }
 
+  let confirmRemove: FamilyMember | null = null;
+
   function handleRemoveMember(m: FamilyMember) {
-    if (m.role === "admin") {
-      alert("Das Admin-Konto kann nicht entfernt werden.");
-      return;
+    if (m.role === "admin") return;
+    confirmRemove = m;
+  }
+
+  function confirmRemoveAction() {
+    if (confirmRemove) {
+      members.update((all) => all.filter((x) => x.id !== confirmRemove!.id));
+      confirmRemove = null;
     }
-    members.update((all) => all.filter((x) => x.id !== m.id));
+  }
+
+  function cancelRemove() {
+    confirmRemove = null;
   }
 
   function handleSave() {
@@ -256,6 +266,33 @@
   {/if}
 </div>
 
+<!-- Confirmation dialog -->
+{#if confirmRemove}
+  <div class="dialog-overlay" on:click={cancelRemove} role="presentation">
+    <div
+      class="dialog"
+      role="alertdialog"
+      aria-modal="true"
+      aria-labelledby="dialog-title"
+      aria-describedby="dialog-desc"
+      on:click|stopPropagation
+    >
+      <h3 id="dialog-title" class="dialog__title">Mitglied entfernen?</h3>
+      <p id="dialog-desc" class="dialog__text">
+        <strong>{confirmRemove.name}</strong> wird dauerhaft aus dem Haushalt entfernt. Diese Aktion kann nicht rückgängig gemacht werden.
+      </p>
+      <div class="dialog__actions">
+        <button class="btn btn--secondary" on:click={cancelRemove}>
+          Abbrechen
+        </button>
+        <button class="btn btn--danger" on:click={confirmRemoveAction}>
+          Entfernen
+        </button>
+      </div>
+    </div>
+  </div>
+{/if}
+
 <style>
   .tabs {
     display: flex;
@@ -265,7 +302,8 @@
   }
 
   .tab {
-    padding: var(--space-3) var(--space-5);
+    padding: var(--space-4) var(--space-5);
+    min-height: 2.75rem;
     font-size: var(--text-sm);
     font-weight: var(--weight-normal);
     color: var(--color-text-tertiary);
@@ -277,8 +315,14 @@
     white-space: nowrap;
   }
 
-  .tab:hover {
+  .tab:active {
     color: var(--color-text-secondary);
+  }
+
+  @media (hover: hover) {
+    .tab:hover {
+      color: var(--color-text-secondary);
+    }
   }
 
   .tab--active {
@@ -344,15 +388,43 @@
     align-items: flex-start;
     gap: var(--space-3);
     cursor: pointer;
-    padding: var(--space-3) 0;
+    padding: var(--space-4) 0;
+    min-height: 2.75rem;
   }
 
   .toggle-row input[type="checkbox"] {
-    width: 1rem;
-    height: 1rem;
-    accent-color: var(--color-accent);
-    margin-top: 2px;
+    appearance: none;
+    -webkit-appearance: none;
+    width: 3.0625rem;
+    height: 1.875rem;
+    background: var(--color-surface-muted);
+    border-radius: var(--radius-full);
+    position: relative;
     flex-shrink: 0;
+    margin-top: 0;
+    cursor: pointer;
+    transition: background var(--transition-fast);
+  }
+
+  .toggle-row input[type="checkbox"]::after {
+    content: "";
+    position: absolute;
+    top: 0.125rem;
+    left: 0.125rem;
+    width: 1.625rem;
+    height: 1.625rem;
+    border-radius: var(--radius-full);
+    background: var(--color-surface-raised);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-fast);
+  }
+
+  .toggle-row input[type="checkbox"]:checked {
+    background: var(--color-accent);
+  }
+
+  .toggle-row input[type="checkbox"]:checked::after {
+    transform: translateX(1.1875rem);
   }
 
   .toggle-label {
@@ -433,5 +505,51 @@
   .member-email {
     font-size: var(--text-xs);
     color: var(--color-text-tertiary);
+  }
+
+  /* Confirmation dialog */
+  .dialog-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-6);
+  }
+
+  .dialog {
+    background: var(--color-surface-raised);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8);
+    max-width: 22rem;
+    width: 100%;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .dialog__title {
+    font-size: var(--text-lg);
+    font-weight: var(--weight-semibold);
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+  }
+
+  .dialog__text {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: var(--leading-normal);
+    margin-bottom: var(--space-6);
+  }
+
+  .dialog__actions {
+    display: flex;
+    gap: var(--space-3);
+    justify-content: flex-end;
+  }
+
+  :global(.btn--danger) {
+    background: var(--color-danger);
+    color: var(--color-text-inverse);
   }
 </style>

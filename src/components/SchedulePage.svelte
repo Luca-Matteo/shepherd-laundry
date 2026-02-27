@@ -198,7 +198,8 @@
   .filter-chip {
     display: inline-flex;
     align-items: center;
-    padding: 0.3125rem 0.75rem;
+    padding: 0.5rem 0.875rem;
+    min-height: 2.75rem;
     border-radius: var(--radius-full);
     font-size: var(--text-sm);
     font-weight: var(--weight-normal);
@@ -212,9 +213,16 @@
       color var(--transition-fast);
   }
 
-  .filter-chip:hover {
+  .filter-chip:active {
     border-color: var(--color-text-tertiary);
     color: var(--color-text-secondary);
+  }
+
+  @media (hover: hover) {
+    .filter-chip:hover {
+      border-color: var(--color-text-tertiary);
+      color: var(--color-text-secondary);
+    }
   }
 
   .filter-chip--active {
@@ -246,7 +254,7 @@
   }
 
   .cycle-entry {
-    padding: var(--space-5) 0;
+    padding: var(--space-6) 0;
     border-bottom: 1px solid var(--color-border-light);
   }
 

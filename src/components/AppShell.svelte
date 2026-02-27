@@ -19,7 +19,6 @@
     { href: "/items", icon: "items", label: "Wäsche" },
     { href: "/drying", icon: "drying", label: "Trocknung" },
     { href: "/consumables", icon: "consumables", label: "Vorräte" },
-    { href: "/analytics", icon: "analytics", label: "Statistik" },
   ];
 
   export let currentPath: string = "/";
@@ -29,9 +28,7 @@
     return currentPath.startsWith(href);
   }
 
-  const bottomNav: NavItem[] = [
-    nav[0], nav[1], nav[2], nav[4], nav[5],
-  ];
+  const bottomNav: NavItem[] = nav;
 </script>
 
 <div class="shell">
@@ -190,7 +187,8 @@
     display: flex;
     align-items: center;
     gap: var(--space-3);
-    padding: 0.5rem var(--space-4);
+    padding: 0.625rem var(--space-4);
+    min-height: 2.75rem;
     border-radius: var(--radius-md);
     font-size: var(--text-sm);
     font-weight: var(--weight-normal);
@@ -201,9 +199,16 @@
       background var(--transition-fast);
   }
 
-  .sidebar__link:hover {
+  .sidebar__link:active {
     color: var(--color-text);
     text-decoration: none;
+  }
+
+  @media (hover: hover) {
+    .sidebar__link:hover {
+      color: var(--color-text);
+      text-decoration: none;
+    }
   }
 
   .sidebar__link-icon {
@@ -237,14 +242,22 @@
     gap: var(--space-3);
     text-decoration: none;
     border-radius: var(--radius-md);
-    padding: var(--space-2) var(--space-2);
-    margin: calc(-1 * var(--space-2));
+    padding: var(--space-3) var(--space-3);
+    margin: calc(-1 * var(--space-3));
+    min-height: 2.75rem;
     transition: background var(--transition-fast);
   }
 
-  .sidebar__user:hover {
+  .sidebar__user:active {
     background: var(--color-surface-sunken);
     text-decoration: none;
+  }
+
+  @media (hover: hover) {
+    .sidebar__user:hover {
+      background: var(--color-surface-sunken);
+      text-decoration: none;
+    }
   }
 
   .sidebar__user--active {
@@ -319,7 +332,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 0 var(--space-5);
-      background: rgba(248, 248, 245, 0.85);
+      background: var(--color-glass-light);
       backdrop-filter: blur(20px) saturate(1.5);
       -webkit-backdrop-filter: blur(20px) saturate(1.5);
       border-bottom: 1px solid var(--color-border-light);
@@ -351,15 +364,15 @@
     }
 
     .mobile-header__avatar {
-      width: 1.625rem;
-      height: 1.625rem;
+      width: 2.75rem;
+      height: 2.75rem;
       border-radius: var(--radius-full);
       background: var(--color-text);
       color: var(--color-text-inverse);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.5625rem;
+      font-size: 0.6875rem;
       font-weight: var(--weight-medium);
     }
 
@@ -375,7 +388,7 @@
       left: 0;
       right: 0;
       z-index: 30;
-      background: rgba(248, 248, 245, 0.9);
+      background: var(--color-glass-heavy);
       backdrop-filter: blur(20px) saturate(1.5);
       -webkit-backdrop-filter: blur(20px) saturate(1.5);
       border-top: 1px solid var(--color-border-light);
@@ -393,8 +406,10 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       gap: 2px;
-      padding: var(--space-1) var(--space-3);
+      padding: var(--space-2) var(--space-3);
+      min-height: 3rem;
       color: var(--color-text-tertiary);
       font-size: 0.5625rem;
       text-decoration: none;
@@ -402,7 +417,7 @@
       min-width: 3rem;
     }
 
-    .bottom-nav__item:hover {
+    .bottom-nav__item:active {
       color: var(--color-text-secondary);
       text-decoration: none;
     }
