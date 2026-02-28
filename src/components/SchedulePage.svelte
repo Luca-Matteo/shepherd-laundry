@@ -1,9 +1,12 @@
 <script lang="ts">
   import Icon from "./Icon.svelte";
+  import GroupTag from "./GroupTag.svelte";
   import {
     cycles,
     items as allItems,
     members,
+    groups,
+    cycleGroups,
     type WashCycle,
   } from "../lib/stores";
   import { statusLabels, colorLabels, fabricLabels, label } from "../lib/labels";
@@ -129,7 +132,10 @@
                 <h3 class="cycle-entry__name">{cycle.name}</h3>
                 <span class="cycle-entry__time">{cycle.scheduledTime}</span>
               </div>
-              <span class="badge {statusColor(cycle.status)}">{label(statusLabels, cycle.status)}</span>
+              <div class="cycle-entry__right">
+                <GroupTag groups={cycleGroups(cycle, $allItems, $members, $groups)} />
+                <span class="badge {statusColor(cycle.status)}">{label(statusLabels, cycle.status)}</span>
+              </div>
             </div>
 
             <div class="cycle-entry__details">
@@ -267,6 +273,13 @@
     align-items: center;
     justify-content: space-between;
     gap: var(--space-3);
+  }
+
+  .cycle-entry__right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-shrink: 0;
   }
 
   .cycle-entry__info {

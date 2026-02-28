@@ -1,11 +1,13 @@
 <script lang="ts">
   import Icon from "./Icon.svelte";
-  import { items, members, type LaundryItem } from "../lib/stores";
+  import GroupTag from "./GroupTag.svelte";
+  import { items, members, groups, itemGroups, type LaundryItem } from "../lib/stores";
   import { statusLabels, priorityLabels, fabricLabels, colorLabels, label } from "../lib/labels";
 
   let searchQuery: string = "";
   let filterStatus: string = "all";
   let filterOwner: string = "all";
+  let filterGroup: string = "all";
   let sortBy: string = "priority";
 
   $: normalizedQuery = searchQuery.toLowerCase().trim();
@@ -14,6 +16,12 @@
     .filter((i) => !normalizedQuery || i.name.toLowerCase().includes(normalizedQuery) || ownerName(i.owner).toLowerCase().includes(normalizedQuery))
     .filter((i) => filterStatus === "all" || i.status === filterStatus)
     .filter((i) => filterOwner === "all" || i.owner === filterOwner)
+    .filter((i) => {
+      if (filterGroup === "all") return true;
+      if (filterGroup === "shared") return !!i.shared;
+      const gs = itemGroups(i, $members, $groups);
+      return gs.some((g) => g.id === filterGroup);
+    })
     .sort((a, b) => {
       if (sortBy === "priority") {
         const order = { urgent: 0, high: 1, normal: 2, low: 3 };
@@ -120,6 +128,17 @@
   </div>
 
   <div class="filter-bar__group">
+    <label class="label" for="filter-group">Haushalt</label>
+    <select id="filter-group" class="select" bind:value={filterGroup}>
+      <option value="all">Alle</option>
+      {#each $groups as group (group.id)}
+        <option value={group.id}>{group.initials}</option>
+      {/each}
+      <option value="shared">Geteilt</option>
+    </select>
+  </div>
+
+  <div class="filter-bar__group">
     <label class="label" for="sort-by">Sortieren</label>
     <select id="sort-by" class="select" bind:value={sortBy}>
       <option value="priority">Priorität</option>
@@ -135,7 +154,10 @@
     <article class="item-row" aria-label="{item.name}">
       <div class="item-row__main">
         <div class="item-row__info">
-          <h3 class="item-row__name">{item.name}</h3>
+          <div class="item-row__name-line">
+            <h3 class="item-row__name">{item.name}</h3>
+            <GroupTag groups={itemGroups(item, $members, $groups)} small={true} />
+          </div>
           <span class="item-row__owner">{ownerName(item.owner)}</span>
         </div>
         <div class="item-row__badges">
@@ -247,6 +269,12 @@
 
   .item-row__info {
     min-width: 0;
+  }
+
+  .item-row__name-line {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
   }
 
   .item-row__name {

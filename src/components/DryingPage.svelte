@@ -1,9 +1,14 @@
 <script lang="ts">
   import Icon from "./Icon.svelte";
+  import GroupTag from "./GroupTag.svelte";
   import {
     dryingSessions,
     items as allItems,
+    members,
+    groups,
+    cycleGroups,
     type DryingSession,
+    type WashCycle,
   } from "../lib/stores";
 
   function methodLabel(method: DryingSession["method"]): string {
@@ -51,6 +56,12 @@
     const now = new Date("2026-02-24T11:00:00").getTime();
     const pct = Math.min(100, Math.max(0, ((now - start) / (end - start)) * 100));
     return Math.round(pct);
+  }
+
+  function sessionGroups(session: DryingSession) {
+    // Reuse cycleGroups by creating a cycle-like shape
+    const fakeCycle = { items: session.items } as WashCycle;
+    return cycleGroups(fakeCycle, $allItems, $members, $groups);
   }
 
   $: activeSessions = $dryingSessions.filter((d) => d.status === "active");
@@ -116,7 +127,10 @@
                 {formatTime(session.startedAt)} — {formatTime(session.estimatedEnd)}
               </span>
             </div>
-            <span class="session-entry__pct">{progress(session)}%</span>
+            <div class="session-entry__right">
+              <GroupTag groups={sessionGroups(session)} />
+              <span class="session-entry__pct">{progress(session)}%</span>
+            </div>
           </div>
 
           <div class="progress" style="margin: var(--space-3) 0;">
@@ -222,7 +236,7 @@
   }
 
   .session-entry {
-    padding: var(--space-5) 0;
+    padding: var(--space-6) 0;
     border-bottom: 1px solid var(--color-border-light);
   }
 
@@ -252,6 +266,13 @@
   .session-entry__time {
     font-size: var(--text-sm);
     color: var(--color-text-tertiary);
+  }
+
+  .session-entry__right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-shrink: 0;
   }
 
   .session-entry__pct {

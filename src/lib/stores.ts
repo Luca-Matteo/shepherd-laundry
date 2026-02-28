@@ -19,6 +19,8 @@ export interface LaundryItem {
   status: "clean" | "hamper" | "washing" | "drying";
   lastWashed: string | null;
   hygieneLimit: number; // days before must wash
+  shared?: boolean; // true = no group tag shown
+  // TODO: Backend — add boolean field to LaundryItem model
 }
 
 export interface WashCycle {
@@ -56,6 +58,13 @@ export interface Consumable {
   image?: string; // path to product image
 }
 
+export interface HouseholdGroup {
+  id: string;
+  name: string;
+  initials: string;
+  // TODO: Backend — persist as Django model HouseholdGroup
+}
+
 export interface FamilyMember {
   id: string;
   name: string;
@@ -63,11 +72,18 @@ export interface FamilyMember {
   role: "admin" | "member";
   avatar: string; // initials
   color: string;
+  group: string | null; // HouseholdGroup.id, null = shared
+  // TODO: Backend — add FK to HouseholdGroup in Django User model
 }
 
 /* -------------------------------------------------- */
 /*  Mock Data                                          */
 /* -------------------------------------------------- */
+
+const GROUPS: HouseholdGroup[] = [
+  { id: "g1", name: "Luca-Matteo", initials: "LM" },
+  { id: "g2", name: "Gerwin und Siglinde", initials: "GS" },
+];
 
 const MEMBERS: FamilyMember[] = [
   {
@@ -77,6 +93,7 @@ const MEMBERS: FamilyMember[] = [
     role: "admin",
     avatar: "A",
     color: "var(--color-accent)",
+    group: "g1",
   },
   {
     id: "m2",
@@ -85,6 +102,7 @@ const MEMBERS: FamilyMember[] = [
     role: "member",
     avatar: "J",
     color: "var(--color-text-secondary)",
+    group: "g2",
   },
   {
     id: "m3",
@@ -93,6 +111,7 @@ const MEMBERS: FamilyMember[] = [
     role: "member",
     avatar: "S",
     color: "#7B68EE",
+    group: "g1",
   },
 ];
 
@@ -173,6 +192,7 @@ const ITEMS: LaundryItem[] = [
     status: "drying",
     lastWashed: "2026-02-24",
     hygieneLimit: 5,
+    shared: true,
   },
   {
     id: "i8",
@@ -206,6 +226,7 @@ const ITEMS: LaundryItem[] = [
     status: "clean",
     lastWashed: "2026-02-12",
     hygieneLimit: 21,
+    shared: true,
   },
 ];
 
@@ -274,6 +295,19 @@ const CYCLES: WashCycle[] = [
     colorGroup: "white",
     duration: 90,
     machineLoad: 40,
+  },
+  {
+    id: "c6",
+    name: "Gemischte Wäsche — 40°C",
+    scheduledDate: "2026-02-26",
+    scheduledTime: "10:30",
+    status: "scheduled",
+    items: ["i2", "i4"],
+    temperature: 40,
+    fabricType: "mixed",
+    colorGroup: "color",
+    duration: 60,
+    machineLoad: 55,
   },
 ];
 
@@ -358,6 +392,7 @@ const CONSUMABLES: Consumable[] = [
 /*  Stores                                             */
 /* -------------------------------------------------- */
 
+export const groups = writable<HouseholdGroup[]>(GROUPS);
 export const members = writable<FamilyMember[]>(MEMBERS);
 export const items = writable<LaundryItem[]>(ITEMS);
 export const cycles = writable<WashCycle[]>(CYCLES);
@@ -383,3 +418,42 @@ export const lowConsumables = derived(consumables, ($cons) =>
 export const urgentItems = derived(items, ($items) =>
   $items.filter((i) => i.priority === "urgent" || i.priority === "high"),
 );
+
+/* -------------------------------------------------- */
+/*  Helpers — group resolution                        */
+/* -------------------------------------------------- */
+
+/** Resolve a single item to its household group(s). Returns empty array if shared. */
+export function itemGroups(
+  item: LaundryItem,
+  memberList: FamilyMember[],
+  groupList: HouseholdGroup[],
+): HouseholdGroup[] {
+  if (item.shared) return [];
+  const member = memberList.find((m) => m.id === item.owner);
+  if (!member?.group) return [];
+  const group = groupList.find((g) => g.id === member.group);
+  return group ? [group] : [];
+}
+
+/** Resolve the unique set of groups for all items in a cycle. */
+export function cycleGroups(
+  cycle: WashCycle,
+  itemList: LaundryItem[],
+  memberList: FamilyMember[],
+  groupList: HouseholdGroup[],
+): HouseholdGroup[] {
+  const seen = new Set<string>();
+  const result: HouseholdGroup[] = [];
+  for (const itemId of cycle.items) {
+    const item = itemList.find((i) => i.id === itemId);
+    if (!item) continue;
+    for (const g of itemGroups(item, memberList, groupList)) {
+      if (!seen.has(g.id)) {
+        seen.add(g.id);
+        result.push(g);
+      }
+    }
+  }
+  return result;
+}

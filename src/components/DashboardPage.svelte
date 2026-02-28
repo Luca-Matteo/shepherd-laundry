@@ -1,5 +1,6 @@
 <script lang="ts">
   import Icon from "./Icon.svelte";
+  import GroupTag from "./GroupTag.svelte";
   import {
     statusLabels, priorityLabels, label,
   } from "../lib/labels";
@@ -13,6 +14,9 @@
     lowConsumables,
     urgentItems,
     members,
+    groups,
+    cycleGroups,
+    itemGroups,
     type WashCycle,
     type LaundryItem,
     type Consumable,
@@ -149,7 +153,10 @@
               {cycle.scheduledDate} · {cycle.scheduledTime} · {cycle.temperature}°C · {cycle.duration} min
             </span>
           </div>
-          <span class="badge {statusColor(cycle.status)}">{label(statusLabels, cycle.status)}</span>
+          <div class="cycle-row__right">
+            <GroupTag groups={cycleGroups(cycle, $items, $members, $groups)} />
+            <span class="badge {statusColor(cycle.status)}">{label(statusLabels, cycle.status)}</span>
+          </div>
         </a>
       {:else}
         <div class="empty-state">
@@ -171,7 +178,10 @@
         {#each $urgentItems as item (item.id)}
           <div class="attention-row">
             <div class="attention-row__left">
-              <span class="attention-row__name">{item.name}</span>
+              <div class="attention-row__name-line">
+                <span class="attention-row__name">{item.name}</span>
+                <GroupTag groups={itemGroups(item, $members, $groups)} small={true} />
+              </div>
               <span class="attention-row__owner">{ownerName(item.owner)}</span>
             </div>
             <span class="badge {priorityColor(item.priority)}">{label(priorityLabels, item.priority)}</span>
@@ -482,6 +492,19 @@
     display: flex;
     flex-direction: column;
     min-width: 0;
+  }
+
+  .cycle-row__right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-shrink: 0;
+  }
+
+  .attention-row__name-line {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
   }
 
   .attention-row__name {
